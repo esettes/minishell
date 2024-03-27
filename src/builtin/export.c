@@ -1,53 +1,68 @@
-#include "../../inc/headers/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export2.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/30 21:01:32 by iostancu          #+#    #+#             */
+/*   Updated: 2024/03/14 21:07:12 by iostancu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-static int	add_last_env(char **env, const char *export_var)
+#include "minishell.h"
+
+int	exec_export(t_pipe *data, t_cmd *cmd, int pos)
 {
-	register size_t	x;
+	int	i;
+	char	**envp;
+	size_t	len;
+	size_t	j;
 
-	x = env_len(env);
-	env[x] = ft_strdup(export_var);
-	if (NULL == env[x])
-		return (EXIT_FAILURE);
-	env[x + TRUE] = NULL;
-	return (EXIT_SUCCESS);
-}
-
-static int	add_env_pos(char **env, const char *export_var, char *var_name)
-{
-	size_t	pos;
-
-	pos = search_in_env(env, var_name);
-	free(var_name);
-	free(env[pos]); /* NEED TESTED */
-	env[pos] = ft_strdup(export_var);
-	if (NULL == env[pos])
-		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
-}
-
-int	export_handler(char **env, const char *export_var)
-{
-	char	*delimiter;
-	char	*var_name;
-
-	if (NULL == env || NULL == *env || NULL == export_var || 0 == *export_var)
-		return (EXIT_FAILURE);
-	delimiter = strchr(export_var, '=');
-	if (NULL == delimiter)
-		return (EXIT_FAILURE);
-	var_name = ft_substr(export_var, ZERO, delimiter - export_var); /* NEED TESTED */
-	if (NULL == var_name)
-		return (EXIT_FAILURE);
-	/* MAYBE NEED DUPLICATE ENV*/
-	if (getenv(var_name))
+	i = 0;
+	j = 0;
+	len = get_array_size(data->envp_minish);
+	envp = malloc(sizeof(char *) * (len + 1));
+	if (cmd->scmd[pos]->args[i] == NULL)
 	{
-		if (add_env_pos(env, export_var, var_name))
-			return (EXIT_FAILURE);
+		// create a new array of char * and print envp_minish in alphabetical order
+		while (j < len)
+		{
+			envp[i] = ft_strdup(data->envp_minish[j]);
+			if (data->envp_minish[j][0] == envp[i][0])
+			{
+				// if first letter is the same, compare second letter
+				
+			}
+			if (data->envp_minish[j][0] > envp[i][0])
+			{
+				
+			}
+			j++;
+		}
+		
 	}
 	else
 	{
-		if (add_last_env(env, export_var))
-			return (EXIT_FAILURE);
+		i = 1;
+		while (cmd->scmd[pos]->args[i])
+		{
+			if (!is_correct_env_variable(cmd->scmd[pos]->args[i], "export"))
+			{
+				i++;
+				continue ;
+			}
+			if (env_var_already_exist(data->envp_minish, cmd->scmd[pos]->args[i]))
+				change_var_value(data->envp_minish, cmd->scmd[pos]->args[i]);
+			else
+			{
+				data->envp_minish = create_new_var(data->envp_minish,
+					cmd->scmd[pos]->args[i]);
+				if (!data->envp_minish)
+					return (EXIT_FAILURE);
+			}
+			i++;
+		}
 	}
 	return (EXIT_SUCCESS);
 }

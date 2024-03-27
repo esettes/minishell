@@ -6,7 +6,7 @@
 #    By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/21 19:03:34 by uliherre          #+#    #+#              #
-#    Updated: 2024/03/13 23:43:09 by iostancu         ###   ########.fr        #
+#    Updated: 2024/03/27 23:02:59 by iostancu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -72,8 +72,6 @@ SOURCES_BUILTIN = \
 	cd.c \
 	env.c \
 	exit.c \
-	export2.c \
-	unset2.c \
 	pwd.c \
 	env_utils.c \
 	env_utils_2.c
