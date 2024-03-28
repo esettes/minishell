@@ -6,7 +6,7 @@
 /*   By: ubuntu <ubuntu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 19:03:59 by uliherre          #+#    #+#             */
-/*   Updated: 2024/03/28 12:32:05 by ubuntu           ###   ########.fr       */
+/*   Updated: 2024/03/28 13:55:56 by ubuntu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 # include <termios.h>		/* Para tcsetattr, tcgetattr */
 # include <curses.h>		/* Para tgetent, tgetflag, tgetnum, tgetstr, tgoto, tputs */
 # include <sys/param.h>
-# include "libft.h"
+# include "../libft/inc/libft.h"
 # include "pipex.h"
 # include "parser.h"
 # include "structs.h"

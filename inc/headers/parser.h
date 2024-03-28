@@ -6,7 +6,7 @@
 /*   By: ubuntu <ubuntu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 19:04:03 by uliherre          #+#    #+#             */
-/*   Updated: 2024/03/28 12:44:59 by ubuntu           ###   ########.fr       */
+/*   Updated: 2024/03/28 12:54:37 by ubuntu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,9 @@ void	insert_args(t_scmd **scmd, t_list *args, int *i);
 int		scommand_count(t_list *lst);
 size_t	val_get_type(char *token);
 void	redirect_phase(t_scmd *scmd, t_list **tokens, int *i);
+
+//parse Tony
+t_cmd	*parser(char *str, char **envp);
+t_list	*lex_tony(char *str, char **envp);
 
 #endif
