@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ubuntu <ubuntu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 19:03:59 by uliherre          #+#    #+#             */
-/*   Updated: 2024/03/13 23:08:05 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/03/28 12:32:05 by ubuntu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@
 # include <sys/param.h>
 # include "libft.h"
 # include "pipex.h"
-# include "ft_printf.h"
 # include "parser.h"
 # include "structs.h"
 # include "executer.h"

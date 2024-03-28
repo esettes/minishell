@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ubuntu <ubuntu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 18:43:21 by iostancu          #+#    #+#             */
-/*   Updated: 2024/03/13 23:39:17 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/03/28 12:30:49 by ubuntu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	exec_cd(t_pipe *data, t_cmd *cmd, int pos)
 	if (chdir(cd.dir_to_exec) < 0)
 		return (f_error());
 	if (cd.is_hyphen)
-		ft_printf("%s\n", cd.last_dir);
+		printf("%s\n", cd.last_dir);
 	change_and_create_env_var(&data, cd.curr_dir);
 	return (EXIT_SUCCESS);
 }
@@ -61,7 +61,7 @@ void	is_home_directory(t_cmd *cmd, t_cd *cd)
 
 char	*set_home_directory(t_pipe *data)
 {
-	ft_printf("HOME: '%s'\n", get_env_var_value(data, "HOME"));
+	printf("HOME: '%s'\n", get_env_var_value(data, "HOME"));
 	return (get_env_var_value(data, "HOME"));
 }
 
