@@ -45,5 +45,6 @@ void	redirect_phase(t_scmd *scmd, t_list **tokens, int *i);
 //parse Tony
 t_cmd	*parser(char *str, char **envp);
 t_list	*lex_tony(char *str, char **envp);
+char	*expander_process(char *str, char **envp);
 
 #endif

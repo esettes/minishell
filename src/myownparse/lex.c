@@ -16,25 +16,34 @@
 //borrar cuando termine esta parte
 volatile int	g_signal = 0;
 
-
-//No funciona bien, me dice todo el rato unclosed quotes, cuando no deberia, falta revisar.
 static char	*quotes_content(char *str, char **envp, int *i, char quote)
 {
-	(void)envp;
-	if (!ft_strchr(str, quote))
+	int		j;
+	char	*string;
+	int		flag;
+
+	(*i)++;
+	j = *i;
+	flag = 0;
+	if (!ft_strchr(str + j, quote))
 		return (ft_puterror_noexit("unclosed quotes"), NULL);
-	while (*str != '\'' && *str)
+	while (str[*i] != quote && str[*i])
 	{
-		str++;
+		if (str[*i] == '$')
+			flag = 1;
 		(*i)++;
 	}
-	return (ft_substr(str, 0, *i));
+	string = ft_substr(str + j, 0, *i - j);
+	if (quote == '\"' && flag == 1)
+		string = expander_process(string, envp);
+	return (string);
 }
 
-static char	*search_token(char *str, char **envp)
+static char	*search_token(char *str, char **envp, int *i)
 {
 	(void)str;
 	(void)envp;
+	(void)i;
 	return (NULL);
 }
 
@@ -45,20 +54,20 @@ t_list	*lex_tony(char *str, char **envp)
 	int		i;
 
 	list = NULL;
-	while (*str)
+	i = 0;
+	while (str[i])
 	{
 		content = NULL;
-		i = 0;
-		while (*str == ' ')
-			str++;
-		if (*str == '\'' || *str == '\"')
+		while (str[i] == ' ')
+			i++;
+		if (str[i] == '\'' || str[i] == '\"')
 		{
-			content = quotes_content(str + 1, envp, &i, *str);
-			str += i + 1;
-			printf("%c\n", *str);
+			content = quotes_content(str, envp, &i, str[i]);
+			printf("%s\n", content);
+			i++;
 		}
 		else
-			content = search_token(str, envp);
+			content = search_token(str, envp, &i);
 		if (!content)
 		{
 			ft_lstclear(&list, free);
@@ -72,7 +81,7 @@ t_list	*lex_tony(char *str, char **envp)
 int	main(void)
 {
 	t_list	*list;
-	char	*str = "\'hola que tal\'  \' adios \'";
+	char	*str = "\'hola que tal\'  \' adios \' \'       \'";
 
 	list = lex_tony(str, NULL);
 	
