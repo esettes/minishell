@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 23:41:36 by iostancu          #+#    #+#             */
-/*   Updated: 2024/03/13 23:42:45 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/02 01:01:55 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ size_t	get_array_size(char **arr)
 }
 
 /**
- * @brief Returns the variable, without '=', from a string like 'var=value'
+ * @brief Returns the variable clear, without '=', from string like 'var=value'
  * 
  * @param var 
  * @return char* 
@@ -52,14 +52,14 @@ char	*get_env_variable(char *var)
 /**
  * @brief Get the env variable from the minishell environment
  * 
- * @param var_value 
- * @param var 
- * @return char* 
+ * @param envp_minish 
+ * @param var variable inserted in terminal
+ * @return char* variable without '='
  */
 char	*get_env_variable_from_minish_environ(char **envp_minish, char *var)
 {
 	size_t	i;
-	char	*aux;
+	//char	*aux;
 	char	*env_var;
 
 	i = 0;
@@ -70,9 +70,12 @@ char	*get_env_variable_from_minish_environ(char **envp_minish, char *var)
 			env_var = get_env_variable(envp_minish[i]);
 			if (f_strict_strncmp(env_var, var, f_strlen(env_var)) == 0)
 			{
-				aux = f_strdup(envp_minish[i] + f_strlen(var) + 1);
-				free(env_var);
-				return (aux);
+				printf("environ f env_var: %s\n", env_var);
+				printf("environ f var: %s\n", var);
+				//aux = f_strdup(envp_minish[i] + f_strlen(var) + 1);
+				//printf("environ f aux: %s\n", aux);
+				//free(env_var);
+				return (env_var);
 			}
 		}
 		i++;
@@ -89,22 +92,23 @@ char	*get_env_variable_from_minish_environ(char **envp_minish, char *var)
  */
 int	env_var_already_exist(char **envp_minish, char *raw_variable)
 {
-	size_t	i;
 	char	*var;
+	char	*var_in_envp_minish;
 
-	i = 0;
 	var = get_env_variable(raw_variable);
-	while (envp_minish[i])
+	if (!var)
+		return (FALSE);
+	var_in_envp_minish = get_env_variable_from_minish_environ(envp_minish, var);
+	printf("var: %s\n", var);
+	printf("var_in_envp_minish: %s\n", var_in_envp_minish);
+	if (!var_in_envp_minish)
 	{
-		if (f_strncmp(envp_minish[i], var, f_strlen(var)) == 0)
-		{
-			free(var);
-			return (TRUE);
-		}
-		i++;
+		free(var);
+		return (FALSE);
 	}
 	free(var);
-	return (FALSE);
+	free(var_in_envp_minish);
+	return (TRUE);
 }
 
 char	**create_new_var(char **envp_minish, char *var)

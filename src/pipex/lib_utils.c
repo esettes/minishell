@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 19:53:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/02/03 20:58:45 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/02 01:04:19 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ int	f_strict_strncmp(const char *s1, const char *s2, size_t n)
 {
 	if (f_strncmp(s1, s2, n) == 0)
 	{
+		printf("s1 strlen: %zu\n", f_strlen(s1));
+		printf("s2 strlen: %zu\n", f_strlen(s2));
 		if (f_strlen(s1) != f_strlen(s2))
 			return (1);
 	}
