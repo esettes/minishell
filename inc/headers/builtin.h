@@ -42,7 +42,7 @@ int		env_var_already_exist(char **envp_minish, char *raw_variable);
 size_t	get_array_size(char **arr);
 char	*get_env_variable(char *var);
 int		is_correct_env_variable(char *var, char *cmd);
-char	*get_env_var_value(t_pipe *data, char *var);
+char	*get_env_var_value(char **envp_minish, char *var);
 int		pwd_handler(void);
 char	**create_new_var(char **envp_minish, char *var);
 int	change_var_value(char **envp_minish, char *raw_variable);

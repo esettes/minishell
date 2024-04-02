@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 21:01:32 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/01 23:34:43 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/03 00:30:43 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,9 @@ int	exec_export(t_pipe *data, t_cmd *cmd, int pos)
 				continue ;
 			}
 			if (env_var_already_exist(data->envp_minish, cmd->scmd[pos]->args[i]))
+			{
 				change_var_value(data->envp_minish, cmd->scmd[pos]->args[i]);
+			}
 			else
 			{
 				data->envp_minish = create_new_var(data->envp_minish,
@@ -60,6 +62,8 @@ void	exec_export_no_args(char **envp_minish)
 {
 	size_t	i;
 	char	**env;
+	char	*var;
+	char	*value;
 	size_t	len;
 	size_t	j;
 
@@ -80,7 +84,16 @@ void	exec_export_no_args(char **envp_minish)
 	}
 	i = -1;
 	while (++i < len)
-		printf("declare -x %s\n", env[i]);
+	{
+		var = get_env_variable(env[i]);
+		printf("declare -x %s", var);
+		value = get_env_var_value(envp_minish, var);
+		if (value != NULL)
+			printf("=\"%s\"\n", value);
+		else
+			printf("\n");
+		free(var);
+	}
 	free_memory((const char **)env, len);
 }
 

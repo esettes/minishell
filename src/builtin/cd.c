@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 18:43:21 by iostancu          #+#    #+#             */
-/*   Updated: 2024/03/13 23:39:17 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/02 22:35:07 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,15 +61,15 @@ void	is_home_directory(t_cmd *cmd, t_cd *cd)
 
 char	*set_home_directory(t_pipe *data)
 {
-	ft_printf("HOME: '%s'\n", get_env_var_value(data, "HOME"));
-	return (get_env_var_value(data, "HOME"));
+	ft_printf("HOME: '%s'\n", get_env_var_value(data->envp_minish, "HOME"));
+	return (get_env_var_value(data->envp_minish, "HOME"));
 }
 
 t_cd	init_cd(t_pipe *data)
 {
 	t_cd	cd;
 
-	cd.last_dir = get_env_var_value(data, "OLDPWD");
+	cd.last_dir = get_env_var_value(data->envp_minish, "OLDPWD");
 	cd.curr_dir = getcwd(NULL, 0);
 	cd.is_hyphen = 0;
 	cd.is_home = 0;

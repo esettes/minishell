@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 19:27:39 by iostancu          #+#    #+#             */
-/*   Updated: 2024/03/13 23:42:41 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/03 00:31:18 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,42 +59,60 @@ int	is_correct_env_variable(char *var, char *cmd)
 int	change_var_value(char **envp_minish, char *raw_variable)
 {
 	int		i;
+	char	*in_var;
 	char	*var;
 	int		envp_size;
 
 	i = 0;
-	var = get_env_variable(raw_variable);
+	in_var = get_env_variable(raw_variable);
+
 	envp_size = get_array_size(envp_minish);
-	if (!var)
+	if (!in_var)
 		return (EXIT_SUCCESS);
 	while (i < envp_size)
 	{
-		if (f_strncmp(envp_minish[i], var, f_strlen(var)) == 0)
+		var = get_env_variable(envp_minish[i]);
+		if (f_strict_strncmp(var, in_var, f_strlen(in_var)) == 0)
 		{
 			free(envp_minish[i]);
 			envp_minish[i] = f_strdup(raw_variable);
+			free(in_var);
 			free(var);
+			//free(var_minish);
 			free(raw_variable);
 			return (EXIT_SUCCESS);
 		}
 		i++;
 	}
+	free(in_var);
 	free(var);
 	free(raw_variable);
+	//free(var_minish);
 	return (EXIT_SUCCESS);
 }
 
-char	*get_env_var_value(t_pipe *data, char *var)
+char	*get_env_var_value(char **envp_minish, char *var)
 {
 	size_t	i;
+	char	*env_var;
 
 	i = 0;
-	while (data->envp_minish[i])
+	while (envp_minish[i])
 	{
-		if (f_strncmp(data->envp_minish[i], var, f_strlen(var)) == 0)
-			return (data->envp_minish[i] + f_strlen(var) + 1);
+		env_var = get_env_variable(envp_minish[i]);
+		if (f_strict_strncmp(env_var, var, f_strlen(var)) == 0)
+		{
+			if (envp_minish[i][f_strlen(env_var)] == '\0')
+			{
+				free(env_var);
+				return (NULL);
+			}
+			free(env_var);
+			return (envp_minish[i] + f_strlen(var) + 1);
+		}
 		i++;
 	}
+	free(env_var);
 	return (NULL);
 }
 

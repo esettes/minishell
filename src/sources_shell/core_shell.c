@@ -120,7 +120,7 @@ char	*get_prompt(t_pipe *data)
 {
 	t_prompt	prompt;
 
-	prompt.home_substr = ft_substr(getcwd(NULL, 0), f_strlen(get_env_var_value(data, "HOME")),
+	prompt.home_substr = ft_substr(getcwd(NULL, 0), f_strlen(get_env_var_value(data->envp_minish, "HOME")),
 						f_strlen(getcwd(NULL, 0)));
 	prompt.curr_dir = f_strjoin(prompt.home_substr, " > ");
 	if (f_strlen(prompt.curr_dir) <= 3)

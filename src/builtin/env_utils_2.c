@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 23:41:36 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/02 01:01:55 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/02 21:44:07 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,8 @@ char	*get_env_variable_from_minish_environ(char **envp_minish, char *var)
 			env_var = get_env_variable(envp_minish[i]);
 			if (f_strict_strncmp(env_var, var, f_strlen(env_var)) == 0)
 			{
-				printf("environ f env_var: %s\n", env_var);
-				printf("environ f var: %s\n", var);
+				//printf("environ f env_var: %s\n", env_var);
+				//printf("environ f var: %s\n", var);
 				//aux = f_strdup(envp_minish[i] + f_strlen(var) + 1);
 				//printf("environ f aux: %s\n", aux);
 				//free(env_var);
@@ -99,8 +99,8 @@ int	env_var_already_exist(char **envp_minish, char *raw_variable)
 	if (!var)
 		return (FALSE);
 	var_in_envp_minish = get_env_variable_from_minish_environ(envp_minish, var);
-	printf("var: %s\n", var);
-	printf("var_in_envp_minish: %s\n", var_in_envp_minish);
+	//printf("var: %s\n", var);
+	//printf("var_in_envp_minish: %s\n", var_in_envp_minish);
 	if (!var_in_envp_minish)
 	{
 		free(var);
