@@ -49,7 +49,7 @@ int	core_shell(char **envp)
 	char	*prompt;
 	size_t	show_sig;
 
-	 g_signal = 0;
+	g_signal = 0;
 	show_sig = 0;
 	s0.sa_handler = &c_handler;
 	s0.sa_flags = SA_RESTART;
@@ -63,7 +63,7 @@ int	core_shell(char **envp)
 	if (!p_data)
 		return (EXIT_FAILURE);
 	prompt = NULL;
-  while(buffer)
+	while(buffer)
 	{
 		//g_signal = 0;
 		if (buffer)
@@ -103,7 +103,6 @@ int	core_shell(char **envp)
 			continue ;
 		}
 		
-		/*CONDICIONES DE SALIDA: señales*/
 	}
 	free(buffer);
 	free(oldbuffer);

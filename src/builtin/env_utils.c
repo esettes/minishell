@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 19:27:39 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/03 00:31:18 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/03 01:00:24 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ int	change_var_value(char **envp_minish, char *raw_variable)
 
 	i = 0;
 	in_var = get_env_variable(raw_variable);
-
 	envp_size = get_array_size(envp_minish);
 	if (!in_var)
 		return (EXIT_SUCCESS);
@@ -78,7 +77,6 @@ int	change_var_value(char **envp_minish, char *raw_variable)
 			envp_minish[i] = f_strdup(raw_variable);
 			free(in_var);
 			free(var);
-			//free(var_minish);
 			free(raw_variable);
 			return (EXIT_SUCCESS);
 		}
@@ -87,7 +85,6 @@ int	change_var_value(char **envp_minish, char *raw_variable)
 	free(in_var);
 	free(var);
 	free(raw_variable);
-	//free(var_minish);
 	return (EXIT_SUCCESS);
 }
 

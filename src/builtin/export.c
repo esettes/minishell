@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 21:01:32 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/03 00:53:23 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/03 00:58:44 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 void	exec_export_no_args(char **envp_minish);
 void	init_env(char **env, size_t len, char **envp_minish);
+void	print_export_no_args(char **envp_minish, char **env, size_t len);
 
 int	exec_export(t_pipe *data, t_cmd *cmd, int pos)
 {
 	size_t	i;
 
-	i = 0;
 	if (cmd->scmd[pos]->args[1] == NULL)
 		exec_export_no_args(data->envp_minish);
 	else
@@ -32,10 +32,9 @@ int	exec_export(t_pipe *data, t_cmd *cmd, int pos)
 				i++;
 				continue ;
 			}
-			if (env_var_already_exist(data->envp_minish, cmd->scmd[pos]->args[i]))
-			{
+			if (env_var_already_exist(data->envp_minish,
+					cmd->scmd[pos]->args[i]))
 				change_var_value(data->envp_minish, cmd->scmd[pos]->args[i]);
-			}
 			else
 			{
 				data->envp_minish = create_new_var(data->envp_minish,
@@ -60,31 +59,40 @@ void	swap_str(char **env, size_t i, size_t j)
 
 void	exec_export_no_args(char **envp_minish)
 {
-	t_unset	aux;
+	size_t	i;
+	size_t	j;
 	char	**env;
-	char	*var;
-	char	*value;
 	size_t	len;
 
 	len = get_array_size(envp_minish);
 	env = malloc(sizeof(char *) * (len + 1));
 	env[len] = NULL;
 	init_env(env, len, envp_minish);
-	aux.i = -1;
-	while (++aux.i < len)
+	i = -1;
+	while (++i < len)
 	{
-		aux.j = aux.i;
-		while (++aux.j < len)
+		j = i;
+		while (++j < len)
 		{
-			if (f_strncmp(env[aux.j], env[aux.i],
-				f_strlen(env[aux.i]) + f_strlen(env[aux.j])) < 0)
-				swap_str(env, aux.i, aux.j);
+			if (f_strncmp(env[j], env[i],
+				f_strlen(env[i]) + f_strlen(env[j])) < 0)
+				swap_str(env, i, j);
 		}
 	}
-	aux.i = -1;
-	while (++aux.i < len)
+	print_export_no_args(envp_minish, env, len);
+	free_memory((const char **)env, len);
+}
+
+void	print_export_no_args(char **envp_minish, char **env, size_t len)
+{
+	char	*var;
+	char	*value;
+	size_t	i;
+
+	i = -1;
+	while (++i < len)
 	{
-		var = get_env_variable(env[aux.i]);
+		var = get_env_variable(env[i]);
 		printf("declare -x %s", var);
 		value = get_env_var_value(envp_minish, var);
 		if (value != NULL)
@@ -93,7 +101,6 @@ void	exec_export_no_args(char **envp_minish)
 			printf("\n");
 		free(var);
 	}
-	free_memory((const char **)env, len);
 }
 
 void	init_env(char **env, size_t len, char **envp_minish)
