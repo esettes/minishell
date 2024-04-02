@@ -6,7 +6,7 @@
 /*   By: ubuntu <ubuntu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 20:25:09 by ubuntu            #+#    #+#             */
-/*   Updated: 2024/03/28 17:35:29 by ubuntu           ###   ########.fr       */
+/*   Updated: 2024/04/02 23:05:13 by ubuntu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,13 @@ static char	*quotes_content(char *str, char **envp, int *i, char quote)
 	while (str[*i] != quote && str[*i])
 	{
 		if (str[*i] == '$')
-			flag = 1;
+			flag++;
 		(*i)++;
 	}
 	string = ft_substr(str + j, 0, *i - j);
-	if (quote == '\"' && flag == 1)
-		string = expander_process(string, envp);
+	if (quote == '\"' && flag > 0)
+		while (flag-- > 0)
+			string = expander_process(string, envp);
 	return (string);
 }
 
