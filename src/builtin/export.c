@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 21:01:32 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/03 00:30:43 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/03 00:53:23 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,32 +60,31 @@ void	swap_str(char **env, size_t i, size_t j)
 
 void	exec_export_no_args(char **envp_minish)
 {
-	size_t	i;
+	t_unset	aux;
 	char	**env;
 	char	*var;
 	char	*value;
 	size_t	len;
-	size_t	j;
 
 	len = get_array_size(envp_minish);
 	env = malloc(sizeof(char *) * (len + 1));
 	env[len] = NULL;
 	init_env(env, len, envp_minish);
-	i = -1;
-	while (++i < len)
+	aux.i = -1;
+	while (++aux.i < len)
 	{
-		j = i;
-		while (++j < len)
+		aux.j = aux.i;
+		while (++aux.j < len)
 		{
-			if (f_strncmp(env[j], env[i],
-				f_strlen(env[i]) + f_strlen(env[j])) < 0)
-				swap_str(env, i, j);
+			if (f_strncmp(env[aux.j], env[aux.i],
+				f_strlen(env[aux.i]) + f_strlen(env[aux.j])) < 0)
+				swap_str(env, aux.i, aux.j);
 		}
 	}
-	i = -1;
-	while (++i < len)
+	aux.i = -1;
+	while (++aux.i < len)
 	{
-		var = get_env_variable(env[i]);
+		var = get_env_variable(env[aux.i]);
 		printf("declare -x %s", var);
 		value = get_env_var_value(envp_minish, var);
 		if (value != NULL)

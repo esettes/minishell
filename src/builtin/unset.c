@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 19:10:04 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/03 00:26:15 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/03 00:37:35 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,17 +51,11 @@ void	print_unset_error(char *var)
 
 static void	unset_variables(t_pipe *data, t_cmd *cmd, t_unset *uset, int pos)
 {
-	char	*var;
-	char	*value;
 	uset->i = 0;
 
 	while (data->envp_minish[uset->i])
 	{
-		//printf("data->envp_minish[uset->i]: %s\n", data->envp_minish[uset->i]);
-		//printf("cmd->scmd[pos]->args[uset->k]: %s\n", cmd->scmd[pos]->args[uset->k]);
-		var = get_env_variable(data->envp_minish[uset->i]);
-		value = get_env_var_value(data->envp_minish, var);
-		if (f_strncmp(data->envp_minish[uset->i], cmd->scmd[pos]->args[uset->k],
+		if (f_strict_strncmp(data->envp_minish[uset->i], cmd->scmd[pos]->args[uset->k],
 				f_strlen(cmd->scmd[pos]->args[uset->k])) != 0)
 			{
 				uset->tmp[uset->j] = f_strdup(data->envp_minish[uset->i]);

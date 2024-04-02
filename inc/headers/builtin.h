@@ -15,6 +15,13 @@ typedef struct s_cd
 	int		stdin_;
 }	t_cd;
 
+/** 
+ * @brief t_unset
+ * 
+ * @var t_unset::i
+ * @var t_unset::j
+ * @var t_unset::k
+ */
 typedef struct s_unset
 {
 	size_t	i;

@@ -76,7 +76,7 @@ int	core_shell(char **envp)
 		free (prompt);
 		if (!buffer)
 			return (f_error());
-		if (buffer && *buffer && ft_strncmp(buffer, oldbuffer, sizeof(oldbuffer)) != 0)
+		if (buffer && *buffer && f_strict_strncmp(buffer, oldbuffer, sizeof(oldbuffer)) != 0)
 			add_history(buffer);
 		if (show_sig == 1)
 		{
