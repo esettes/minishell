@@ -19,35 +19,42 @@ static int	len_expanded_str(char *str, char *env_value)
 	return (len_str + ft_strlen(env_value));
 }
 
-static char	*create_expanded_str(char *str, char *env_value)
+static char	*fill_array(char *str, char *env_value, char *array)
 {
-	char	*array;
-	int		len;
-	int		i;
-	int		j;
-	int		x;
+	int	i;
+	int	j;
+	int	x;
 
-	len = len_expanded_str(str, env_value);	
-	array = (char *)malloc(len + 1);
 	i = 0;
 	j = 0;
 	x = 0;
-	if (!array)
-	{
-		free(str);
-		free(env_value);
-		//falta hacer el exit pero no se como aun
-	}
 	while (str[i] != '$' && str[i])
 		array[j++] = str[i++];
+	i++;
 	while ((ft_isalnum(str[i]) || str[i] == '_') && str[i])
 		i++;
-	while (env_value[x])
+	while (env_value && env_value[x])
 		array[j++] = env_value[x++];
 	while (str[i])
 		array[j++] = str[i++];
 	array[j] = '\0';
-	return (array);	
+	return (array);
+}
+
+static char	*create_expanded_str(char *str, char *env_value)
+{
+	char	*array;
+	int		len;
+
+	len = len_expanded_str(str, env_value);	
+	array = (char *)malloc(len + 1);
+	if (!array)
+	{
+		free(str);
+		free(env_value);
+		exit(EXIT_FAILURE);
+	}
+	return (fill_array(str, env_value, array));	
 }
 
 static char	*get_env_value(char *var_env, char **envp)
@@ -71,6 +78,9 @@ static char	*get_env_value(char *var_env, char **envp)
 	return (NULL);
 }
 
+
+/*manejar caso en que $ no le sigue nada porque me esta devolviendo /bin/bash que es la primera variable que se encuentra
+y verificar el caso en el que se pone $? porque no esta funcionando igual que en bash*/
 char	*expander_process(char *str, char **envp)
 {
 	char	*expanded_str;
@@ -92,6 +102,8 @@ char	*expander_process(char *str, char **envp)
 		len++;
 	env_key = ft_substr(str + i, 1, len - 1);
 	env_value = get_env_value(env_key, envp);
+	if (env_value == NULL)
+    	env_value = strdup("");
 	free(env_key);
 	expanded_str = create_expanded_str(str, env_value);
 	free(env_value);

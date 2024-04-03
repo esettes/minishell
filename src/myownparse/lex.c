@@ -6,7 +6,7 @@
 /*   By: ubuntu <ubuntu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 20:25:09 by ubuntu            #+#    #+#             */
-/*   Updated: 2024/04/02 23:05:13 by ubuntu           ###   ########.fr       */
+/*   Updated: 2024/04/03 22:10:32 by ubuntu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ static char	*search_token(char *str, char **envp, int *i)
 	return (NULL);
 }
 
+
+/*leaks aqui probar mañana con mi funcion*/
 t_list	*lex_tony(char *str, char **envp)
 {
 	t_list	*list;
@@ -64,7 +66,6 @@ t_list	*lex_tony(char *str, char **envp)
 		if (str[i] == '\'' || str[i] == '\"')
 		{
 			content = quotes_content(str, envp, &i, str[i]);
-			printf("%s\n", content);
 			i++;
 		}
 		else
@@ -79,17 +80,20 @@ t_list	*lex_tony(char *str, char **envp)
 	return (list);
 }
 
-int	main(void)
+int	main(int argc, char **argv, char **envp)
 {
 	t_list	*list;
-	char	*str = "\'hola que tal\'  \' adios \' \'       \'";
+	char	*str = "\'hola que tal\'  \' adios \' \"hola $? \"";
 
-	list = lex_tony(str, NULL);
 	
+	(void)argc;
+	(void)argv;
+	list = lex_tony(str, envp);
 	while (list)
 	{
 		printf("content: %s\n", (char *)list->content);
 		list = list->next;
 	}
+	ft_lstclear(&list, free);
 	return (0);
 }
