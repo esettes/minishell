@@ -52,6 +52,7 @@ int		is_correct_env_variable(char *var, char *cmd);
 char	*get_env_var_value(char **envp_minish, char *var);
 int		pwd_handler(void);
 char	**create_new_var(char **envp_minish, char *var);
+void	print_cmd_error(char *var,  char *cmd);
 int	change_var_value(char **envp_minish, char *raw_variable);
 /**
  * @brief Get the env variable from the minishell environment

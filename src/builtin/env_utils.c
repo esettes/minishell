@@ -6,23 +6,48 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 19:27:39 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/03 01:00:24 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/04 22:36:54 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 size_t	var_lenght(char *var);
+static int check_chars(char *var, char *cmd);
 
 int	is_correct_env_variable(char *var, char *cmd)
 {
-	size_t	i;
 	size_t	count;
 	int		ret;
+	int		i;
+
+	count = 0;
+	ret = check_chars(var, cmd);
+	i = 0;
+	while (var[i] && var[i] != '=')
+	{
+		if (ft_isdigit(var[i]) || var[i] == '_')
+			count++;
+		i++;
+	}
+	if (count == var_lenght(var))
+		ret = FALSE;
+	if (ret == FALSE)
+	{
+		print_cmd_error(var, cmd);
+		g_signal = 1;
+		return (FALSE);
+	}
+	return (TRUE);
+}
+
+static int check_chars(char *var, char *cmd)
+{
+	int		i;
+	size_t	ret;
 
 	i = 0;
 	ret = TRUE;
-	count = 0;
 	if (!(ft_isalpha(var[0]) || var[0] == '_'))
 		ret = FALSE;
 	while (var[i] && var[i] != '=')
@@ -31,29 +56,10 @@ int	is_correct_env_variable(char *var, char *cmd)
 			ret = FALSE;
 		i++;
 	}
-	i = 0;
-	while (var[i] && var[i] != '=')
-	{
-		if (ft_isdigit(var[i]))
-			count++;
-		i++;
-	}
-	if (count == var_lenght(var))
-		ret = FALSE;
-	if (var[ft_strlen(var) - 1] == '='
+	if (var[f_strlen(var) - 1] == '='
 		&& f_strncmp(cmd, "unset", f_strlen(cmd)) == 0)
 		ret = FALSE;
-	if (ret == FALSE)
-	{
-		ft_putstrc_fd(RED_, "minishell: ", 2);
-		ft_putstrc_fd(RED_, cmd, 2);
-		ft_putstrc_fd(RED_, ": `", 2);
-		ft_putstrc_fd(RED_, var, 2);
-		ft_putstrc_fd(RED_, "': not a valid identifier\n", 2);
-		g_signal = 1;
-		return (FALSE);
-	}
-	return (TRUE);
+	return (ret);
 }
 
 int	change_var_value(char **envp_minish, char *raw_variable)

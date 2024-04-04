@@ -6,12 +6,11 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 19:10:04 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/03 00:37:35 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/04 22:36:09 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-void		print_unset_error(char *var);
 static void	unset_variables(t_pipe *data, t_cmd *cmd, t_unset *uset, int pos);
 
 int	exec_unset(t_cmd *cmd, t_pipe *data, int pos)
@@ -42,9 +41,11 @@ int	exec_unset(t_cmd *cmd, t_pipe *data, int pos)
 	return (EXIT_SUCCESS);
 }
 
-void	print_unset_error(char *var)
+void	print_cmd_error(char *var,  char *cmd)
 {
-	ft_putstrc_fd(RED_, "minishell: unset: `", 2);
+	ft_putstrc_fd(RED_, "minishell: ", 2);
+	ft_putstrc_fd(RED_, cmd, 2);
+	ft_putstrc_fd(RED_, ": `", 2);
 	ft_putstrc_fd(RED_, var, 2);
 	ft_putstrc_fd(RED_, "': not a valid identifier\n", 2);
 }
