@@ -54,7 +54,7 @@ static char	*create_expanded_str(char *str, char *env_value)
 		free(env_value);
 		exit(EXIT_FAILURE);
 	}
-	return (fill_array(str, env_value, array));	
+	return (fill_array(str, env_value, array));
 }
 
 static char	*get_env_value(char *var_env, char **envp)
@@ -65,48 +65,48 @@ static char	*get_env_value(char *var_env, char **envp)
 	i = 0;
 	while (envp[i])
 	{
-		if (ft_strncmp(var_env, envp[i], ft_strlen(var_env)) == 0)
+		if (ft_strncmp(var_env, envp[i], ft_strlen(var_env)) == 0
+			&& envp[i][ft_strlen(var_env)] == '=')
 		{
 			j = 0;
 			while (envp[i][j] != '=' && envp[i][j])
 				j++;
 			if (envp[i][j + 1])
-				return (ft_substr(envp[i] + j, 1, ft_strlen(envp[i]) - (j + 1)));
+			{
+				free(var_env);
+				return (ft_substr(envp[i] + j, 1,
+						ft_strlen(envp[i]) - (j + 1)));
+			}
 		}
 		i++;
 	}
-	return (NULL);
+	return (strdup(""));
 }
 
 char	*expander_process(char *str, char **envp)
 {
 	char	*expanded_str;
-	char	*env_value;
-	char	*env_key;
-	int		len;
+	char	*env;
+	int		l;
 	int		i;
 
 	i = 0;
 	while (str[i] != '$' && str[i])
 		i++;
-	if ((str[i + 1] == '?'))
+	if (!(str[i + 1] == '?'))
 	{
-		expanded_str = create_expanded_str(str, ft_itoa(g_signal));
-		free(str);
-		return(expanded_str);
+		if (!((ft_isalnum(str[i + 1]) || str[i + 1] == '_') && str[i + 1]))
+			return (str);
+		l = 1;
+		while ((ft_isalnum(str[i + l]) || str[i + l] == '_') && str[i + l])
+			l++;
+		env = ft_substr(str + i, 1, l - 1);
+		env = get_env_value(env, envp);
+		expanded_str = create_expanded_str(str, env);
+		free(env);
 	}
-	if (!((ft_isalnum(str[i + 1]) || str[i + 1] == '_') && str[i + 1]))
-		return (str);
-	len = 1;
-	while ((ft_isalnum(str[i + len]) || str[i + len] == '_') && str[i + len])
-		len++;
-	env_key = ft_substr(str + i, 1, len - 1);
-	env_value = get_env_value(env_key, envp);
-	if (env_value == NULL)
-		env_value = strdup("");
-	free(env_key);
-	expanded_str = create_expanded_str(str, env_value);
-	free(env_value);
+	else
+		expanded_str = create_expanded_str(str, ft_itoa(g_signal));
 	free(str);
 	return (expanded_str);
 }
