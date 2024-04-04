@@ -6,7 +6,7 @@
 /*   By: ubuntu <ubuntu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 20:25:09 by ubuntu            #+#    #+#             */
-/*   Updated: 2024/04/03 22:10:32 by ubuntu           ###   ########.fr       */
+/*   Updated: 2024/04/04 22:48:09 by ubuntu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ t_list	*lex_tony(char *str, char **envp)
 int	main(int argc, char **argv, char **envp)
 {
 	t_list	*list;
-	char	*str = "\'hola que tal\'  \' adios \' \"hola $? \"";
+	char	*str = "\'hola que tal\'  \' adios \' \"hola $HOME \"";
 
 	
 	(void)argc;

@@ -31,7 +31,7 @@ static char	*fill_array(char *str, char *env_value, char *array)
 	while (str[i] != '$' && str[i])
 		array[j++] = str[i++];
 	i++;
-	while ((ft_isalnum(str[i]) || str[i] == '_') && str[i])
+	while ((str[i] == '?' || ft_isalnum(str[i]) || str[i] == '_') && str[i])
 		i++;
 	while (env_value && env_value[x])
 		array[j++] = env_value[x++];
@@ -46,7 +46,7 @@ static char	*create_expanded_str(char *str, char *env_value)
 	char	*array;
 	int		len;
 
-	len = len_expanded_str(str, env_value);	
+	len = len_expanded_str(str, env_value);
 	array = (char *)malloc(len + 1);
 	if (!array)
 	{
@@ -78,9 +78,6 @@ static char	*get_env_value(char *var_env, char **envp)
 	return (NULL);
 }
 
-
-/*manejar caso en que $ no le sigue nada porque me esta devolviendo /bin/bash que es la primera variable que se encuentra
-y verificar el caso en el que se pone $? porque no esta funcionando igual que en bash*/
 char	*expander_process(char *str, char **envp)
 {
 	char	*expanded_str;
@@ -92,18 +89,21 @@ char	*expander_process(char *str, char **envp)
 	i = 0;
 	while (str[i] != '$' && str[i])
 		i++;
-	if (str[i + 1] == '?')
+	if ((str[i + 1] == '?'))
 	{
+		expanded_str = create_expanded_str(str, ft_itoa(g_signal));
 		free(str);
-		return (ft_itoa(g_signal));
+		return(expanded_str);
 	}
+	if (!((ft_isalnum(str[i + 1]) || str[i + 1] == '_') && str[i + 1]))
+		return (str);
 	len = 1;
 	while ((ft_isalnum(str[i + len]) || str[i + len] == '_') && str[i + len])
 		len++;
 	env_key = ft_substr(str + i, 1, len - 1);
 	env_value = get_env_value(env_key, envp);
 	if (env_value == NULL)
-    	env_value = strdup("");
+		env_value = strdup("");
 	free(env_key);
 	expanded_str = create_expanded_str(str, env_value);
 	free(env_value);
