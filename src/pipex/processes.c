@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/03/14 20:43:46 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/05 22:03:42 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,28 +15,21 @@
 int	exec_process(char **cmd, char *envp[], char *path_envp)
 {
 	char	*path;
-	//char	*path_arg;
 
 	if (cmd_have_path(cmd[0]))
 	{
 		path = f_strdup(cmd[0]);
 		if (execve(path, cmd, envp) < 0)
-		{
-			ft_putstr_fd("Execve error\n", 2);
 			return (f_error());
-		}
 		return (EXIT_SUCCESS);
 	}
 	path = get_path(cmd[0], path_envp);
-	//path_arg = get_path(cmd)
 	if ((cmd_have_current_path(cmd[0]) || !path))
 	{
 		free_split(cmd);
 		g_signal = 127;
-		ft_putstr_fd("cmd_have_current_path error\n", 2);
 		return (127);
 	}
-	printf("envp: %s\n", envp[0]);
 	if (execve(path, cmd, envp) < 0)
 	{
 		printf("Execve error\n");

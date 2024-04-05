@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:39 by iostancu          #+#    #+#             */
-/*   Updated: 2024/03/13 23:21:53 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/05 22:03:11 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ int ff_error(char *num)
 int	f_error(void)
 {
 	g_signal = errno;
-	printf("check error num: %i \n", g_signal);
 	if (g_signal == 0)
 		return (g_signal);
 	ft_putstrc_fd(RED_, "Error: ", 2);

@@ -6,14 +6,15 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 19:27:39 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/04 22:36:54 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/05 20:26:05 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-size_t	var_lenght(char *var);
-static int check_chars(char *var, char *cmd);
+size_t		var_lenght(char *var);
+static int	check_chars(char *var, char *cmd);
+static void	free_vars(char *s1, char *s2, char *s3);
 
 int	is_correct_env_variable(char *var, char *cmd)
 {
@@ -81,17 +82,20 @@ int	change_var_value(char **envp_minish, char *raw_variable)
 		{
 			free(envp_minish[i]);
 			envp_minish[i] = f_strdup(raw_variable);
-			free(in_var);
-			free(var);
-			free(raw_variable);
+			free_vars(in_var, var, raw_variable);
 			return (EXIT_SUCCESS);
 		}
 		i++;
 	}
-	free(in_var);
-	free(var);
-	free(raw_variable);
+	free_vars(in_var, var, raw_variable);
 	return (EXIT_SUCCESS);
+}
+
+static void	free_vars(char *s1, char *s2, char *s3)
+{
+	free(s1);
+	free(s2);
+	free(s3);
 }
 
 char	*get_env_var_value(char **envp_minish, char *var)

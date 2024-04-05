@@ -1,6 +1,18 @@
-#include "../../inc/headers/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   core_shell.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/05 20:06:11 by iostancu          #+#    #+#             */
+/*   Updated: 2024/04/05 22:01:37 by iostancu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-volatile int g_signal;
+#include "minishell.h"
+
+int g_signal;
 
 char	*get_prompt(t_pipe *data);
 void	sig_interrupt(int signum);
@@ -47,10 +59,8 @@ int	core_shell(char **envp)
 	t_pipe	*p_data;
 	struct sigaction	s0;
 	char	*prompt;
-	size_t	show_sig;
 
 	g_signal = 0;
-	show_sig = 0;
 	s0.sa_handler = &c_handler;
 	s0.sa_flags = SA_RESTART;
 	if (sigaction(SIGINT, &s0, NULL))
@@ -65,7 +75,6 @@ int	core_shell(char **envp)
 	prompt = NULL;
 	while(buffer)
 	{
-		//g_signal = 0;
 		if (buffer)
 		{
 			free(buffer);
@@ -78,13 +87,7 @@ int	core_shell(char **envp)
 			return (f_error());
 		if (buffer && *buffer && f_strict_strncmp(buffer, oldbuffer, sizeof(oldbuffer)) != 0)
 			add_history(buffer);
-		if (show_sig == 1)
-		{
-			
-			show_sig = 0;
-			g_signal = 0;
-			printf("show sig = 0 and g_signal: %d\n",  g_signal);
-		}
+
 		cmd = parser(buffer, p_data->envp_minish);
 		if (NULL == cmd)
 			continue ;
@@ -94,15 +97,7 @@ int	core_shell(char **envp)
 		oldbuffer = (char *)NULL;
 		oldbuffer = ft_strdup(buffer);
 		
-		if (f_pipex(p_data, cmd, envp))
-			continue ;
-		if (g_signal != 0 && show_sig == 0)
-		{
-			printf("show sig = 1 and g_signal: %d\n",  g_signal);
-			show_sig = 1;
-			continue ;
-		}
-		
+		f_pipex(p_data, cmd, envp);
 	}
 	free(buffer);
 	free(oldbuffer);

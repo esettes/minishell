@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:23 by iostancu          #+#    #+#             */
-/*   Updated: 2024/03/14 20:41:36 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/05 22:02:55 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,7 @@ int	f_pipex(t_pipe *p_data, t_cmd *cmd, char *envp[])
 		return (EXIT_FAILURE);
 	n_cmds = cmd->n_scmd;
 	while (n_cmds-- != 0)
-		wait(NULL);
-	// if (f_strncmp("?", cmd->scmd[i]->args[0], sizeof("?")) == 0)
-	// 	g_signal = 0;
+		wait3(&g_signal, WCONTINUED, NULL);
 	return (EXIT_SUCCESS);
 }
 
@@ -57,10 +55,10 @@ int run_parent(t_cmd *cmd, t_pipe **p_data, int pos)
 	if (f_strncmp(*cmd->scmd[pos]->args, "unset", sizeof("unset")) == 0)
 		if (exec_unset(cmd, *p_data, pos))
 			return (EXIT_FAILURE);
-	if (ZERO == ft_strncmp(*cmd->scmd[pos]->args, "echo", sizeof("echo")))
+	if (ft_strncmp(*cmd->scmd[pos]->args, "echo", sizeof("echo")) == 0)
 		if (echo_handler(*cmd->scmd[pos]))
 			return (EXIT_FAILURE);
-	if (ZERO == ft_strncmp(*cmd->scmd[pos]->args, "exit", sizeof("exit")))
+	if (ft_strncmp(*cmd->scmd[pos]->args, "exit", sizeof("exit")) == 0)
 		if (exit_handler(cmd))
 			return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
@@ -88,6 +86,8 @@ t_pipe	*init_pipe_struct(char *envp[])
 		if (f_error())
 			return (NULL);
 	tmp->envp = getenv("PATH");
+	if (tmp->envp == NULL)
+		tmp->envp = NULL;
 	init_envp_minishell(tmp, envp);
 	return (tmp);
 }
@@ -144,7 +144,8 @@ int	process_loop(t_cmd *cmd, char *envp[], t_pipe **p_data, int pos)
 	if ((*p_data)->pid == 0)
 		if (run_child(*p_data, cmd, envp, pos))
 			return (EXIT_FAILURE);
-	
+	printf("exit status: %i\n", WEXITSTATUS(g_signal));
+	WEXITSTATUS(g_signal);
 	close_files(&(*p_data)->infile, &(*p_data)->outfile);
 	(*p_data)->infile = (*p_data)->pip[R];
 	return (EXIT_SUCCESS);
