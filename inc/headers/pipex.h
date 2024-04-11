@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:09:44 by iostancu          #+#    #+#             */
-/*   Updated: 2024/03/13 23:03:29 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/11 23:35:48 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,17 +79,6 @@ int		f_strict_strncmp(const char *s1, const char *s2, size_t n);
 int		is_parent_exec(char *str);
 int		run_parent(t_cmd *cmd, t_pipe **p_data, int pos);
 t_pipe	*init_pipe_struct(char *envp[]);
-/**
- * Fills the first n bytes of the memory area pointed to by 'b' with 
- * the constant byte c.
- * 
- * @param[in] b Pointer to memory to fill.
- * @param[in] c Byte to fill with.
- * @param[in] len Number of bytes to fill.
- */
-void	*f_memset(void *b, int c, size_t len);
-void	*f_memmove(void *dst, const void *src, size_t len);
-void	f_bzero(void *s, size_t n);
 /**
  * @brief Frees all the strings allocated in the double ptr, and then frees
  * the double ptr.

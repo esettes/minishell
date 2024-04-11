@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 23:41:36 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/05 20:05:51 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/11 23:40:24 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ char	**create_new_var(char **envp_minish, char *var)
 	size_t	len;
 	char	**tmp;
 	size_t	aux;
-	
+
 	len = 0;
 	len = get_array_size(envp_minish);
 	aux = len;

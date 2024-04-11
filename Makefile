@@ -6,7 +6,7 @@
 #    By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/21 19:03:34 by uliherre          #+#    #+#              #
-#    Updated: 2024/04/01 23:34:10 by iostancu         ###   ########.fr        #
+#    Updated: 2024/04/11 23:40:02 by iostancu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -74,7 +74,8 @@ SOURCES_BUILTIN = \
 	exit.c \
 	pwd.c \
 	env_utils.c \
-	env_utils_2.c
+	env_utils_2.c \
+	env_utils_3.c
 
 A_BUILTIN = $(addprefix $(DIR_BUILTIN),$(SOURCES_BUILTIN))
 SOURCES += $(A_BUILTIN)
@@ -87,7 +88,8 @@ SOURCES_PIPEX = \
 	lib_utils.c \
 	pipex.c \
 	processes.c \
-	utils.c
+	utils.c \
+	utils_2.c
 
 A_PIPEX = $(addprefix $(DIR_PIPEX),$(SOURCES_PIPEX))
 SOURCES += $(A_PIPEX)

@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 19:53:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/03 00:27:31 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/11 23:36:27 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,84 +73,4 @@ int	f_strict_strncmp(const char *s1, const char *s2, size_t n)
 	else
 		return (1);
 	return (0);
-}
-
-char	*f_strjoin(char const *s1, char const *s2)
-{
-	char	*res;
-	size_t	i;
-	size_t	j;
-
-	i = 0;
-	j = 0;
-	if (!s1 || !s2)
-		return (NULL);
-	res = (char *)malloc(f_strlen((char *)s1) + (f_strlen((char *)s2)) + 1);
-	if (!res)
-		return (NULL);
-	while (s1[i])
-		res[i++] = (char)s1[j++];
-	j = 0;
-	while (s2[j])
-		res[i++] = s2[j++];
-	res[i] = '\0';
-	return (res);
-}
-
-size_t	f_strlen(const char *s)
-{
-	size_t	i;
-
-	i = 0;
-	if (!s)
-		return (i);
-	while (s[i])
-		i++;
-	return (i);
-}
-
-void	*f_memset(void *b, int c, size_t len)
-{
-	unsigned char	*p;
-
-	p = b;
-	while (len-- > 0)
-		*p++ = (char)c;
-	return (b);
-}
-
-void	*f_memmove(void *dst, const void *src, size_t len)
-{
-	const unsigned char	*s;
-	unsigned char		*d;
-	size_t				i;
-
-	s = (const unsigned char *)src;
-	d = (unsigned char *)dst;
-	i = 0;
-	if (NULL == dst && NULL == src)
-		return (dst);
-	if (d > s)
-	{
-		while (len-- > 0)
-			d[len] = s[len];
-	}
-	else
-	{
-		while (i < len)
-		{
-			d[i] = s[i];
-			i++;
-		}
-	}
-	return (dst);
-}
-
-void	f_bzero(void *s, size_t n)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < n)
-		*(char *)(s + i++) = 0;
 }

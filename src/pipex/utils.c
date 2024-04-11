@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:39 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/05 22:03:11 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/11 23:33:07 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	free_split(char **s)
 	free(s);
 }
 
-int ff_error(char *num)
+int	ff_error(char *num)
 {
 	if (!num)
 		g_signal = 0;

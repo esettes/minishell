@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 19:27:39 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/05 20:26:05 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/11 23:38:59 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	is_correct_env_variable(char *var, char *cmd)
 	return (TRUE);
 }
 
-static int check_chars(char *var, char *cmd)
+static int	check_chars(char *var, char *cmd)
 {
 	int		i;
 	size_t	ret;
@@ -96,31 +96,6 @@ static void	free_vars(char *s1, char *s2, char *s3)
 	free(s1);
 	free(s2);
 	free(s3);
-}
-
-char	*get_env_var_value(char **envp_minish, char *var)
-{
-	size_t	i;
-	char	*env_var;
-
-	i = 0;
-	while (envp_minish[i])
-	{
-		env_var = get_env_variable(envp_minish[i]);
-		if (f_strict_strncmp(env_var, var, f_strlen(var)) == 0)
-		{
-			if (envp_minish[i][f_strlen(env_var)] == '\0')
-			{
-				free(env_var);
-				return (NULL);
-			}
-			free(env_var);
-			return (envp_minish[i] + f_strlen(var) + 1);
-		}
-		i++;
-	}
-	free(env_var);
-	return (NULL);
 }
 
 size_t	var_lenght(char *var)

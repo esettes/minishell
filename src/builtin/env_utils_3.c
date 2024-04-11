@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_tools.c                                        :+:      :+:    :+:   */
+/*   env_utils_3.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:07:23 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/05 20:07:24 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/11 23:40:31 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,27 @@ char	*ft_getenv(char **envp, char *var_name)
 	return (NULL);
 }
 
+char	*get_env_var_value(char **envp_minish, char *var)
+{
+	size_t	i;
+	char	*env_var;
 
+	i = 0;
+	while (envp_minish[i])
+	{
+		env_var = get_env_variable(envp_minish[i]);
+		if (f_strict_strncmp(env_var, var, f_strlen(var)) == 0)
+		{
+			if (envp_minish[i][f_strlen(env_var)] == '\0')
+			{
+				free(env_var);
+				return (NULL);
+			}
+			free(env_var);
+			return (envp_minish[i] + f_strlen(var) + 1);
+		}
+		i++;
+	}
+	free(env_var);
+	return (NULL);
+}
