@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:07:46 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/05 20:07:47 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/12 00:03:39 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,6 @@ typedef struct s_unset
 	char	*var;
 }	t_unset;
 
-int		export_handler(char **env, const char *export_var);
-int		unset_handler(char **env, const char *unset_var);
 size_t	env_len(char **env);
 int		echo_handler(t_scmd scmd);
 int		exit_handler(t_cmd *cmd);
@@ -64,8 +62,8 @@ int		is_correct_env_variable(char *var, char *cmd);
 char	*get_env_var_value(char **envp_minish, char *var);
 int		pwd_handler(void);
 char	**create_new_var(char **envp_minish, char *var);
-void	print_cmd_error(char *var,  char *cmd);
-int	change_var_value(char **envp_minish, char *raw_variable);
+void	print_cmd_error(char *var, char *cmd);
+int		change_var_value(char **envp_minish, char *raw_variable);
 /**
  * @brief Get the env variable from the minishell environment
  * 
@@ -74,5 +72,6 @@ int	change_var_value(char **envp_minish, char *raw_variable);
  * @return char* 
  */
 char	*get_env_variable_from_minish_environ(char **envp_minish, char *var);
+void	init_env(char **env, size_t len, char **envp_minish);
 
 #endif

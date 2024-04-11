@@ -6,7 +6,7 @@
 #    By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/21 19:03:34 by uliherre          #+#    #+#              #
-#    Updated: 2024/04/11 23:40:02 by iostancu         ###   ########.fr        #
+#    Updated: 2024/04/12 00:18:11 by iostancu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -65,7 +65,6 @@ OBJECTS += $(addprefix $(OBJDIR), $(SOURCES_EXECUTER:.c=.o))
 ########################## BUILTIN ############################
 DIR_BUILTIN = ./src/builtin/
 SOURCES_BUILTIN = \
-	env_tools.c \
 	echo.c \
 	export.c \
 	unset.c \

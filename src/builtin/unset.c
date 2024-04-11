@@ -6,11 +6,12 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 19:10:04 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/04 22:36:09 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/12 00:03:00 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 static void	unset_variables(t_pipe *data, t_cmd *cmd, t_unset *uset, int pos);
 
 int	exec_unset(t_cmd *cmd, t_pipe *data, int pos)
@@ -26,7 +27,7 @@ int	exec_unset(t_cmd *cmd, t_pipe *data, int pos)
 		uset.arr_size = get_array_size(data->envp_minish);
 		if (is_correct_env_variable(cmd->scmd[pos]->args[uset.k], "unset")
 			&& env_var_already_exist(data->envp_minish,
-								cmd->scmd[pos]->args[uset.k]))
+				cmd->scmd[pos]->args[uset.k]))
 		{
 			uset.tmp = malloc(sizeof(char *) * uset.arr_size);
 			if (!uset.tmp)
@@ -41,7 +42,7 @@ int	exec_unset(t_cmd *cmd, t_pipe *data, int pos)
 	return (EXIT_SUCCESS);
 }
 
-void	print_cmd_error(char *var,  char *cmd)
+void	print_cmd_error(char *var, char *cmd)
 {
 	ft_putstrc_fd(RED_, "minishell: ", 2);
 	ft_putstrc_fd(RED_, cmd, 2);
@@ -53,15 +54,15 @@ void	print_cmd_error(char *var,  char *cmd)
 static void	unset_variables(t_pipe *data, t_cmd *cmd, t_unset *uset, int pos)
 {
 	uset->i = 0;
-
 	while (data->envp_minish[uset->i])
 	{
-		if (f_strict_strncmp(data->envp_minish[uset->i], cmd->scmd[pos]->args[uset->k],
+		if (f_strict_strncmp(data->envp_minish[uset->i],
+				cmd->scmd[pos]->args[uset->k],
 				f_strlen(cmd->scmd[pos]->args[uset->k])) != 0)
-			{
-				uset->tmp[uset->j] = f_strdup(data->envp_minish[uset->i]);
-				uset->j++;
-			}
+		{
+			uset->tmp[uset->j] = f_strdup(data->envp_minish[uset->i]);
+			uset->j++;
+		}
 		uset->i++;
 	}
 }

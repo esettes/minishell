@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 19:03:59 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/05 21:22:04 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/12 00:17:44 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@
 # include "ft_printf.h"
 # include "parser.h"
 # include "structs.h"
-# include "executer.h"
 # include "builtin.h"
 
 # include <readline/readline.h>

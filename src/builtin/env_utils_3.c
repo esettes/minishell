@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:07:23 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/11 23:40:31 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/12 00:01:38 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,16 @@ char	*get_env_var_value(char **envp_minish, char *var)
 	}
 	free(env_var);
 	return (NULL);
+}
+
+void	init_env(char **env, size_t len, char **envp_minish)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < len)
+	{
+		env[i] = f_strdup(envp_minish[i]);
+		i++;
+	}
 }
