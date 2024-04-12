@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:07 by antosanc          #+#    #+#             */
-/*   Updated: 2024/04/12 17:56:20 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/04/12 18:30:05 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ static int	parse_checker(t_cmd *cmd, char *str, char **envp)
 		return (EXIT_FAILURE);
 	if (validator_tony(tokens))
 		return (ft_lstclear(&tokens, free), EXIT_FAILURE);
-	cmd = yacc_tony(cmd, tokens);
+	/*cmd = yacc_tony(cmd, tokens);
 	if (cmd == NULL)
-		return (ft_lstclear(&tokens, free), EXIT_FAILURE);
+		return (ft_lstclear(&tokens, free), EXIT_FAILURE);*/
 	print_result(tokens);
 	return (ft_lstclear(&tokens, free), EXIT_SUCCESS);
 }
@@ -54,7 +54,10 @@ t_cmd	*parser(char *str, char **envp)
 	if (!command)
 		return (NULL);
 	if (parse_checker(command, str, envp))
+	{
+		g_signal = 2;
 		return (free(command), NULL);
+	}
 	return (command);
 }
 
@@ -63,6 +66,6 @@ int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
-	char	*str = "<<< adios";
+	char	*str = "hola | | adios";
 	parser(str, envp);
 }

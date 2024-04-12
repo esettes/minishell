@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:44 by antosanc          #+#    #+#             */
-/*   Updated: 2024/04/12 17:54:29 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/04/12 18:46:13 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,5 +19,7 @@ hay que expandirlas*/
 
 t_cmd	*yacc_tony(t_cmd *cmd, t_list *tokens)
 {
-	
+	cmd->n_available_scmd = count_cmd(tokens);
+	cmd->n_scmd = 0;
+	cmd->scmd = ft_calloc(cmd->n_available_scmd, sizeof(t_scmd *));
 }
