@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   lex.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ubuntu <ubuntu@student.42.fr>              +#+  +:+       +#+        */
+/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/26 20:25:09 by ubuntu            #+#    #+#             */
-/*   Updated: 2024/04/10 23:10:14 by ubuntu           ###   ########.fr       */
+/*   Created: 2024/04/12 16:58:24 by antosanc          #+#    #+#             */
+/*   Updated: 2024/04/12 16:58:26 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/headers/minishell.h"
 
-//Heredoc por revisar el tema de expansion de variables de entorno
 volatile int	g_signal = 0;
 
 static char	*quotes_content(char *str, char **envp, int *i, t_list **list)

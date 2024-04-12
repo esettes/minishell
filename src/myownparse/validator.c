@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   validator.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/12 16:58:34 by antosanc          #+#    #+#             */
+/*   Updated: 2024/04/12 17:30:32 by antosanc         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 // casi terminado falta probarlo y darle una revision
 #include "../../inc/headers/minishell.h"
 
-static	void	syntax_error(char *str)
+static void	syntax_error(char *str)
 {
-	printf("minishell: syntax error near unexpected token `%s'", str);
+	printf("minishell: syntax error near unexpected token `%s'\n", str);
 }
 
 static int	check_error_cases(t_list *tokens)
@@ -30,11 +42,10 @@ int	validator_tony(t_list *tokens)
 	t_list	*last;
 
 	last = ft_lstlast(tokens);
-	if (((char *)tokens->content)[0] == '|')
-	if (last && last->content && ((char *)last->content)[0] == '>'
-		|| ((char *)last->content)[0] == '<')
+	if (last && last->content && (((char *)last->content)[0] == '>'
+		|| ((char *)last->content)[0] == '<'))
 		return (syntax_error("newline"), EXIT_FAILURE);
-	else if (((char *)tokens->content)[0] == '|'
+	if (((char *)tokens->content)[0] == '|'
 		|| ((char *)last->content)[0] == '|')
 		return (syntax_error("|"), EXIT_FAILURE);
 	while (tokens)

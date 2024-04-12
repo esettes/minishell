@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ubuntu <ubuntu@student.42.fr>              +#+  +:+       +#+        */
+/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 19:04:03 by uliherre          #+#    #+#             */
-/*   Updated: 2024/04/10 22:05:49 by ubuntu           ###   ########.fr       */
+/*   Updated: 2024/04/12 17:54:18 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,8 @@ int		check_sign_char(t_list *list);
 
 //Validator
 int		validator_tony(t_list *tokens);
+
+//Yacc
+t_cmd	*yacc_tony(t_cmd *cmd, t_list *tokens);
 
 #endif
