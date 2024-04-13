@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 19:04:03 by uliherre          #+#    #+#             */
-/*   Updated: 2024/04/12 18:21:47 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/04/13 14:17:46 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,7 @@ int		validator_tony(t_list *tokens);
 //Yacc
 t_cmd	*yacc_tony(t_cmd *cmd, t_list *tokens);
 int		count_cmd(t_list *tokens);
+int		count_scmd_args(t_list *tokens);
+void	free_cmd_tony(t_cmd *cmd);
 
 #endif
