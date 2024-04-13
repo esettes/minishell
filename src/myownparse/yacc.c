@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:44 by antosanc          #+#    #+#             */
-/*   Updated: 2024/04/13 13:51:42 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/04/13 17:12:53 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,24 @@ en este punto hay que controlar heredoc. En teoria, si heredoc usa variables de 
 hay que expandirlas*/
 
 #include "../../inc/headers/minishell.h"
+
+// Falta añadirle la comprobacion de redirecciones y el heredoc que no se como hacerlo aun
+static int	fill_scmd(t_scmd *scmd, t_list *tokens)
+{
+	int	t_len;
+
+	while (scmd->argc < scmd->n_available_args)
+	{
+		t_len = ft_strlen((char *)tokens->content);
+		scmd->args[scmd->argc] = (char *)malloc(sizeof(char) * t_len + 1);
+		if (!scmd->args[scmd->argc])
+			return (EXIT_FAILURE);
+		scmd->args[scmd->argc] = ft_strdup((char *)tokens->content);
+		tokens = tokens->next;
+		scmd->argc++;
+	}
+	return (EXIT_SUCCESS);
+}
 
 static int	create_scmd(t_scmd **scmd, t_list *tokens)
 {
@@ -32,7 +50,7 @@ static int	create_scmd(t_scmd **scmd, t_list *tokens)
 		scmd[i]->append = 0;
 		scmd[i]->in_f = NULL;
 		scmd[i]->out_f = NULL;
-		if (!fill_scmd(scmd[i], tokens))
+		if (fill_scmd(scmd[i], tokens))
 			return (EXIT_FAILURE);
 		i++;
 	}
@@ -48,18 +66,17 @@ t_cmd	*yacc_tony(t_cmd *cmd, t_list *tokens)
 	cmd->scmd = ft_calloc(cmd->n_available_scmd + 1, sizeof(t_scmd *));
 	if (!cmd->scmd)
 		return (NULL);
-	i = 0;
-	while (i < cmd->n_available_scmd)
+	i = -1;
+	while (++i < cmd->n_available_scmd)
 	{
 		cmd->scmd[i] = (t_scmd *)malloc(sizeof(t_scmd));
 		if (!cmd->scmd[i])
 		{
-			while (i-- > 0)
+			while (--i > 0)
 				free(cmd->scmd[i]);
 			free(cmd->scmd);
 			return (NULL);
 		}
-		i++;
 	}
 	cmd->scmd[cmd->n_available_scmd] = NULL;
 	if (create_scmd(cmd->scmd, tokens))
