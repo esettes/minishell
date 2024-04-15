@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 19:04:03 by uliherre          #+#    #+#             */
-/*   Updated: 2024/04/13 14:17:46 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/04/15 21:35:01 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ char	*store_syntax_char(char *str, int *i);
 int		check_syntax_char(char c);
 void	*clear_all(t_list **list, char *error);
 int		check_sign_char(t_list *list);
+char	*create_string(char *str, int j, int *i);
 
 //Validator
 int		validator_tony(t_list *tokens);

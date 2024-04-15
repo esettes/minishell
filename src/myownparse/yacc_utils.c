@@ -6,12 +6,13 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 18:19:47 by antosanc          #+#    #+#             */
-/*   Updated: 2024/04/13 14:40:39 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/04/15 22:42:28 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/headers/minishell.h"
 
+//comprobar que este bien 
 int	count_cmd(t_list *tokens)
 {
 	int	len;

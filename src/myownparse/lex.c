@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:24 by antosanc          #+#    #+#             */
-/*   Updated: 2024/04/12 16:58:26 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/04/15 22:39:08 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static char	*quotes_content(char *str, char **envp, int *i, t_list **list)
 	}
 	if (str[*i] == quote)
 		(*i)++;
-	string = ft_substr(str, j, *i - j);
+	string = create_string(str, j, i);
 	if (check_sign_char(*list))
 		return (string);
 	if (quote == '\"' && flag > 0)
@@ -101,7 +101,7 @@ t_list	*lex_tony(char *str, char **envp)
 /*int	main(int argc, char **argv, char **envp)
 {
 	t_list	*list;
-	char	*str = " << adios";
+	char	*str = " >\">\"";
 	t_list	*tmp;
 
 	

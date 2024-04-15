@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:44 by antosanc          #+#    #+#             */
-/*   Updated: 2024/04/13 17:12:53 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/04/15 22:42:11 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ hay que expandirlas*/
 
 #include "../../inc/headers/minishell.h"
 
-// Falta añadirle la comprobacion de redirecciones y el heredoc que no se como hacerlo aun
+// Falta añadirle la comprobacion de redirecciones, todo esto va a ir en una funcion aparte y el heredoc que no se como hacerlo aun
 static int	fill_scmd(t_scmd *scmd, t_list *tokens)
 {
 	int	t_len;

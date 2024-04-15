@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:59:23 by antosanc          #+#    #+#             */
-/*   Updated: 2024/04/12 17:38:58 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/04/15 22:30:42 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,21 @@ int	check_sign_char(t_list *list)
 	if (str[1] == str[0] && (str[1] == '>' || str[1] == '<'))
 		return (1);
 	return (0);
+}
+
+char	*create_string(char *str, int j, int *i)
+{
+	int			x;
+	int			flag;
+	const char	*meta_chars;
+
+	x = j;
+	meta_chars = "><|";
+	flag = 0;
+	while (x < (*i) && str[x])
+		if (ft_strchr(meta_chars, str[x++]))
+			flag = 1;
+	if (flag == 1)
+		return (ft_substr(str, j, *i - j));
+	return (ft_substr(str, j + 1, *i - j - 2));
 }
