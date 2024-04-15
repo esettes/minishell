@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 18:43:21 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/02 22:35:07 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/16 00:12:25 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	exec_cd(t_pipe *data, t_cmd *cmd, int pos)
 	if (chdir(cd.dir_to_exec) < 0)
 		return (f_error());
 	if (cd.is_hyphen)
-		ft_printf("%s\n", cd.last_dir);
+		printf("%s\n", cd.last_dir);
 	change_and_create_env_var(&data, cd.curr_dir);
 	return (EXIT_SUCCESS);
 }
