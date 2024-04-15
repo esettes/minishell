@@ -1,26 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/05 20:06:51 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/16 00:25:47 by iostancu         ###   ########.fr       */
+/*   Created: 2024/04/12 18:19:52 by antosanc          #+#    #+#             */
+/*   Updated: 2024/04/12 18:19:53 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-int	pwd_handler(void)
-{
-	char	*buffer;
-
-	buffer = getcwd(NULL, MAXPATHLEN);
-	if (buffer)
-	{
-		ft_putendl_fd(buffer, STDOUT_FILENO);
-		return (EXIT_SUCCESS);
-	}
-	return (EXIT_FAILURE);
-}

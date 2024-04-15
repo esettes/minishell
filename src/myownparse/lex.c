@@ -3,49 +3,69 @@
 /*                                                        :::      ::::::::   */
 /*   lex.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ubuntu <ubuntu@student.42.fr>              +#+  +:+       +#+        */
+/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/26 20:25:09 by ubuntu            #+#    #+#             */
-/*   Updated: 2024/04/02 23:05:13 by ubuntu           ###   ########.fr       */
+/*   Created: 2024/04/12 16:58:24 by antosanc          #+#    #+#             */
+/*   Updated: 2024/04/15 22:39:08 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/headers/minishell.h"
 
-
-//borrar cuando termine esta parte
 volatile int	g_signal = 0;
 
-static char	*quotes_content(char *str, char **envp, int *i, char quote)
+static char	*quotes_content(char *str, char **envp, int *i, t_list **list)
 {
 	int		j;
 	char	*string;
 	int		flag;
+	char	quote;
 
-	(*i)++;
-	j = *i;
+	j = *i - 1;
+	quote = str[j];
 	flag = 0;
-	if (!ft_strchr(str + j, quote))
-		return (ft_puterror_noexit("unclosed quotes"), NULL);
+	if (!ft_strchr(str + *i, quote))
+		return (clear_all(list, "unclosed quotes"));
 	while (str[*i] != quote && str[*i])
 	{
 		if (str[*i] == '$')
 			flag++;
 		(*i)++;
 	}
-	string = ft_substr(str + j, 0, *i - j);
+	if (str[*i] == quote)
+		(*i)++;
+	string = create_string(str, j, i);
+	if (check_sign_char(*list))
+		return (string);
 	if (quote == '\"' && flag > 0)
 		while (flag-- > 0)
-			string = expander_process(string, envp);
+			string = expander_process(string, envp, list);
 	return (string);
 }
 
-static char	*search_token(char *str, char **envp, int *i)
+static char	*search_token(char *str, char **envp, int *i, t_list **list)
 {
-	(void)str;
-	(void)envp;
-	(void)i;
-	return (NULL);
+	int		flag;
+	int		j;
+	char	*string;
+
+	j = *i;
+	flag = 0;
+	if (check_syntax_char(str[*i]))
+		return (store_syntax_char(str, i));
+	while (!check_syntax_char(str[*i]) && str[*i])
+	{
+		if (str[*i] == '$')
+			flag++;
+		(*i)++;
+	}
+	string = ft_substr(str, j, *i - j);
+	if (check_sign_char(*list))
+		return (string);
+	if (flag > 0)
+		while (flag-- > 0)
+			string = expander_process(string, envp, list);
+	return (string);
 }
 
 t_list	*lex_tony(char *str, char **envp)
@@ -61,35 +81,39 @@ t_list	*lex_tony(char *str, char **envp)
 		content = NULL;
 		while (str[i] == ' ')
 			i++;
+		if (!str[i])
+			break ;
 		if (str[i] == '\'' || str[i] == '\"')
 		{
-			content = quotes_content(str, envp, &i, str[i]);
-			printf("%s\n", content);
 			i++;
+			content = quotes_content(str, envp, &i, &list);
 		}
 		else
-			content = search_token(str, envp, &i);
-		if (!content)
-		{
-			ft_lstclear(&list, free);
-			return (NULL);
-		}
-		ft_lstadd_back(&list, ft_lstnew(content));
+			content = search_token(str, envp, &i, &list);
+		if (content && *content)
+			ft_lstadd_back(&list, ft_lstnew(content));
+		else if (!content)
+			break ;
 	}
 	return (list);
 }
 
-int	main(void)
+/*int	main(int argc, char **argv, char **envp)
 {
 	t_list	*list;
-	char	*str = "\'hola que tal\'  \' adios \' \'       \'";
+	char	*str = " >\">\"";
+	t_list	*tmp;
 
-	list = lex_tony(str, NULL);
 	
+	(void)argc;
+	(void)argv;
+	list = lex_tony(str, envp);
+	tmp = list;
 	while (list)
 	{
 		printf("content: %s\n", (char *)list->content);
 		list = list->next;
 	}
+	ft_lstclear(&tmp, free);
 	return (0);
-}
+}*/
