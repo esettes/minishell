@@ -80,7 +80,7 @@ t_list	*lex(char *str, char **envp)
 	//printf("lex_list: \n");
 	//tmp = lex_list;
 	//while (tmp)
-	{
+	//{
 		//printf("content: %s\n", (char *)tmp->content);
 		//tmp = tmp->next;
 	//}

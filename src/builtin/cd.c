@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 18:43:21 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/16 20:34:45 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/16 20:49:45 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	is_home_directory(t_cmd *cmd, t_cd *cd)
 
 char	*set_home_directory(t_pipe *data)
 {
-	ft_printf("HOME: '%s'\n", get_env_var_value(data->envp_minish, "HOME"));
+	printf("HOME: '%s'\n", get_env_var_value(data->envp_minish, "HOME"));
 	return (get_env_var_value(data->envp_minish, "HOME"));
 }
 
