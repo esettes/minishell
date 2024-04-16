@@ -6,7 +6,7 @@
 #    By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/21 19:03:34 by uliherre          #+#    #+#              #
-#    Updated: 2024/04/12 00:18:11 by iostancu         ###   ########.fr        #
+#    Updated: 2024/04/16 20:38:43 by iostancu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ CFLAGS = -g3 -Wall -Wextra -Werror -fsanitize=address #-fsanitize-ignorelist=/ho
 LDFLAGS	= -L/Users/$(USER)/.brew/opt/readline/lib -lreadline
 CFLAGS += -I/Users/$(USER)/.brew/opt/readline/include
 
-INCLUDES = -I include -I ./inc/headers -I ./inc/libft/inc -I ./inc/ft_printf/inc
+INCLUDES = -I include -I ./inc/headers -I ./inc/libft/inc
 
 ############################ PARSER ###########################
 DIR_PARSER = ./src/sources_parser/
@@ -99,9 +99,8 @@ OBJECTS += $(addprefix $(OBJDIR), $(SOURCES_PIPEX:.c=.o))
 OBJDIR = ./src/obj/
 
 LIBFT = ./inc/libft/libft.a
-FT_PRINTF = ./inc/ft_printf/ft_printf.a
 
-COMPS = $(LIBFT) $(FT_PRINTF)
+COMPS = $(LIBFT)
 
 $(OBJDIR)%.o:$(DIR_PARSER)%.c
 	@mkdir -p $(OBJDIR)
@@ -127,8 +126,6 @@ $(NAME): $(OBJECTS) $(COMPS)
 $(LIBFT):
 	@$(MAKE) -C $(dir $(LIBFT))
 
-$(FT_PRINTF):
-	@$(MAKE) -C $(dir $(FT_PRINTF))
 
 all: obj $(NAME)
 
@@ -138,13 +135,11 @@ obj:
 clean:
 	@/bin/rm -rf $(OBJECTS)
 	@$(MAKE) -C $(dir $(LIBFT)) clean
-	@$(MAKE) -C $(dir $(FT_PRINTF)) clean
 	@echo "${LWHITE}Clean minishell... ${LGREEN}✓$(RESET)"
 
 fclean: clean
 	@/bin/rm -rf $(NAME)
 	@$(MAKE) -C $(dir $(LIBFT)) fclean
-	@$(MAKE) -C $(dir $(FT_PRINTF)) fclean
 
 f: fclean
 

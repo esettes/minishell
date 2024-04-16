@@ -53,6 +53,7 @@ t_list	*lex(char *str, char **envp)
 	t_list	*lex_list;
 	t_list	*new;
 	char	*descomposed;
+	//t_list	*tmp;
 
 	lex_list = NULL;
 	while (ft_isspace(*str))
@@ -76,5 +77,12 @@ t_list	*lex(char *str, char **envp)
 		while (ft_isspace(*str))
 			str++;
 	}
+	//printf("lex_list: \n");
+	//tmp = lex_list;
+	//while (tmp)
+	{
+		//printf("content: %s\n", (char *)tmp->content);
+		//tmp = tmp->next;
+	//}
 	return (lex_list);
 }
