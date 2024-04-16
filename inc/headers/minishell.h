@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 19:03:59 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/12 00:17:44 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/16 22:49:43 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@
 # include <sys/param.h>
 # include "libft.h"
 # include "pipex.h"
-# include "ft_printf.h"
 # include "parser.h"
 # include "structs.h"
 # include "builtin.h"
