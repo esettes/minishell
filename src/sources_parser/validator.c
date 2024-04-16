@@ -2,7 +2,6 @@
 
 size_t	val_get_type(char *token)
 {
-	printf("token: %s\n", token);
 	if (NULL == token)
 		return (ZERO);
 	if ('<' == *token || '>' == *token)

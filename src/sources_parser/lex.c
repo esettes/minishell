@@ -76,7 +76,5 @@ t_list	*lex(char *str, char **envp)
 		while (ft_isspace(*str))
 			str++;
 	}
-	printf("lex_list: \n");
-	printf("%s\n", (char *)lex_list->content);
 	return (lex_list);
 }
