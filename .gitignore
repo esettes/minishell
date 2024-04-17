@@ -1,0 +1,7 @@
+.vscode
+*.o
+*.txt
+minishell
+docker
+.DS_Store
+*libft.a
