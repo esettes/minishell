@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 21:01:32 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/12 00:19:15 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/17 23:23:42 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,12 @@ int	manage_variable(char **envp_minish, char *var)
 	else
 	{
 		envp_minish = create_new_var(envp_minish, var);
+		/*while (*envp_minish)
+		{
+			printf("%s\n", *envp_minish);
+			envp_minish++;
+		}*/
+		
 		if (!envp_minish)
 			return (EXIT_FAILURE);
 	}

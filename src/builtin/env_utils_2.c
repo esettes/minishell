@@ -6,12 +6,13 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 23:41:36 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/11 23:40:24 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/17 23:45:05 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+void	create_new_envp_minish(char ***envp_minish, char **tmp);
 size_t	get_array_size(char **arr)
 {
 	size_t	i;
@@ -19,6 +20,7 @@ size_t	get_array_size(char **arr)
 	i = 0;
 	while (arr[i])
 		i++;
+	printf("size: %zu\n", i);
 	return (i);
 }
 
@@ -119,8 +121,29 @@ char	**create_new_var(char **envp_minish, char *var)
 		tmp[len] = f_strdup(envp_minish[len]);
 		len++;
 	}
+	printf("var: %s\n", var);
 	tmp[len] = f_strdup(var);
 	tmp[len + 1] = NULL;
 	free_memory((const char **)envp_minish, aux);
-	return (tmp);
+	envp_minish = tmp;
+	//create_new_envp_minish(&envp_minish, tmp);
+	return (envp_minish);
+}
+
+void create_new_envp_minish(char ***envp_minish, char **tmp)
+{
+	size_t		i;
+
+	i = 0;
+	*envp_minish = malloc(sizeof(char *) * (get_array_size(tmp) + 1));
+	if (!(*envp_minish))
+		return ;
+	while (tmp[i])
+	{
+		*envp_minish[i] = f_strdup(tmp[i]);
+		printf("envp_minish[%zu]: %s\n", i, *envp_minish[i]);
+		i++;
+	}
+	*envp_minish[i] = NULL;
+	free_memory((const char **)tmp, get_array_size(tmp));
 }
