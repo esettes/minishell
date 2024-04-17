@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:23 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/17 21:27:15 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/17 21:41:25 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,8 @@ int	run_last_process(t_cmd *cmd, t_pipe **p_data, char *envp[], int pos)
 		if ((*p_data)->pid2 == 0)
 			if (run_child2(*p_data, cmd, envp, pos))
 				return (EXIT_FAILURE);
+		close((*p_data)->pip[R]);
+		close((*p_data)->pip[W]);
 	/*}
 	else
 		if (run_parent(cmd, p_data, pos))
