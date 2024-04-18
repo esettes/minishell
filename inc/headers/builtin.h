@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/05 20:07:46 by iostancu          #+#    #+#             */
+/*   Updated: 2024/04/17 22:54:51 by iostancu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef BUILTIN_H
 # define BUILTIN_H
 
@@ -15,6 +27,13 @@ typedef struct s_cd
 	int		stdin_;
 }	t_cd;
 
+/** 
+ * @brief t_unset
+ * 
+ * @var t_unset::i
+ * @var t_unset::j
+ * @var t_unset::k
+ */
 typedef struct s_unset
 {
 	size_t	i;
@@ -25,8 +44,6 @@ typedef struct s_unset
 	char	*var;
 }	t_unset;
 
-int		export_handler(char **env, const char *export_var);
-int		unset_handler(char **env, const char *unset_var);
 size_t	env_len(char **env);
 int		echo_handler(t_scmd scmd);
 int		exit_handler(t_cmd *cmd);
@@ -42,10 +59,11 @@ int		env_var_already_exist(char **envp_minish, char *raw_variable);
 size_t	get_array_size(char **arr);
 char	*get_env_variable(char *var);
 int		is_correct_env_variable(char *var, char *cmd);
-char	*get_env_var_value(t_pipe *data, char *var);
+char	*get_env_var_value(char **envp_minish, char *var);
 int		pwd_handler(void);
 char	**create_new_var(char **envp_minish, char *var);
-int	change_var_value(char **envp_minish, char *raw_variable);
+void	print_cmd_error(char *var, char *cmd);
+int		change_var_value(char **envp_minish, char *raw_variable);
 /**
  * @brief Get the env variable from the minishell environment
  * 
@@ -54,5 +72,6 @@ int	change_var_value(char **envp_minish, char *raw_variable);
  * @return char* 
  */
 char	*get_env_variable_from_minish_environ(char **envp_minish, char *var);
+void	init_env(char **env, size_t len, char **envp_minish);
 
 #endif

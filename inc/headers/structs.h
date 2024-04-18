@@ -6,7 +6,7 @@
 /*   By: ubuntu <ubuntu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 19:43:08 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/10 20:56:47 by ubuntu           ###   ########.fr       */
+/*   Updated: 2024/04/12 00:12:37 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,11 @@ typedef struct s_prompt
 	char	*usr;
 	char	*prompt;
 }				t_prompt;
+
+typedef struct s_buff
+{
+	char	*buffer;
+	char	*oldbuffer;
+}				t_buff;
 
 #endif

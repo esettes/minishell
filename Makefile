@@ -6,7 +6,7 @@
 #    By: ubuntu <ubuntu@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/21 19:03:34 by uliherre          #+#    #+#              #
-#    Updated: 2024/03/28 12:31:41 by ubuntu           ###   ########.fr        #
+#    Updated: 2024/04/16 22:53:26 by iostancu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ LGREEN	= \033[2;32m
 NAME = minishell
 
 CC = clang
-CFLAGS = -g3 -Wall -Wextra -Werror #-fsanitize=leak -fsanitize-ignorelist=/home/settes/cursus/minishell/ignorelist.txt #-Wall -Wextra -Werror -pedantic
+CFLAGS = -g3 -Wall -Wextra -Werror -fsanitize=address #-fsanitize-ignorelist=/home/settes/cursus/minishell/ignorelist.txt #-Wall -Wextra -Werror -pedantic
 LDFLAGS	= -L/Users/$(USER)/.brew/opt/readline/lib -lreadline
 CFLAGS += -I/Users/$(USER)/.brew/opt/readline/include
 
@@ -73,7 +73,8 @@ SOURCES_BUILTIN = \
 	exit.c \
 	pwd.c \
 	env_utils.c \
-	env_utils_2.c
+	env_utils_2.c \
+	env_utils_3.c
 
 A_BUILTIN = $(addprefix $(DIR_BUILTIN),$(SOURCES_BUILTIN))
 SOURCES += $(A_BUILTIN)
@@ -84,9 +85,11 @@ DIR_PIPEX = ./src/pipex/
 SOURCES_PIPEX = \
 	f_split.c \
 	lib_utils.c \
+	lib_utils_2.c \
 	pipex.c \
 	processes.c \
-	utils.c
+	utils.c \
+	utils_2.c
 
 A_PIPEX = $(addprefix $(DIR_PIPEX),$(SOURCES_PIPEX))
 SOURCES += $(A_PIPEX)

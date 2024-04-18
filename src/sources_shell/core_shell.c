@@ -1,6 +1,18 @@
-#include "../../inc/headers/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   core_shell.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/05 20:06:11 by iostancu          #+#    #+#             */
+/*   Updated: 2024/04/12 00:17:12 by iostancu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-volatile int g_signal;
+#include "minishell.h"
+
+int g_signal;
 
 char	*get_prompt(t_pipe *data);
 void	sig_interrupt(int signum);
@@ -39,80 +51,70 @@ static int	enmask_signals(void)
 	return (EXIT_SUCCESS);
 }
 
-int	core_shell(char **envp)
+int manage_signactions(void)
 {
-	char	*buffer;
-	char	*oldbuffer;
-	t_cmd	*cmd;
-	t_pipe	*p_data;
 	struct sigaction	s0;
-	char	*prompt;
-	size_t	show_sig;
 
-	 g_signal = 0;
-	show_sig = 0;
 	s0.sa_handler = &c_handler;
 	s0.sa_flags = SA_RESTART;
 	if (sigaction(SIGINT, &s0, NULL))
 		return (ft_puterror("error: sigaction\n"), EXIT_FAILURE);
 	if (enmask_signals())
 		return (EXIT_FAILURE);
-	buffer = ft_strdup("");
-	oldbuffer = ft_strdup("");
-	p_data = init_pipe_struct(envp);
-	if (!p_data)
-		return (EXIT_FAILURE);
-	prompt = NULL;
-  while(buffer)
-	{
-		//g_signal = 0;
-		if (buffer)
-		{
-			free(buffer);
-			buffer = (char *)NULL;
-		}
-		prompt = get_prompt(p_data);
-		buffer = readline(prompt);
-		free (prompt);
-		if (!buffer)
-			return (f_error());
-		if (buffer && *buffer && ft_strncmp(buffer, oldbuffer, sizeof(oldbuffer)) != 0)
-			add_history(buffer);
-		if (show_sig == 1)
-		{
-			
-			show_sig = 0;
-			g_signal = 0;
-			printf("show sig = 0 and g_signal: %d\n",  g_signal);
-		}
-		cmd = parser(buffer, p_data->envp_minish);
-		if (NULL == cmd)
-			continue ;
-		if (ft_strncmp("", buffer, 1) == 0)
-			continue ;
-		free(oldbuffer);
-		oldbuffer = (char *)NULL;
-		oldbuffer = ft_strdup(buffer);
-		
-		if (f_pipex(p_data, cmd, envp))
-			continue ;
-		if (g_signal != 0 && show_sig == 0)
-		{
-			printf("show sig = 1 and g_signal: %d\n",  g_signal);
-			show_sig = 1;
-			continue ;
-		}
-		
-		/*CONDICIONES DE SALIDA: señales*/
-	}
-	free(buffer);
-	free(oldbuffer);
-	// free(cmd->scmd);
-	// free(cmd);
+	return (EXIT_SUCCESS);
+}
+
+static void	free_all(t_cmd *cmd, t_pipe *p_data, t_buff *buff)
+{
 	free_cmd(&cmd);
 	free(p_data->envp);
 	free_memory((const char **)p_data->envp_minish, get_array_size(p_data->envp_minish));
 	free(p_data);
+	free(buff->buffer);
+	free(buff->oldbuffer);
+}
+
+int	core_shell(char **envp)
+{
+	t_buff	b;
+	t_cmd	*cmd;
+	t_pipe	*p_data;
+	char	*prompt;
+
+	g_signal = 0;
+	b.buffer = ft_strdup("");
+	b.oldbuffer = ft_strdup("");
+	p_data = init_pipe_struct(envp);
+	if (!p_data)
+		return (EXIT_FAILURE);
+	prompt = NULL;
+	while(b.buffer)
+	{
+		if (b.buffer)
+		{
+			free(b.buffer);
+			b.buffer = (char *)NULL;
+		}
+		prompt = get_prompt(p_data);
+		b.buffer = readline(prompt);
+		free (prompt);
+		if (!b.buffer)
+			return (f_error());
+		if (b.buffer && *b.buffer && f_strict_strncmp(b.buffer,
+			b.oldbuffer, sizeof(b.oldbuffer)) != 0)
+			add_history(b.buffer);
+		cmd = parser(b.buffer, p_data->envp_minish);
+		if (NULL == cmd)
+			continue ;
+		if (ft_strncmp("", b.buffer, 1) == 0)
+			continue ;
+		free(b.oldbuffer);
+		b.oldbuffer = (char *)NULL;
+		b.oldbuffer = ft_strdup(b.buffer);
+		
+		f_pipex(p_data, cmd, envp);
+	}
+	free_all(cmd, p_data, &b);
 	return (EXIT_SUCCESS);
 }
 
@@ -120,7 +122,7 @@ char	*get_prompt(t_pipe *data)
 {
 	t_prompt	prompt;
 
-	prompt.home_substr = ft_substr(getcwd(NULL, 0), f_strlen(get_env_var_value(data, "HOME")),
+	prompt.home_substr = ft_substr(getcwd(NULL, 0), f_strlen(get_env_var_value(data->envp_minish, "HOME")),
 						f_strlen(getcwd(NULL, 0)));
 	prompt.curr_dir = f_strjoin(prompt.home_substr, " > ");
 	if (f_strlen(prompt.curr_dir) <= 3)

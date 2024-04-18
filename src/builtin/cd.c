@@ -6,7 +6,7 @@
 /*   By: ubuntu <ubuntu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 18:43:21 by iostancu          #+#    #+#             */
-/*   Updated: 2024/03/28 12:30:49 by ubuntu           ###   ########.fr       */
+/*   Updated: 2024/04/17 22:46:05 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ int	exec_cd(t_pipe *data, t_cmd *cmd, int pos)
 void	change_and_create_env_var(t_pipe **data, char *curr_dir)
 {
 	if (!env_var_already_exist((*data)->envp_minish, "OLDPWD="))
-		(*data)->envp_minish = create_new_var((*data)->envp_minish, "OLDPWD=");
+		//(*data)->envp_minish = 
+		create_new_var((*data)->envp_minish, "OLDPWD=");
 	change_var_value((*data)->envp_minish, f_strjoin("OLDPWD=", curr_dir));
 	change_var_value((*data)->envp_minish, f_strjoin("PWD=", getcwd(NULL, 0)));
 }
@@ -61,15 +62,15 @@ void	is_home_directory(t_cmd *cmd, t_cd *cd)
 
 char	*set_home_directory(t_pipe *data)
 {
-	printf("HOME: '%s'\n", get_env_var_value(data, "HOME"));
-	return (get_env_var_value(data, "HOME"));
+	printf("HOME: '%s'\n", get_env_var_value(data->envp_minish, "HOME"));
+	return (get_env_var_value(data->envp_minish, "HOME"));
 }
 
 t_cd	init_cd(t_pipe *data)
 {
 	t_cd	cd;
 
-	cd.last_dir = get_env_var_value(data, "OLDPWD");
+	cd.last_dir = get_env_var_value(data->envp_minish, "OLDPWD");
 	cd.curr_dir = getcwd(NULL, 0);
 	cd.is_hyphen = 0;
 	cd.is_home = 0;

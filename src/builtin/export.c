@@ -1,47 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export2.c                                          :+:      :+:    :+:   */
+/*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 21:01:32 by iostancu          #+#    #+#             */
-/*   Updated: 2024/03/14 21:07:12 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/17 23:23:42 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+void	exec_export_no_args(char **envp_minish);
+void	print_export_no_args(char **envp_minish, char **env, size_t len);
+int		manage_variable(char **envp_minish, char *var);
+
 int	exec_export(t_pipe *data, t_cmd *cmd, int pos)
 {
-	int	i;
-	char	**envp;
-	size_t	len;
-	size_t	j;
+	size_t	i;
 
-	i = 0;
-	j = 0;
-	len = get_array_size(data->envp_minish);
-	envp = malloc(sizeof(char *) * (len + 1));
-	if (cmd->scmd[pos]->args[i] == NULL)
-	{
-		// create a new array of char * and print envp_minish in alphabetical order
-		while (j < len)
-		{
-			envp[i] = ft_strdup(data->envp_minish[j]);
-			if (data->envp_minish[j][0] == envp[i][0])
-			{
-				// if first letter is the same, compare second letter
-				
-			}
-			if (data->envp_minish[j][0] > envp[i][0])
-			{
-				
-			}
-			j++;
-		}
-		
-	}
+	if (cmd->scmd[pos]->args[1] == NULL)
+		exec_export_no_args(data->envp_minish);
 	else
 	{
 		i = 1;
@@ -52,17 +32,86 @@ int	exec_export(t_pipe *data, t_cmd *cmd, int pos)
 				i++;
 				continue ;
 			}
-			if (env_var_already_exist(data->envp_minish, cmd->scmd[pos]->args[i]))
-				change_var_value(data->envp_minish, cmd->scmd[pos]->args[i]);
-			else
-			{
-				data->envp_minish = create_new_var(data->envp_minish,
-					cmd->scmd[pos]->args[i]);
-				if (!data->envp_minish)
-					return (EXIT_FAILURE);
-			}
+			if (manage_variable(data->envp_minish, cmd->scmd[pos]->args[i]))
+				//free_memory((const char **)data->envp_minish,
+				//	get_array_size(data->envp_minish));
+				return (EXIT_FAILURE);
 			i++;
 		}
 	}
 	return (EXIT_SUCCESS);
+}
+
+int	manage_variable(char **envp_minish, char *var)
+{
+	if (env_var_already_exist(envp_minish, var))
+		change_var_value(envp_minish, var);
+	else
+	{
+		envp_minish = create_new_var(envp_minish, var);
+		/*while (*envp_minish)
+		{
+			printf("%s\n", *envp_minish);
+			envp_minish++;
+		}*/
+		
+		if (!envp_minish)
+			return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
+}
+
+void	swap_str(char **env, size_t i, size_t j)
+{
+	char	*tmp;
+
+	tmp = env[i];
+	env[i] = env[j];
+	env[j] = tmp;
+}
+
+void	exec_export_no_args(char **envp_minish)
+{
+	size_t	i;
+	size_t	j;
+	char	**env;
+	size_t	len;
+
+	len = get_array_size(envp_minish);
+	env = malloc(sizeof(char *) * (len + 1));
+	env[len] = NULL;
+	init_env(env, len, envp_minish);
+	i = -1;
+	while (++i < len)
+	{
+		j = i;
+		while (++j < len)
+		{
+			if (f_strncmp(env[j], env[i],
+					f_strlen(env[i]) + f_strlen(env[j])) < 0)
+				swap_str(env, i, j);
+		}
+	}
+	print_export_no_args(envp_minish, env, len);
+	free_memory((const char **)env, len);
+}
+
+void	print_export_no_args(char **envp_minish, char **env, size_t len)
+{
+	char	*var;
+	char	*value;
+	size_t	i;
+
+	i = -1;
+	while (++i < len)
+	{
+		var = get_env_variable(env[i]);
+		printf("declare -x %s", var);
+		value = get_env_var_value(envp_minish, var);
+		if (value != NULL)
+			printf("=\"%s\"\n", value);
+		else
+			printf("\n");
+		free(var);
+	}
 }
