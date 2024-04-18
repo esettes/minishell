@@ -22,7 +22,11 @@ static char	*search_end(char *str, char end)
 	{
 		str = ft_strchr(str, end);
 		if (str)
+<<<<<<< HEAD
 			return (str + TRUE);
+=======
+			return (str + 1);
+>>>>>>> 543440311a181f8f35912cb123a41f9052856f30
 	}
 	return (NULL);
 }
@@ -77,7 +81,10 @@ t_list	*lex(char *str, char **envp)
 		while (ft_isspace(*str))
 			str++;
 	}
+<<<<<<< HEAD
 	printf("lex_list: \n");
+=======
+>>>>>>> 543440311a181f8f35912cb123a41f9052856f30
 	tmp = lex_list;
 	while (tmp)
 	{

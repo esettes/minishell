@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ubuntu <ubuntu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 19:43:08 by iostancu          #+#    #+#             */
-/*   Updated: 2024/02/19 20:03:22 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/10 20:56:47 by ubuntu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ typedef struct s_cmd
 	int			n_available_scmd;
 	int			n_scmd;
 	t_scmd		**scmd;
-	int			*stdout_copy;
 }				t_cmd;
 
 typedef struct s_prompt

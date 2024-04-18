@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expander.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/12 16:59:16 by antosanc          #+#    #+#             */
+/*   Updated: 2024/04/17 23:27:56 by antosanc         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/headers/minishell.h"
 
 static int	len_expanded_str(char *str, char *env_value)
@@ -40,8 +52,8 @@ static char	*fill_array(char *str, char *env_value, char *array)
 	array[j] = '\0';
 	return (array);
 }
-
-static char	*create_expanded_str(char *str, char *env_value)
+//Leak si la variable no esta definida
+static char	*create_expanded_str(char *str, char *env_value, t_token *token)
 {
 	char	*array;
 	int		len;
@@ -52,7 +64,7 @@ static char	*create_expanded_str(char *str, char *env_value)
 	{
 		free(str);
 		free(env_value);
-		exit(EXIT_FAILURE);
+		return (clear_all(token, "malloc has failed"));
 	}
 	return (fill_array(str, env_value, array));
 }
@@ -61,29 +73,31 @@ static char	*get_env_value(char *var_env, char **envp)
 {
 	int		i;
 	int		j;
+	char	**tmp_envp;
 
 	i = 0;
-	while (envp[i])
+	tmp_envp = envp;
+	while (tmp_envp[i])
 	{
-		if (ft_strncmp(var_env, envp[i], ft_strlen(var_env)) == 0
-			&& envp[i][ft_strlen(var_env)] == '=')
+		if (ft_strncmp(var_env, tmp_envp[i], ft_strlen(var_env)) == 0
+			&& tmp_envp[i][ft_strlen(var_env)] == '=')
 		{
 			j = 0;
-			while (envp[i][j] != '=' && envp[i][j])
+			while (tmp_envp[i][j] != '=' && tmp_envp[i][j])
 				j++;
-			if (envp[i][j + 1])
+			if (tmp_envp[i][j + 1])
 			{
 				free(var_env);
-				return (ft_substr(envp[i] + j, 1,
-						ft_strlen(envp[i]) - (j + 1)));
+				return (ft_substr(tmp_envp[i] + j, 1,
+						ft_strlen(tmp_envp[i]) - (j + 1)));
 			}
 		}
 		i++;
 	}
-	return (strdup(""));
+	return (ft_strdup(""));
 }
 
-char	*expander_process(char *str, char **envp)
+char	*expander_process(char *str, t_token *token)
 {
 	char	*expanded_str;
 	char	*env;
@@ -91,9 +105,9 @@ char	*expander_process(char *str, char **envp)
 	int		i;
 
 	i = 0;
-	while (str[i] != '$' && str[i])
+	while (str[i] && str[i] != '$')
 		i++;
-	if (!(str[i + 1] == '?'))
+	if (str[i] && !(str[i + 1] == '?'))
 	{
 		if (!((ft_isalnum(str[i + 1]) || str[i + 1] == '_') && str[i + 1]))
 			return (str);
@@ -101,12 +115,12 @@ char	*expander_process(char *str, char **envp)
 		while ((ft_isalnum(str[i + l]) || str[i + l] == '_') && str[i + l])
 			l++;
 		env = ft_substr(str + i, 1, l - 1);
-		env = get_env_value(env, envp);
-		expanded_str = create_expanded_str(str, env);
+		env = get_env_value(env, token->envp);
+		expanded_str = create_expanded_str(str, env, token);
 		free(env);
 	}
 	else
-		expanded_str = create_expanded_str(str, ft_itoa(g_signal));
+		expanded_str = create_expanded_str(str, ft_itoa(g_signal), token);
 	free(str);
 	return (expanded_str);
 }
