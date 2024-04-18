@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:39 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/11 23:33:07 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/18 22:00:53 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,12 @@ void	free_split(char **s)
 	int	i;
 
 	i = 0;
+	printf("f_strlen(s): %d\n", f_strlen(*s));
 	while (s[i])
+	{
+		printf("s[%d]: %s\n", i, s[i]);
 		free(s[i++]);
+	}
 	free(s);
 }
 
