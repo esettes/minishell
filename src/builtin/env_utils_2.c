@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 23:41:36 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/17 23:50:24 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/18 19:44:55 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ char	**create_new_var(char **envp_minish, char *var)
 	printf("var: %s\n", var);
 	tmp[len] = f_strdup(var);
 	tmp[len + 1] = NULL;
-	free_memory((const char **)envp_minish, aux);
+	//free_memory((const char **)envp_minish, aux);
 	envp_minish = tmp;
 	//create_new_envp_minish(&envp_minish, tmp);
 	return (envp_minish);

@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:07:23 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/12 00:01:38 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/18 19:46:22 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,22 +32,6 @@ size_t	search_in_env(char **env, char *to_search)
 	while (ft_strncmp(to_search, env[x], to_search_len))
 		x++;
 	return (x);
-}
-
-char	*ft_getenv(char **envp, char *var_name)
-{
-	size_t	x;
-	size_t	tam;
-
-	x = ZERO;
-	tam = ft_strlen(var_name);
-	while (envp[x])
-	{
-		if (!ft_strncmp(var_name, envp[x], tam) && '=' == envp[x][tam])
-			return (&envp[x][tam + TRUE]);
-		++x;
-	}
-	return (NULL);
 }
 
 char	*get_env_var_value(char **envp_minish, char *var)
