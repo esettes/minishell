@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/18 21:04:16 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/18 21:32:49 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,19 @@ int	exec_process(char **cmd, char *envp[], char *path_envp)
 		g_signal = 127;
 		return (127);
 	}
-	printf("path: %s\n", path);
-	printf("cmd“0‘: %s\n", cmd[0]);
-	printf("envp[0]: %s\n", envp[0]);
+	int i  = 0;
+	while (envp[i])
+	{
+		printf("envp[%d]: %s\n", i, envp[i]);
+		i++;
+	}
+	printf("====================\n");
+	i = 0;
+	while (cmd[i])
+	{
+		printf("cmd[%d]: %s\n", i, cmd[i]);
+		i++;
+	}
 	if (execve(path, cmd, envp) < 0)
 	{
 		printf("Execve error\n");

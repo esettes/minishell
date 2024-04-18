@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:44 by antosanc          #+#    #+#             */
-/*   Updated: 2024/04/18 20:57:58 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/18 21:40:44 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,11 @@ static int	create_scmd(t_scmd **scmd, t_token_lst **token_lst)
 	while (scmd[i] && *token_lst)
 	{
 		scmd[i]->n_available_args = count_scmd_args(*token_lst);
-		scmd[i]->args = malloc(sizeof(char *) * scmd[i]->n_available_args + 1);
+		printf("n_available_args: %d\n", scmd[i]->n_available_args);
+		scmd[i]->args = malloc(sizeof(char *) * (scmd[i]->n_available_args + 1));
 		if (!scmd[i]->args)
 			return (EXIT_FAILURE);
+		scmd[i]->args[scmd[i]->n_available_args] = NULL;
 		scmd[i]->argc = 0;
 		scmd[i]->append = 0;
 		scmd[i]->in_f = NULL;
