@@ -22,7 +22,7 @@ static char	*search_end(char *str, char end)
 	{
 		str = ft_strchr(str, end);
 		if (str)
-			return (str + TRUE);
+			return (str + 1);
 	}
 	return (NULL);
 }
