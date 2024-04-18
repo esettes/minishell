@@ -1,0 +1,15 @@
+f_strlen(s): 25
+s[0]: /Users/iostancu/.brew/bin
+s[1]: /Users/iostancu/.brew/bin
+s[2]: /Users/iostancu/.brew/bin
+s[3]: /usr/local/bin
+s[4]: /usr/bin
+s[5]: /bin
+s[6]: /usr/sbin
+s[7]: /sbin
+s[8]: /usr/local/munki
+s[9]: /Users/iostancu/.brew/bin
+f_strlen(s): 1
+s[0]: z
+s[1]: z
+s[2]: Z

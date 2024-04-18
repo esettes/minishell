@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/18 21:30:01 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/18 23:05:17 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,19 +29,6 @@ int	exec_process(char **cmd, char *envp[], char *path_envp)
 		free_split(cmd);
 		g_signal = 127;
 		return (127);
-	}
-	int i  = 0;
-	while (envp[i])
-	{
-		printf("envp[%d]: %s\n", i, envp[i]);
-		i++;
-	}
-	printf("====================\n");
-	i = 0;
-	while (cmd[i])
-	{
-		printf("cmd[%d]: %s\n", i, cmd[i]);
-		i++;
 	}
 	if (execve(path, cmd, envp) < 0)
 	{

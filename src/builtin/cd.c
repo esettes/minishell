@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 18:43:21 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/17 22:46:05 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/18 23:17:03 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	change_and_create_env_var(t_pipe **data, char *curr_dir)
 {
 	if (!env_var_already_exist((*data)->envp_minish, "OLDPWD="))
 		//(*data)->envp_minish = 
-		create_new_var((*data)->envp_minish, "OLDPWD=");
+		create_new_var(*data, "OLDPWD=");
 	change_var_value((*data)->envp_minish, f_strjoin("OLDPWD=", curr_dir));
 	change_var_value((*data)->envp_minish, f_strjoin("PWD=", getcwd(NULL, 0)));
 }

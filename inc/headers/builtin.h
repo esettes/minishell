@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:07:46 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/17 22:54:51 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/18 23:16:39 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ char	*get_env_variable(char *var);
 int		is_correct_env_variable(char *var, char *cmd);
 char	*get_env_var_value(char **envp_minish, char *var);
 int		pwd_handler(void);
-char	**create_new_var(char **envp_minish, char *var);
+char	**create_new_var(t_pipe *data, char *var);
 void	print_cmd_error(char *var, char *cmd);
 int		change_var_value(char **envp_minish, char *raw_variable);
 /**

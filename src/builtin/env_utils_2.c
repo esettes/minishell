@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 23:41:36 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/17 23:50:24 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/18 23:15:22 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,31 +103,29 @@ int	env_var_already_exist(char **envp_minish, char *raw_variable)
 	return (TRUE);
 }
 
-char	**create_new_var(char **envp_minish, char *var)
+char	**create_new_var(t_pipe *data, char *var)
 {
 	size_t	len;
 	char	**tmp;
-	size_t	aux;
 
 	len = 0;
-	len = get_array_size(envp_minish);
-	aux = len;
+	len = get_array_size(data->envp_minish);
 	tmp = malloc(sizeof(char *) * (len + 2));
 	if (!tmp)
 		return (NULL);
 	len = 0;
-	while (envp_minish[len])
+	while (data->envp_minish[len])
 	{
-		tmp[len] = f_strdup(envp_minish[len]);
+		tmp[len] = f_strdup(data->envp_minish[len]);
 		len++;
 	}
 	printf("var: %s\n", var);
 	tmp[len] = f_strdup(var);
 	tmp[len + 1] = NULL;
-	free_memory((const char **)envp_minish, aux);
-	envp_minish = tmp;
+	free_memory((const char **)data->envp_minish, get_array_size(data->envp_minish));
+	//envp_minish = tmp;
 	//create_new_envp_minish(&envp_minish, tmp);
-	return (envp_minish);
+	return (tmp);
 }
 
 void create_new_envp_minish(char ***envp_minish, char **tmp)
