@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:06:11 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/12 00:17:12 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/18 20:28:03 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int manage_signactions(void)
 
 static void	free_all(t_cmd *cmd, t_pipe *p_data, t_buff *buff)
 {
-	free_cmd(&cmd);
+	free_cmd_tony(cmd);
 	free(p_data->envp);
 	free_memory((const char **)p_data->envp_minish, get_array_size(p_data->envp_minish));
 	free(p_data);

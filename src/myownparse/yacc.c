@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   yacc.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:44 by antosanc          #+#    #+#             */
-/*   Updated: 2024/04/17 22:42:30 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/04/18 20:57:58 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ t_cmd	*yacc_tony(t_cmd *cmd, t_token_lst **token_lst)
 	int	i;
 
 	cmd->n_available_scmd = count_cmd(*token_lst);
-	cmd->n_scmd = 0;
+	cmd->n_scmd = cmd->n_available_scmd;
 	cmd->scmd = ft_calloc(cmd->n_available_scmd + 1, sizeof(t_scmd *));
 	if (!cmd->scmd)
 		return (NULL);

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ubuntu <ubuntu@student.42.fr>              +#+  +:+       +#+         #
+#    By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/21 19:03:34 by uliherre          #+#    #+#              #
-#    Updated: 2024/04/18 19:45:32 by iostancu         ###   ########.fr        #
+#    Updated: 2024/04/18 20:29:00 by iostancu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,15 +26,16 @@ CFLAGS += -I/Users/$(USER)/.brew/opt/readline/include
 INCLUDES = -I include -I ./inc/headers -I ./inc/libft/inc
 
 ############################ PARSER ###########################
-DIR_PARSER = ./src/sources_parser/
+DIR_PARSER = ./src/myownparse/
 SOURCES_PARSER = \
-	command.c \
 	expander.c \
+	heredoc.c \
+	lex_utils.c \
 	lex.c \
+	list_utils.c \
 	parser.c \
-	redirects.c \
-	scommand.c \
 	validator.c \
+	yacc_utils.c \
 	yacc.c
 
 A_PARSER = $(addprefix $(DIR_PARSER),$(SOURCES_PARSER))

@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:23 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/17 23:22:01 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/18 20:58:47 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	f_pipex(t_pipe *p_data, t_cmd *cmd, char *envp[])
 
 	i = -1;
 	n_cmds = cmd->n_scmd;
+	printf("n_cmds: %d\n", n_cmds);
 	while (n_cmds-- != 1)
 	{
 		p_data->cmd = cmd->scmd[++i]->args;
