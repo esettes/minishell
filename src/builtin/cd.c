@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ubuntu <ubuntu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 18:43:21 by iostancu          #+#    #+#             */
 /*   Updated: 2024/04/17 22:46:05 by iostancu         ###   ########.fr       */

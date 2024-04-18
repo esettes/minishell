@@ -22,7 +22,7 @@ static char	*search_end(char *str, char end)
 	{
 		str = ft_strchr(str, end);
 		if (str)
-			return (str + TRUE);
+			return (str + 1);
 	}
 	return (NULL);
 }
@@ -53,6 +53,7 @@ t_list	*lex(char *str, char **envp)
 	t_list	*lex_list;
 	t_list	*new;
 	char	*descomposed;
+	t_list	*tmp;
 
 	lex_list = NULL;
 	while (ft_isspace(*str))
