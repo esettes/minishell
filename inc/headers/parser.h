@@ -3,17 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-<<<<<<< HEAD
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 19:04:03 by uliherre          #+#    #+#             */
-/*   Updated: 2024/04/18 20:26:26 by iostancu         ###   ########.fr       */
-=======
-/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/21 19:04:03 by uliherre          #+#    #+#             */
-/*   Updated: 2024/04/17 22:43:08 by antosanc         ###   ########.fr       */
->>>>>>> parser2
+/*   Updated: 2024/04/23 23:47:23 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +19,8 @@
 # define ERR_REDIRECT "syntax error near unexpected token `< / >\'"
 # define ERR_NEWLINE "syntax error near unexpected token `newline\'"
 
-//parse Tony
-
-typedef struct s_token_lst
+typedef struct s_expander
 {
-<<<<<<< HEAD
-	char				*content;
-	int					quotes;
-	struct s_token_lst	*next;
-}		t_token_lst;
-
-=======
 	char	*expanded;
 	char	*var;
 	char	*index;
@@ -69,7 +53,6 @@ typedef struct s_token_lst
 	struct s_token_lst	*next;
 }		t_token_lst;
 
->>>>>>> parser2
 typedef struct s_token
 {
 	int			i;

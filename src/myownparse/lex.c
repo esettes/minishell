@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   lex.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:24 by antosanc          #+#    #+#             */
-/*   Updated: 2024/04/17 23:28:59 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/04/23 23:50:37 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/headers/minishell.h"
-
-volatile int	g_signal = 0;
 
 static t_token_lst	*quotes_content(char *str, t_token *token)
 {
