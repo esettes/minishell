@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:06:11 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/23 22:03:24 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/23 22:59:43 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int	core_shell(char **envp)
 		b.oldbuffer = (char *)NULL;
 		b.oldbuffer = ft_strdup(b.buffer);
 		
-		f_pipex(p_data, cmd, envp);
+		f_pipex(p_data, cmd);
 	}
 	free_all(cmd, p_data, &b);
 	return (EXIT_SUCCESS);
@@ -125,6 +125,8 @@ char	*get_prompt(t_pipe *data)
 
 	prompt.home_substr = ft_substr(getcwd(NULL, 0), f_strlen(get_env_var_value
 				(data->envp_minish, "HOME")), f_strlen(getcwd(NULL, 0)));
+	if (!prompt.home_substr)
+		prompt.home_substr = f_strdup(getcwd(NULL, 0));
 	prompt.curr_dir = f_strjoin(prompt.home_substr, " > ");
 	if (f_strlen(prompt.curr_dir) <= 3)
 	{
@@ -133,6 +135,8 @@ char	*get_prompt(t_pipe *data)
 	}
 	prompt.usr = f_strjoin(get_env_var_value(data->envp_minish, "USER"),
 							" in ");
+	if (!prompt.usr)
+		prompt.usr = f_strdup("minishell in ");
 	prompt.join_usr_color = f_strjoin(GREEN_, prompt.usr);
 	prompt.join_usr_curr_dir = f_strjoin(prompt.join_usr_color,
 							prompt.curr_dir);

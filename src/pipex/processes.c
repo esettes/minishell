@@ -6,31 +6,32 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/18 23:05:17 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/23 23:19:25 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-int	exec_process(char **cmd, char *envp[], char *path_envp)
+int	exec_process(t_pipe *data, char **cmd)
 {
 	char	*path;
 
 	if (cmd_have_path(cmd[0]))
 	{
 		path = f_strdup(cmd[0]);
-		if (execve(path, cmd, envp) < 0)
+		if (execve(path, cmd, data->envp_minish) < 0)
 			return (f_error());
 		return (EXIT_SUCCESS);
 	}
-	path = get_path(cmd[0], path_envp);
+	path = get_path(cmd[0], get_env_var_value(data->envp_minish, "PATH"));
+	printf("path: %s\n", path);
 	if ((cmd_have_current_path(cmd[0]) || !path))
 	{
 		free_split(cmd);
-		g_signal = 127;
-		return (127);
+		g_signal = 2;
+		return (2);
 	}
-	if (execve(path, cmd, envp) < 0)
+	if (execve(path, cmd, data->envp_minish) < 0)
 	{
 		printf("Execve error\n");
 		return (f_error());
@@ -38,7 +39,7 @@ int	exec_process(char **cmd, char *envp[], char *path_envp)
 	return (EXIT_SUCCESS);
 }
 
-int	run_child(t_pipe *data, t_cmd *cmd, char *envp[], int pos)
+int	run_child(t_pipe *data, t_cmd *cmd, int pos)
 {
 	close(data->pip[R]);
 	if (duplicate_fd(data->pip[W], STDOUT_FILENO))
@@ -55,13 +56,13 @@ int	run_child(t_pipe *data, t_cmd *cmd, char *envp[], int pos)
 	}
 	else
 	{
-		if (exec_process(data->cmd, envp, data->envp))
+		if (exec_process(data, data->cmd))
 			exit(f_error());
 	}
 	return (EXIT_SUCCESS);
 }
 
-int	run_child2(t_pipe *data, t_cmd *cmd, char *envp[], int pos)
+int	run_child2(t_pipe *data, t_cmd *cmd, int pos)
 {
 	close(data->pip[W]);
 	if (duplicate_fd(data->pip[R], STDIN_FILENO))
@@ -72,13 +73,13 @@ int	run_child2(t_pipe *data, t_cmd *cmd, char *envp[], int pos)
 	if (is_parent_exec(data->last_cmd[0]))
 	{
 		if (run_parent(cmd, &data, pos))
-			exit(f_error());
+			return (f_error());
 		else
 			exit(EXIT_SUCCESS);
 	}
 	else
 	{
-		if (exec_process(data->last_cmd, envp, data->envp))
+		if (exec_process(data, data->last_cmd))
 			exit(f_error());
 	}
 	return (EXIT_SUCCESS);

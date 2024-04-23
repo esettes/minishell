@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 18:43:21 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/23 22:00:11 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/23 22:38:38 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	exec_cd(t_pipe *data, t_cmd *cmd, int pos)
 		cd.is_hyphen = 1;
 		if (!cd.last_dir)
 		{
-			ft_putstrc_fd(RED_, "minishell: cd: OLDPWD not set\n", 2);
+			print_env_not_set("cd", "OLDPWD");
 			return (EXIT_SUCCESS);
 		}
 		cd.dir_to_exec = cd.last_dir;
@@ -38,7 +38,7 @@ int	exec_cd(t_pipe *data, t_cmd *cmd, int pos)
 		cd.dir_to_exec = set_home_directory(data);
 	if (cd.is_home && (!env_var_already_exist(data->envp_minish, "HOME=")))
 	{
-		ft_putstrc_fd(RED_, "minishell: cd: HOME not set\n", 2);
+		print_env_not_set("cd", "HOME");
 		return (EXIT_SUCCESS);
 	}
 	if (chdir(cd.dir_to_exec) < 0)

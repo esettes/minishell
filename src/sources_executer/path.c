@@ -8,6 +8,8 @@ char	*get_path(char *cmd, char *path_envp)
 	int		i;
 
 	paths = ft_split(path_envp, ':');
+	if (!paths)
+		return (NULL);
 	i = 0;
 	while (paths[i])
 	{

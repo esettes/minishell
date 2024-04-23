@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:07:46 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/18 23:16:39 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/23 22:37:26 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,8 @@ typedef struct s_unset
 	char	*var;
 }	t_unset;
 
-size_t	env_len(char **env);
 int		echo_handler(t_scmd scmd);
 int		exit_handler(t_cmd *cmd);
-size_t	search_in_env(char **env, char *to_search);
 char	*ft_getenv(char **envp, char *var_name);
 int		exec_cd(t_pipe *data, t_cmd *cmd, int pos);
 int		exec_env(t_pipe *data);
@@ -73,5 +71,6 @@ int		change_var_value(char **envp_minish, char *raw_variable);
  */
 char	*get_env_variable_from_minish_environ(char **envp_minish, char *var);
 void	init_env(char **env, size_t len, char **envp_minish);
+void	print_env_not_set(char *cmd, char *var);
 
 #endif

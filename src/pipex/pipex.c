@@ -6,17 +6,17 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:23 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/17 23:22:01 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/23 22:59:22 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-int		process_loop(t_cmd *cmd, char *envp[], t_pipe **p_data, int pos);
-int		run_last_process(t_cmd *cmd, t_pipe **p_data, char *envp[], int pos);
+int		process_loop(t_cmd *cmd, t_pipe **p_data, int pos);
+int		run_last_process(t_cmd *cmd, t_pipe **p_data, int pos);
 int		open_file(t_cmd *cmd, t_pipe *data, int pos);
 
-int	f_pipex(t_pipe *p_data, t_cmd *cmd, char *envp[])
+int	f_pipex(t_pipe *p_data, t_cmd *cmd)
 {
 	int	n_cmds;
 	int	i;
@@ -26,12 +26,12 @@ int	f_pipex(t_pipe *p_data, t_cmd *cmd, char *envp[])
 	while (n_cmds-- != 1)
 	{
 		p_data->cmd = cmd->scmd[++i]->args;
-		if (process_loop(cmd, envp, &p_data, i))
+		if (process_loop(cmd, &p_data, i))
 			return (EXIT_FAILURE);
 	}
 	p_data->last_cmd = cmd->scmd[++i]->args;
 	p_data->cmd = p_data->last_cmd;
-	if (run_last_process(cmd, &p_data, envp, i))
+	if (run_last_process(cmd, &p_data, i))
 		return (EXIT_FAILURE);
 	n_cmds = cmd->n_scmd;
 	waitpid(p_data->pid2, &g_signal, 0);
@@ -76,7 +76,7 @@ int	is_parent_exec(char *str)
 	return (0);
 }
 
-int	process_loop(t_cmd *cmd, char *envp[], t_pipe **p_data, int pos)
+int	process_loop(t_cmd *cmd, t_pipe **p_data, int pos)
 {
 	if (pipe((*p_data)->pip) < 0)
 		return (f_error());
@@ -87,7 +87,7 @@ int	process_loop(t_cmd *cmd, char *envp[], t_pipe **p_data, int pos)
 		return (f_error());
 	
 	if ((*p_data)->pid == 0)
-		if (run_child(*p_data, cmd, envp, pos))
+		if (run_child(*p_data, cmd, pos))
 			return (EXIT_FAILURE);
 	close((*p_data)->pip[W]);
 	close_files(&(*p_data)->infile, &(*p_data)->outfile);
@@ -97,7 +97,7 @@ int	process_loop(t_cmd *cmd, char *envp[], t_pipe **p_data, int pos)
 	return (EXIT_SUCCESS);
 }
 
-int	run_last_process(t_cmd *cmd, t_pipe **p_data, char *envp[], int pos)
+int	run_last_process(t_cmd *cmd, t_pipe **p_data, int pos)
 {
 	if (pipe((*p_data)->pip) < 0)
 		return (f_error());
@@ -114,7 +114,7 @@ int	run_last_process(t_cmd *cmd, t_pipe **p_data, char *envp[], int pos)
 		if ((*p_data)->pid2 < 0)
 			return (f_error());
 		if ((*p_data)->pid2 == 0)
-			if (run_child2(*p_data, cmd, envp, pos))
+			if (run_child2(*p_data, cmd, pos))
 				return (EXIT_FAILURE);
 	}
 	else
