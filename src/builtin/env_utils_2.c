@@ -6,13 +6,14 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 23:41:36 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/18 23:15:22 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/23 21:38:23 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 void	create_new_envp_minish(char ***envp_minish, char **tmp);
+
 size_t	get_array_size(char **arr)
 {
 	size_t	i;
@@ -20,7 +21,6 @@ size_t	get_array_size(char **arr)
 	i = 0;
 	while (arr[i])
 		i++;
-	printf("size: %zu\n", i);
 	return (i);
 }
 

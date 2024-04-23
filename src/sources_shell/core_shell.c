@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:06:11 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/12 00:17:12 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/23 22:03:24 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,8 @@ static void	free_all(t_cmd *cmd, t_pipe *p_data, t_buff *buff)
 {
 	free_cmd(&cmd);
 	free(p_data->envp);
-	free_memory((const char **)p_data->envp_minish, get_array_size(p_data->envp_minish));
+	free_memory((const char **)p_data->envp_minish,
+		get_array_size(p_data->envp_minish));
 	free(p_data);
 	free(buff->buffer);
 	free(buff->oldbuffer);
@@ -122,17 +123,19 @@ char	*get_prompt(t_pipe *data)
 {
 	t_prompt	prompt;
 
-	prompt.home_substr = ft_substr(getcwd(NULL, 0), f_strlen(get_env_var_value(data->envp_minish, "HOME")),
-						f_strlen(getcwd(NULL, 0)));
+	prompt.home_substr = ft_substr(getcwd(NULL, 0), f_strlen(get_env_var_value
+				(data->envp_minish, "HOME")), f_strlen(getcwd(NULL, 0)));
 	prompt.curr_dir = f_strjoin(prompt.home_substr, " > ");
 	if (f_strlen(prompt.curr_dir) <= 3)
 	{
 		free (prompt.curr_dir);
 		prompt.curr_dir = f_strjoin(getcwd(NULL, 0), " > ");
 	}
-	prompt.usr = f_strjoin(getenv("USER"), " in ");
+	prompt.usr = f_strjoin(get_env_var_value(data->envp_minish, "USER"),
+							" in ");
 	prompt.join_usr_color = f_strjoin(GREEN_, prompt.usr);
-	prompt.join_usr_curr_dir = f_strjoin(prompt.join_usr_color, prompt.curr_dir);
+	prompt.join_usr_curr_dir = f_strjoin(prompt.join_usr_color,
+							prompt.curr_dir);
 	prompt.prompt = f_strjoin(prompt.join_usr_curr_dir, RESET_);
 	free(prompt.curr_dir);
 	free(prompt.usr);
