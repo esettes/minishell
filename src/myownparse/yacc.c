@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   yacc.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:44 by antosanc          #+#    #+#             */
-/*   Updated: 2024/04/18 21:55:13 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/17 22:42:30 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,9 @@ static int	create_scmd(t_scmd **scmd, t_token_lst **token_lst)
 	while (scmd[i] && *token_lst)
 	{
 		scmd[i]->n_available_args = count_scmd_args(*token_lst);
-		printf("n_available_args: %d\n", scmd[i]->n_available_args);
-		scmd[i]->args = malloc(sizeof(char *) * (scmd[i]->n_available_args + 1));
+		scmd[i]->args = malloc(sizeof(char *) * scmd[i]->n_available_args + 1);
 		if (!scmd[i]->args)
 			return (EXIT_FAILURE);
-		scmd[i]->args[scmd[i]->n_available_args] = NULL;
 		scmd[i]->argc = 0;
 		scmd[i]->append = 0;
 		scmd[i]->in_f = NULL;
@@ -88,7 +86,7 @@ t_cmd	*yacc_tony(t_cmd *cmd, t_token_lst **token_lst)
 	int	i;
 
 	cmd->n_available_scmd = count_cmd(*token_lst);
-	cmd->n_scmd = cmd->n_available_scmd;
+	cmd->n_scmd = 0;
 	cmd->scmd = ft_calloc(cmd->n_available_scmd + 1, sizeof(t_scmd *));
 	if (!cmd->scmd)
 		return (NULL);

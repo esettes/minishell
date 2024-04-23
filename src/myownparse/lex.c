@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   lex.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:24 by antosanc          #+#    #+#             */
-/*   Updated: 2024/04/18 20:50:51 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/17 23:28:59 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../inc/headers/minishell.h"
+
+volatile int	g_signal = 0;
 
 static t_token_lst	*quotes_content(char *str, t_token *token)
 {
@@ -60,8 +62,7 @@ t_token	*lex_tony(char *str, char **envp)
 	t_token_lst	*token_lst;
 
 	token = token_init(envp);
-	int	len = ft_strlen(str);
-	while (token->i < len && str[token->i])
+	while (str[token->i])
 	{
 		token_lst = NULL;
 		while (str[token->i] == ' ')
@@ -82,26 +83,26 @@ t_token	*lex_tony(char *str, char **envp)
 	}
 	return (token);
 }
-/*
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_token	*list;
 	char	*str = "<< >> a a ";
-	t_token_lst	*str2;
+	t_token_lst	*tmp2;
 
 	(void)argc;
 	(void)argv;
 	list = lex_tony(str, envp);
 	if (!list)
 		return (0);
-	str2 = list->token_lst;
-	while (str2)
+	tmp2 = list->token_lst;
+	while (tmp2)
 	{
-		printf("content: %s\n", str2->content);
-		printf("quotes: %d\n", str2->quotes);
-		str2 = str2->next;
+		printf("content: %s\n", tmp2->content);
+		printf("quotes: %d\n", tmp2->quotes);
+		tmp2 = tmp2->next;
 	}
 	if (list)
 		clear_all(list, NULL);
 	return (0);
-}*/
+}

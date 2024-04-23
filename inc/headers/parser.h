@@ -3,10 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
+<<<<<<< HEAD
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 19:04:03 by uliherre          #+#    #+#             */
 /*   Updated: 2024/04/18 20:26:26 by iostancu         ###   ########.fr       */
+=======
+/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/21 19:04:03 by uliherre          #+#    #+#             */
+/*   Updated: 2024/04/17 22:43:08 by antosanc         ###   ########.fr       */
+>>>>>>> parser2
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +30,46 @@
 
 typedef struct s_token_lst
 {
+<<<<<<< HEAD
 	char				*content;
 	int					quotes;
 	struct s_token_lst	*next;
 }		t_token_lst;
 
+=======
+	char	*expanded;
+	char	*var;
+	char	*index;
+	char	*aux;
+	char	*auxvar;
+}			t_expander;
+
+
+
+t_cmd	*parser(char *str, char **envp);
+t_list	*lex(char *str, char **envp);
+char	*expander(char *str, char **envp);
+int		validator(t_list *tokens);
+t_cmd	*yacc(t_cmd *cmd, t_list *lst);
+
+void	free_cmd(t_cmd **cmd);
+void	free_scmd(t_scmd **scmd);
+void	insert_scmd(t_cmd *cmd, t_scmd *scmd);
+void	insert_args(t_scmd **scmd, t_list *args, int *i);
+int		scommand_count(t_list *lst);
+size_t	val_get_type(char *token);
+void	redirect_phase(t_scmd *scmd, t_list **tokens, int *i);
+
+//parse Tony
+
+typedef struct s_token_lst
+{
+	char				*content;
+	int					quotes;
+	struct s_token_lst	*next;
+}		t_token_lst;
+
+>>>>>>> parser2
 typedef struct s_token
 {
 	int			i;

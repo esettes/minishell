@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:07 by antosanc          #+#    #+#             */
-/*   Updated: 2024/04/18 20:58:08 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/17 23:15:07 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 //no avanza si le pongo un pipe es decir no me crea los comandos en el siguiente subcommand
 //hay leaks no se esta liberando bien la estructura de los tokens
-/*
+
 void print_cmd_arguments(const t_cmd *cmd) {
     if (cmd == NULL) {
         printf("No command data available.\n");
@@ -50,7 +50,7 @@ void print_cmd_arguments(const t_cmd *cmd) {
             printf("\n");
         }
     }
-}*/
+}
 
 static int	parse_checker(t_cmd *cmd, char *str, char **envp)
 {
@@ -64,11 +64,10 @@ static int	parse_checker(t_cmd *cmd, char *str, char **envp)
 		return (clear_all(token, NULL), EXIT_FAILURE);
 	head = token->token_lst;
 	cmd = yacc_tony(cmd, &token->token_lst);
-	printf("Number of subcommands: %d\n", cmd->n_available_scmd);
 	token->token_lst = head;
 	if (cmd == NULL)
 		return (clear_all(token, NULL), EXIT_FAILURE);
-	//print_cmd_arguments(cmd);
+	print_cmd_arguments(cmd);
 	return (clear_all(token, NULL), EXIT_SUCCESS);
 }
 
@@ -87,10 +86,10 @@ t_cmd	*parser(char *str, char **envp)
 		g_signal = 2;
 		return (free(command), NULL);
 	}
-	//free_cmd_tony(command);
+	free_cmd_tony(command);
 	return (command);
 }
-/*
+
 //Borrar cuando termine de probar
 int	main(int argc, char **argv, char **envp)
 {
@@ -98,4 +97,4 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	char	*str = "ls a a a";
 	parser(str, envp);
-}*/
+}
