@@ -6,7 +6,7 @@
 #    By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/21 19:03:34 by uliherre          #+#    #+#              #
-#    Updated: 2024/04/16 22:53:26 by iostancu         ###   ########.fr        #
+#    Updated: 2024/04/18 20:29:00 by iostancu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,22 +19,23 @@ LGREEN	= \033[2;32m
 NAME = minishell
 
 CC = clang
-CFLAGS = -g3 -Wall -Wextra -Werror -fsanitize=address #-fsanitize-ignorelist=/home/settes/cursus/minishell/ignorelist.txt #-Wall -Wextra -Werror -pedantic
+CFLAGS = -g3 -fsanitize=address #-Wall -Wextra -Werror #-fsanitize-ignorelist=/home/settes/cursus/minishell/ignorelist.txt #-Wall -Wextra -Werror -pedantic
 LDFLAGS	= -L/Users/$(USER)/.brew/opt/readline/lib -lreadline
 CFLAGS += -I/Users/$(USER)/.brew/opt/readline/include
 
-INCLUDES = -I include -I ./inc/headers -I ./inc/libft/inc 
+INCLUDES = -I include -I ./inc/headers -I ./inc/libft/inc
 
 ############################ PARSER ###########################
-DIR_PARSER = ./src/sources_parser/
+DIR_PARSER = ./src/myownparse/
 SOURCES_PARSER = \
-	command.c \
 	expander.c \
+	heredoc.c \
+	lex_utils.c \
 	lex.c \
+	list_utils.c \
 	parser.c \
-	redirects.c \
-	scommand.c \
 	validator.c \
+	yacc_utils.c \
 	yacc.c
 
 A_PARSER = $(addprefix $(DIR_PARSER),$(SOURCES_PARSER))
@@ -101,7 +102,7 @@ OBJDIR = ./src/obj/
 
 LIBFT = ./inc/libft/libft.a
 
-COMPS = $(LIBFT) 
+COMPS = $(LIBFT)
 
 $(OBJDIR)%.o:$(DIR_PARSER)%.c
 	@mkdir -p $(OBJDIR)
