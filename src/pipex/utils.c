@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:39 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/18 22:00:53 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/23 22:40:02 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,8 @@ void	free_split(char **s)
 	int	i;
 
 	i = 0;
-	printf("f_strlen(s): %d\n", f_strlen(*s));
 	while (s[i])
-	{
-		printf("s[%d]: %s\n", i, s[i]);
 		free(s[i++]);
-	}
 	free(s);
 }
 
@@ -37,7 +33,7 @@ int	ff_error(char *num)
 	}
 	if (g_signal == 0 || g_signal == 127)
 		return (g_signal);
-	ft_putstrc_fd(RED_, "Error: ", 2);
+	ft_putstrc_fd(RED_, "minishell: ", 2);
 	ft_putstrc_fd(RED_, strerror(g_signal), 2);
 	ft_putstrc_fd(RESET_, "\n", 2);
 	return (g_signal);
@@ -48,7 +44,7 @@ int	f_error(void)
 	g_signal = errno;
 	if (g_signal == 0)
 		return (g_signal);
-	ft_putstrc_fd(RED_, "Error: ", 2);
+	ft_putstrc_fd(RED_, "minishell: ", 2);
 	ft_putstrc_fd(RED_, strerror(g_signal), 2);
 	ft_putstrc_fd(RESET_, "\n", 2);
 	return (g_signal);

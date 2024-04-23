@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:09:44 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/11 23:35:48 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/23 23:07:45 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,14 @@ int		f_error(void);
  * @param newfd
  */
 int		duplicate_fd(int oldfd, int newfd);
-int		exec_process(char **cmd, char *envp[], char *path_envp);
-int		run_child(t_pipe *data, t_cmd *cmd, char *envp[], int pos);
-int		run_child2(t_pipe *data, t_cmd *cmd, char *envp[], int pos);
+int		exec_process(t_pipe *data, char **cmd);
+int		run_child(t_pipe *data, t_cmd *cmd, int pos);
+int		run_child2(t_pipe *data, t_cmd *cmd, int pos);
 int		cmd_have_path(char *cmd);
 int		cmd_have_current_path(char *cmd);
 char	*get_path(char *cmd, char *path_envp);
 void	free_split(char **s);
-int		f_pipex(t_pipe *p_data, t_cmd *cmd, char *envp[]);
+int		f_pipex(t_pipe *p_data, t_cmd *cmd);
 void	ft_putstrc_fd(char *color, char *s, int fd);
 char	*f_strdup(const char *s1);
 int		f_strncmp(const char *s1, const char *s2, size_t n);

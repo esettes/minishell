@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:07:30 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/18 21:45:26 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/18 21:25:08 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,7 @@ int	echo_handler(t_scmd scmd)
 		flag = FALSE;
 		x++;
 	}
-	printf("argc: %d\n", scmd.argc);
-	scmd.argc -= 1;
+	dprintf(STDOUT_FILENO, "argc: %d\n", scmd.argc);
 	while (x < (size_t)scmd.argc && scmd.args[x + TRUE])
 	{
 		ft_putstr_fd(scmd.args[x + TRUE], STDOUT_FILENO);
