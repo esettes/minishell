@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/23 23:19:25 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/24 23:10:14 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	exec_process(t_pipe *data, char **cmd)
 	printf("path: %s\n", path);
 	if ((cmd_have_current_path(cmd[0]) || !path))
 	{
+		printf("no path!\n");
 		free_split(cmd);
 		g_signal = 2;
 		return (2);
@@ -73,7 +74,10 @@ int	run_child2(t_pipe *data, t_cmd *cmd, int pos)
 	if (is_parent_exec(data->last_cmd[0]))
 	{
 		if (run_parent(cmd, &data, pos))
-			return (f_error());
+		{
+			printf("builtin error\n");
+			exit(f_error());
+		}
 		else
 			exit(EXIT_SUCCESS);
 	}
