@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 19:59:01 by antosanc          #+#    #+#             */
-/*   Updated: 2024/04/19 22:43:49 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/04/25 22:08:41 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,8 @@ char	*get_env_value(char *var_env, char **envp)
 			while (tmp_envp[i][j] != '=' && tmp_envp[i][j])
 				j++;
 			if (tmp_envp[i][j + 1])
-			{
-				free(var_env);
 				return (ft_substr(tmp_envp[i] + j, 1,
 						ft_strlen(tmp_envp[i]) - (j + 1)));
-			}
 		}
 		i++;
 	}
