@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 18:19:47 by antosanc          #+#    #+#             */
-/*   Updated: 2024/04/19 22:54:15 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/04/25 21:45:17 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,10 @@ int	count_scmd_args(t_token_lst *token_lst)
 			flag = 0;
 		else if (ft_strncmp(content, "<<", 2) == 0)
 			flag = 1;
-		else if (content[0] != '<' && content[0] != '>'
+		else if (content[0] == '<' || content[0] == '>'
 			&& token_lst->quotes == 0)
+			flag = 1;
+		else
 			len++;
 		token_lst = token_lst->next;
 	}
