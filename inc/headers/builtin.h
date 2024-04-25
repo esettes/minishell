@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:07:46 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/17 22:54:51 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/25 00:31:12 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,8 @@ typedef struct s_unset
 	char	*var;
 }	t_unset;
 
-size_t	env_len(char **env);
 int		echo_handler(t_scmd scmd);
 int		exit_handler(t_cmd *cmd);
-size_t	search_in_env(char **env, char *to_search);
 char	*ft_getenv(char **envp, char *var_name);
 int		exec_cd(t_pipe *data, t_cmd *cmd, int pos);
 int		exec_env(t_pipe *data);
@@ -61,7 +59,7 @@ char	*get_env_variable(char *var);
 int		is_correct_env_variable(char *var, char *cmd);
 char	*get_env_var_value(char **envp_minish, char *var);
 int		pwd_handler(void);
-char	**create_new_var(char **envp_minish, char *var);
+char	**create_new_var(t_pipe *data, char *var);
 void	print_cmd_error(char *var, char *cmd);
 int		change_var_value(char **envp_minish, char *raw_variable);
 /**
@@ -73,5 +71,7 @@ int		change_var_value(char **envp_minish, char *raw_variable);
  */
 char	*get_env_variable_from_minish_environ(char **envp_minish, char *var);
 void	init_env(char **env, size_t len, char **envp_minish);
+void	print_env_not_set(char *cmd, char *var);
+void	print_err_msg(char *cmd, char *var, char *msg);
 
 #endif
