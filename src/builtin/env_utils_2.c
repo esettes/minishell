@@ -36,6 +36,8 @@ char	*get_env_variable(char *var)
 	char	*aux;
 
 	i = 0;
+	if (!var)
+		return (NULL);
 	while (var[i] && var[i] != '=')
 		i++;
 	aux = malloc(sizeof(char) * (i + 1));
