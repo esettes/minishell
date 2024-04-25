@@ -37,6 +37,8 @@ char	*get_env_var_value(char **envp_minish, char *var)
 	while (envp_minish[i])
 	{
 		env_var = get_env_variable(envp_minish[i]);
+		if (!env_var)
+			return (NULL);
 		if (f_strict_strncmp(env_var, var, f_strlen(var)) == 0)
 		{
 			if (envp_minish[i][f_strlen(env_var)] == '\0')
