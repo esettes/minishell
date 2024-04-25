@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: ubuntu <ubuntu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/29 14:48:39 by antosanc          #+#    #+#             */
-/*   Updated: 2024/04/19 23:38:26 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/01/28 12:45:02 by ubuntu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,6 @@
 # include <stdio.h>
 # include <fcntl.h>
 # include "colors.h"
-
-# ifndef MY_CONSTANT_H
-#  define MY_CONSTANT_H
-#  define FALSE 0
-#  define TRUE 1
-#  define ZERO 0
-# endif
 
 // LIBFT
 void	ft_bzero(void *s, size_t n);
@@ -113,9 +106,7 @@ t_gnl	*ft_lstlast_gnl(t_gnl *lst);
 // OTHER FUNCTIONS
 void	ft_error(void);
 void	ft_free_matrix(char **matrix);
-void	ft_print_error(const char *error);
+void	ft_print_error(char *error);
 int		ft_count_chars_str(int c, char *str);
-void	ft_puterror_noexit(const char *error);
-void	ft_puterror(const char *error);
 
 #endif

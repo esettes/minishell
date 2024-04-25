@@ -3,29 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:07 by antosanc          #+#    #+#             */
-/*   Updated: 2024/04/18 20:58:08 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/23 20:59:06 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/headers/minishell.h"
 
-
 //Borrar cuando termine de probar
 
-//no avanza si le pongo un pipe es decir no me crea los comandos en el siguiente subcommand
-//hay leaks no se esta liberando bien la estructura de los tokens
-/*
-void print_cmd_arguments(const t_cmd *cmd) {
+/*void print_cmd_arguments(const t_cmd *cmd) {
     if (cmd == NULL) {
         printf("No command data available.\n");
         return;
     }
 
     printf("Total subcommands: %d\n", cmd->n_scmd);
-    for (int i = 0; i < cmd->n_available_scmd; i++) {
+    for (int i = 0; i < cmd->n_scmd; i++) {
         t_scmd *scmd = cmd->scmd[i];
         if (scmd == NULL) {
             printf("Subcommand %d is null.\n", i + 1);
@@ -33,7 +29,7 @@ void print_cmd_arguments(const t_cmd *cmd) {
         }
 
         printf("Subcommand %d:\n", i + 1);
-        printf("  Number of arguments: %d\n", scmd->argc);
+        printf("  Number of arguments argc: %d\n", scmd->argc);
         for (int j = 0; j < scmd->argc; j++) {
             printf("    Arg %d: %s\n", j + 1, scmd->args[j]);
         }
@@ -61,21 +57,19 @@ static int	parse_checker(t_cmd *cmd, char *str, char **envp)
 	if (token == NULL)
 		return (EXIT_FAILURE);
 	if (validator_tony(token))
-		return (clear_all(token, NULL), EXIT_FAILURE);
+		return (clear_all(&token, NULL), EXIT_FAILURE);
 	head = token->token_lst;
 	cmd = yacc_tony(cmd, &token->token_lst);
-	printf("Number of subcommands: %d\n", cmd->n_available_scmd);
 	token->token_lst = head;
 	if (cmd == NULL)
-		return (clear_all(token, NULL), EXIT_FAILURE);
+		return (clear_all(&token, NULL), EXIT_FAILURE);
 	//print_cmd_arguments(cmd);
-	return (clear_all(token, NULL), EXIT_SUCCESS);
+	return (clear_all(&token, NULL), EXIT_SUCCESS);
 }
 
 t_cmd	*parser(char *str, char **envp)
 {
 	t_cmd	*command;
-	
 
 	if (!str || !*str || !envp || !*envp)
 		return (NULL);
@@ -90,12 +84,12 @@ t_cmd	*parser(char *str, char **envp)
 	//free_cmd_tony(command);
 	return (command);
 }
-/*
+
 //Borrar cuando termine de probar
-int	main(int argc, char **argv, char **envp)
+/*int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
-	char	*str = "ls a a a";
+	char	*str = "< Makefile cat";
 	parser(str, envp);
 }*/

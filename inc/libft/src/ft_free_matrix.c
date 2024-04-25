@@ -1,39 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_substr.c                                        :+:      :+:    :+:   */
+/*   ft_free_matrix.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: antosanc <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/29 14:48:04 by antosanc          #+#    #+#             */
-/*   Updated: 2023/09/29 14:48:06 by antosanc         ###   ########.fr       */
+/*   Created: 2023/12/26 15:11:04 by antosanc          #+#    #+#             */
+/*   Updated: 2023/12/26 15:11:05 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/libft.h"
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+void	ft_free_matrix(char **matrix)
 {
-	char	*array;
-	size_t	i;
-	size_t	slen;
+	int	i;
 
 	i = 0;
-	if (!s)
-		return (0);
-	if (start >= ft_strlen(s))
-		return (ft_strdup(""));
-	slen = ft_strlen(s + start);
-	if (slen < len)
-		len = slen;
-	array = (char *)malloc(len + 1);
-	if (array == 0)
-		return (0);
-	while (i < len && s[i])
+	while (matrix[i])
 	{
-		array[i] = s[i + start];
+		free(matrix[i]);
 		i++;
 	}
-	array[i] = '\0';
-	return (array);
+	free(matrix);
 }

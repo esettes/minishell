@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:34 by antosanc          #+#    #+#             */
-/*   Updated: 2024/04/17 22:46:26 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/04/19 22:51:05 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ static void	syntax_error(char *str)
 static int	check_error_cases(t_token_lst *tokens)
 {
 	t_token_lst	*next;
-	char	t_current;
-	char	t_next;
+	char		t_current;
+	char		t_next;
 
 	next = tokens->next;
 	if (!next)
@@ -31,7 +31,7 @@ static int	check_error_cases(t_token_lst *tokens)
 	t_next = ((char *)next->content)[0];
 	if (t_current == '|' && tokens->quotes == 0 && t_next == '|'
 		&& next->quotes == 0)
-        return (syntax_error("||"), EXIT_FAILURE);
+		return (syntax_error("||"), EXIT_FAILURE);
 	if ((t_current == '>' || t_current == '<') && tokens->quotes == 0
 		&& (t_next == '>' || t_next == '<' || t_next == '|')
 		&& next->quotes == 0)

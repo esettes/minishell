@@ -66,7 +66,7 @@ int manage_signactions(void)
 
 static void	free_all(t_cmd *cmd, t_pipe *p_data, t_buff *buff)
 {
-	free_cmd(&cmd);
+	free_cmd_tony(cmd);
 	free(p_data->envp);
 	free_memory((const char **)p_data->envp_minish,
 		get_array_size(p_data->envp_minish));
@@ -105,7 +105,7 @@ int	core_shell(char **envp)
 			b.oldbuffer, sizeof(b.oldbuffer)) != 0)
 			add_history(b.buffer);
 		cmd = parser(b.buffer, p_data->envp_minish);
-		if (NULL == cmd)
+		if (cmd == NULL)
 			continue ;
 		if (ft_strncmp("", b.buffer, 1) == 0)
 			continue ;

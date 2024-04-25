@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 18:19:52 by antosanc          #+#    #+#             */
-/*   Updated: 2024/04/17 21:54:00 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/04/19 22:47:04 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	heredoc_write(int fd, char *delimiter)
 {
-	int	bytes_written;
+	int		bytes_written;
 	char	*buff;
 
 	while (1)
@@ -22,7 +22,7 @@ static int	heredoc_write(int fd, char *delimiter)
 		buff = readline("> ");
 		if (!buff)
 			return (EXIT_FAILURE);
-		if (ft_strncmp(buff, delimiter, ft_strlen(delimiter)) == 0)
+		if (ft_strncmp(buff, delimiter, ft_strlen(buff)) == 0)
 		{
 			free(buff);
 			break ;
@@ -43,7 +43,7 @@ int	heredoc_init(t_scmd *scmd, t_token_lst **token_lst)
 	char	*delimiter;
 	int		fd;
 
-	*token_lst = (*token_lst)->next;	
+	*token_lst = (*token_lst)->next;
 	delimiter = (*token_lst)->content;
 	scmd->in_f = ft_strdup(".tmp");
 	fd = open(".tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -52,6 +52,5 @@ int	heredoc_init(t_scmd *scmd, t_token_lst **token_lst)
 	if (heredoc_write(fd, delimiter))
 		return (close(fd), EXIT_FAILURE);
 	close(fd);
-	
 	return (EXIT_SUCCESS);
 }

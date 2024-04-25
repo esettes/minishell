@@ -71,3 +71,14 @@ int	dup_files(int *infile, int *outfile)
 			return (f_error());
 	return (EXIT_SUCCESS);
 }
+
+int	cmd_have_current_path(char *cmd)
+{
+	register int	i;
+
+	i = 0;
+	while (cmd[i])
+		if (cmd[i++] == '.')
+			return (TRUE);
+	return (FALSE);
+}

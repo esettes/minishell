@@ -1,20 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isprint.c                                       :+:      :+:    :+:   */
+/*   ft_print_error.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antosanc <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ubuntu <ubuntu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/11 18:34:03 by antosanc          #+#    #+#             */
-/*   Updated: 2023/09/11 18:39:46 by antosanc         ###   ########.fr       */
+/*   Created: 2024/01/12 16:58:16 by antosanc          #+#    #+#             */
+/*   Updated: 2024/02/26 21:21:06 by ubuntu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/libft.h"
 
-int	ft_isprint(int c)
+void	ft_print_error(const char *error)
 {
-	if (c >= ' ' && c <= '~')
-		return (1);
-	return (0);
+	ft_printf("%sError:%s %s\n", RED, CLEAR, error);
+	exit(EXIT_FAILURE);
 }

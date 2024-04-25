@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 18:19:47 by antosanc          #+#    #+#             */
-/*   Updated: 2024/04/17 22:42:21 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/04/19 22:54:15 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	count_cmd(t_token_lst *token_lst)
 	int	len;
 
 	len = 1;
-	while(token_lst)
+	while (token_lst)
 	{
 		if (((char *)token_lst->content)[0] == '|' && token_lst->quotes == 0)
 			len++;
@@ -31,7 +31,7 @@ int	count_scmd_args(t_token_lst *token_lst)
 	int			len;
 	char		*content;
 	int			flag;
-	
+
 	len = 0;
 	flag = 0;
 	while (token_lst && ((char *)token_lst->content)[0] != '|')

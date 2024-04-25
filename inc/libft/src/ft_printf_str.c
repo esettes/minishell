@@ -1,39 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_substr.c                                        :+:      :+:    :+:   */
+/*   ft_printf_str.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: antosanc <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/29 14:48:04 by antosanc          #+#    #+#             */
-/*   Updated: 2023/09/29 14:48:06 by antosanc         ###   ########.fr       */
+/*   Created: 2023/11/25 11:20:37 by antosanc          #+#    #+#             */
+/*   Updated: 2023/11/25 11:23:34 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/libft.h"
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+int	ft_putstr(char *s)
 {
-	char	*array;
-	size_t	i;
-	size_t	slen;
+	int	count;
 
-	i = 0;
 	if (!s)
 		return (0);
-	if (start >= ft_strlen(s))
-		return (ft_strdup(""));
-	slen = ft_strlen(s + start);
-	if (slen < len)
-		len = slen;
-	array = (char *)malloc(len + 1);
-	if (array == 0)
-		return (0);
-	while (i < len && s[i])
+	count = 0;
+	while (*s)
 	{
-		array[i] = s[i + start];
-		i++;
+		count += ft_putchar(*s);
+		s++;
 	}
-	array[i] = '\0';
-	return (array);
+	return (count);
 }

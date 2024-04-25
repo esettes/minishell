@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:59:23 by antosanc          #+#    #+#             */
-/*   Updated: 2024/04/17 23:30:12 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/04/24 20:41:19 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@ int	check_syntax_char(char c)
 
 t_token_lst	*store_syntax_char(char *str, t_token *token)
 {
-	int	j;
-	int	start;
+	int			j;
+	int			start;
 	t_token_lst	*token_lst;
 
 	j = 1;
 	token_lst = token_new();
 	if ((str[token->i] == str[token->i + 1]) && (str[token->i] == '>'
-		|| str[token->i] == '<'))
+			|| str[token->i] == '<'))
 	{
 		token->i++;
 		j++;
@@ -39,12 +39,12 @@ t_token_lst	*store_syntax_char(char *str, t_token *token)
 	return (token_lst);
 }
 
-void	*clear_all(t_token *token, char *error)
+void	*clear_all(t_token **token, char *error)
 {
-	if (token->token_lst)
-		token_clear(&token->token_lst, free);
-	free(token);
-	token = NULL;
+	if ((*token)->token_lst)
+		token_clear(&((*token)->token_lst), free);
+	free(*token);
+	*token = NULL;
 	if (error)
 		ft_puterror_noexit(error);
 	return (NULL);
@@ -53,7 +53,7 @@ void	*clear_all(t_token *token, char *error)
 int	check_heredoc(t_token_lst *token_lst)
 {
 	t_token_lst	*last;
-	char	*str;
+	char		*str;
 
 	if (!token_lst)
 		return (0);
@@ -64,23 +64,27 @@ int	check_heredoc(t_token_lst *token_lst)
 	return (0);
 }
 
-//leak cuando se crea una variable no definida
-t_token_lst	*create_token_lst(char *str, int j, t_token *token, int flag)
+t_token_lst	*create_token_lst(char *str, int j, t_token **token, int flag)
 {
 	t_token_lst	*token_lst;
-	
+
 	token_lst = token_new();
-	token_lst->content = ft_substr(str, j, token->i - j);
-	token->i++;
-	if (j > 0 && str[j - 1] && (str[j - 1] == '\'' || str[j - 1] == '\"'))
-		token_lst->quotes = 1;
-	if (check_heredoc(token->token_lst))
+	token_lst->content = ft_substr(str, j, (*token)->i - j);
+	if (j > 0 && str[j - 1] && (str[j - 1] == '\"' || str[j - 1] == '\''))
+		return (token_lst);
+	if (check_heredoc((*token)->token_lst))
 		return (token_lst);
 	if (j > 0 && str[j - 1] && !((str[j - 1] == '\'')))
 	{
 		if (flag > 0)
 			while (flag-- > 0)
-				token_lst->content = expander_process(token_lst->content, token);
+				token_lst->content = expander(token_lst->content, token);
+	}
+	if (!*token_lst->content)
+	{
+		free(token_lst->content);
+		free(token_lst);
+		token_lst = NULL;
 	}
 	return (token_lst);
 }

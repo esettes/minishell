@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 19:04:03 by uliherre          #+#    #+#             */
-/*   Updated: 2024/04/18 20:26:26 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/19 22:57:15 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,6 @@
 # define PARSER_H
 
 # include "minishell.h"
-
-# define ERR_PIPE "syntax error near unexpected token `|\'"
-# define ERR_REDIRECT "syntax error near unexpected token `< / >\'"
-# define ERR_NEWLINE "syntax error near unexpected token `newline\'"
-
-//parse Tony
 
 typedef struct s_token_lst
 {
@@ -46,12 +40,16 @@ t_cmd		*parser(char *str, char **envp);
 
 //Lex
 t_token		*lex_tony(char *str, char **envp);
-char		*expander_process(char *str, t_token *token);
 t_token_lst	*store_syntax_char(char *str, t_token *token);
 int			check_syntax_char(char c);
-void		*clear_all(t_token *token, char *error);
+void		*clear_all(t_token **token, char *error);
 int			check_heredoc(t_token_lst *token_lst);
-t_token_lst	*create_token_lst(char *str, int j, t_token *token, int flag);
+t_token_lst	*create_token_lst(char *str, int j, t_token **token, int flag);
+
+//Expander
+char		*expander(char *str, t_token **token);
+int			len_expanded_str(char *str, char *env_value);
+char		*get_env_value(char *var_env, char **envp);
 
 //Validator
 int			validator_tony(t_token *token);

@@ -1,28 +1,52 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstsize_bonus.c                                 :+:      :+:    :+:   */
+/*   ft_printf_num.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: antosanc <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/25 11:19:52 by antosanc          #+#    #+#             */
-/*   Updated: 2023/11/25 11:19:54 by antosanc         ###   ########.fr       */
+/*   Created: 2023/11/25 11:20:29 by antosanc          #+#    #+#             */
+/*   Updated: 2023/11/25 11:23:02 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/libft.h"
 
-int	ft_lstsize(t_list *lst)
+int	ft_putnbr(int n)
 {
-	t_list	*temp;
+	long	num;
 	int		len;
 
-	temp = lst;
+	num = n;
 	len = 0;
-	while (temp)
+	if (num < 0)
 	{
-		temp = temp->next;
-		len++;
+		num *= -1;
+		len += ft_putchar('-');
 	}
+	if (num > 9)
+	{
+		len += ft_putnbr((num / 10));
+		len += ft_putchar(((num % 10) + '0'));
+	}
+	else
+		len += ft_putchar((num + '0'));
+	return (len);
+}
+
+int	ft_putnbr_unsigned(unsigned int n)
+{
+	long int	num;
+	int			len;
+
+	num = n;
+	len = 0;
+	if (num > 9)
+	{
+		len += ft_putnbr_unsigned(num / 10);
+		len += ft_putchar((num % 10) + '0');
+	}
+	else
+		len += ft_putchar((num % 10) + '0');
 	return (len);
 }

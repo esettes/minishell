@@ -1,20 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isprint.c                                       :+:      :+:    :+:   */
+/*   ft_count_chars_str.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antosanc <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ubuntu <ubuntu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/11 18:34:03 by antosanc          #+#    #+#             */
-/*   Updated: 2023/09/11 18:39:46 by antosanc         ###   ########.fr       */
+/*   Created: 2024/01/27 12:39:40 by antosanc          #+#    #+#             */
+/*   Updated: 2024/01/28 16:13:20 by ubuntu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/libft.h"
 
-int	ft_isprint(int c)
+int	ft_count_chars_str(int c, char *str)
 {
-	if (c >= ' ' && c <= '~')
-		return (1);
-	return (0);
+	int	i;
+	int	len;
+
+	i = 0;
+	len = 0;
+	while (str[i])
+	{
+		if (str[i] == (char)c)
+			len++;
+		i++;
+	}
+	return (len);
 }

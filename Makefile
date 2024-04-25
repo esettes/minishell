@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+         #
+#    By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/21 19:03:34 by uliherre          #+#    #+#              #
-#    Updated: 2024/04/18 20:29:00 by iostancu         ###   ########.fr        #
+#    Updated: 2024/04/24 20:41:38 by antosanc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ LGREEN	= \033[2;32m
 NAME = minishell
 
 CC = clang
-CFLAGS = -g3 -fsanitize=address #-Wall -Wextra -Werror #-fsanitize-ignorelist=/home/settes/cursus/minishell/ignorelist.txt #-Wall -Wextra -Werror -pedantic
+CFLAGS = -g3 #-fsanitize=address #-Wall -Wextra -Werror #-fsanitize-ignorelist=/home/settes/cursus/minishell/ignorelist.txt #-Wall -Wextra -Werror -pedantic
 LDFLAGS	= -L/Users/$(USER)/.brew/opt/readline/lib -lreadline
 CFLAGS += -I/Users/$(USER)/.brew/opt/readline/include
 
@@ -28,6 +28,7 @@ INCLUDES = -I include -I ./inc/headers -I ./inc/libft/inc
 ############################ PARSER ###########################
 DIR_PARSER = ./src/myownparse/
 SOURCES_PARSER = \
+	expander_utils.c \
 	expander.c \
 	heredoc.c \
 	lex_utils.c \
@@ -51,17 +52,6 @@ SOURCES_SHELL = \
 A_SHELL = $(addprefix $(DIR_SHELL),$(SOURCES_SHELL))
 SOURCES += $(A_SHELL)
 OBJECTS += $(addprefix $(OBJDIR), $(SOURCES_SHELL:.c=.o))
-
-########################## EXECUTER ###########################
-DIR_EXECUTER = ./src/sources_executer/
-SOURCES_EXECUTER = \
-	executer_tools.c \
-	executer.c \
-	path.c
-
-A_EXECUTER = $(addprefix $(DIR_EXECUTER),$(SOURCES_EXECUTER))
-SOURCES += $(A_EXECUTER)
-OBJECTS += $(addprefix $(OBJDIR), $(SOURCES_EXECUTER:.c=.o))
 
 ########################## BUILTIN ############################
 DIR_BUILTIN = ./src/builtin/

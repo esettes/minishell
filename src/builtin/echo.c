@@ -25,7 +25,6 @@ int	echo_handler(t_scmd scmd)
 		flag = FALSE;
 		x++;
 	}
-	dprintf(STDOUT_FILENO, "argc: %d\n", scmd.argc);
 	while (x < (size_t)scmd.argc && scmd.args[x + TRUE])
 	{
 		ft_putstr_fd(scmd.args[x + TRUE], STDOUT_FILENO);

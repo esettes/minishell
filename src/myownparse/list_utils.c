@@ -6,23 +6,23 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 19:06:08 by antosanc          #+#    #+#             */
-/*   Updated: 2024/04/17 23:10:22 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/04/19 22:53:36 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/headers/minishell.h"
 
-t_token *token_init(char **envp)
+t_token	*token_init(char **envp)
 {
-    t_token	*token;
+	t_token	*token;
 
 	token = malloc(sizeof(t_token));
-    if (!token)
-        return NULL;    
-    token->i = 0;
-    token->envp = envp;
-    token->token_lst = NULL;
-    return (token);
+	if (!token)
+		return (NULL);
+	token->i = 0;
+	token->envp = envp;
+	token->token_lst = NULL;
+	return (token);
 }
 
 t_token_lst	*token_new(void)

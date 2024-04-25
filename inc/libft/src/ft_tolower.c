@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_tolower.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uliherre <uliherre@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antosanc <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/16 16:26:26 by uliherre          #+#    #+#             */
-/*   Updated: 2022/07/16 16:26:28 by uliherre         ###   ########.fr       */
+/*   Created: 2023/09/29 14:48:10 by antosanc          #+#    #+#             */
+/*   Updated: 2023/09/29 14:48:12 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_tolower(int c)
 {
-	if ((unsigned) c - A_UPPER < 26)
-		c = c TO_LOWER;
+	if (c >= 'A' && c <= 'Z')
+		return (c + 32);
 	return (c);
 }
