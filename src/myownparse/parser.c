@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:07 by antosanc          #+#    #+#             */
-/*   Updated: 2024/04/23 20:59:06 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/04/25 21:59:51 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ static int	parse_checker(t_cmd *cmd, char *str, char **envp)
 	token->token_lst = head;
 	if (cmd == NULL)
 		return (clear_all(&token, NULL), EXIT_FAILURE);
-	//print_cmd_arguments(cmd);
 	return (clear_all(&token, NULL), EXIT_SUCCESS);
 }
 
@@ -81,7 +80,6 @@ t_cmd	*parser(char *str, char **envp)
 		g_signal = 2;
 		return (free(command), NULL);
 	}
-	//free_cmd_tony(command);
 	return (command);
 }
 
