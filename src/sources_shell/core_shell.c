@@ -15,54 +15,6 @@
 int g_signal;
 
 char	*get_prompt(t_pipe *data);
-void	sig_interrupt(int signum);
-void	sig_newentry(int signum);
-
-static void	c_handler(int sig)
-{
-	//termina la readline y muestra otra entrada
-	(void) sig;
-	write(1, "\n", 1);
-	rl_replace_line("", 1);
-	rl_on_new_line();
-	rl_redisplay();
-}
-
-static void	bs_handler(int sig)
-{
-
-	(void) sig;
-	printf("bs signal catch");
-	exit (42);
-}
-
-static int	enmask_signals(void)
-{
-	static struct sigaction	s1;
-
-	s1.sa_handler = &bs_handler;
-	if (sigaction(SIGQUIT, &s1, NULL))
-		return (ft_puterror("error: sigaction\n"), EXIT_FAILURE);
-	// while (TRUE)
-	// {
-	// 	printf("Esperando por una señal\n");
-	// 	sleep(2);
-	// }
-	return (EXIT_SUCCESS);
-}
-
-int manage_signactions(void)
-{
-	struct sigaction	s0;
-
-	s0.sa_handler = &c_handler;
-	s0.sa_flags = SA_RESTART;
-	if (sigaction(SIGINT, &s0, NULL))
-		return (ft_puterror("error: sigaction\n"), EXIT_FAILURE);
-	if (enmask_signals())
-		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
-}
 
 static void	free_all(t_cmd *cmd, t_pipe *p_data, t_buff *buff)
 {
@@ -86,6 +38,7 @@ int	core_shell(char **envp)
 	b.buffer = ft_strdup("");
 	b.oldbuffer = ft_strdup("");
 	p_data = init_pipe_struct(envp);
+	manage_signactions();
 	if (!p_data)
 		return (EXIT_FAILURE);
 	prompt = NULL;
@@ -147,17 +100,4 @@ char	*get_prompt(t_pipe *data)
 	free(prompt.join_usr_curr_dir);
 	free(prompt.home_substr);
 	return (prompt.prompt);
-}
-
-void	sig_interrupt(int signum)
-{
-	(void)signum;
-	ft_putstrc_fd(YELLOW_, "Caught interruption...\n", 1);
-	exit(1);
-}
-
-void	sig_newentry(int signum)
-{
-	(void)signum;
-	ft_putstrc_fd(RESET_, "^C\n", 1);
 }

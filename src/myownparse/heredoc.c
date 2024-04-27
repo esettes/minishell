@@ -12,6 +12,7 @@
 
 #include "../../inc/headers/minishell.h"
 
+//NO esta expandiendo variables de entorno ni poniendo saltos de linea
 static int	heredoc_write(int fd, char *delimiter)
 {
 	int		bytes_written;
@@ -45,6 +46,7 @@ int	heredoc_init(t_scmd *scmd, t_token_lst **token_lst)
 
 	*token_lst = (*token_lst)->next;
 	delimiter = (*token_lst)->content;
+	manage_signactions();
 	scmd->in_f = ft_strdup(".tmp");
 	fd = open(".tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)

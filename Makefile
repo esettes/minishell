@@ -47,7 +47,8 @@ OBJECTS = $(addprefix $(OBJDIR), $(SOURCES_PARSER:.c=.o))
 DIR_SHELL = ./src/sources_shell/
 SOURCES_SHELL = \
 	core_shell.c \
-	main.c
+	main.c \
+	signal.c
 
 A_SHELL = $(addprefix $(DIR_SHELL),$(SOURCES_SHELL))
 SOURCES += $(A_SHELL)

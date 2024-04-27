@@ -36,6 +36,6 @@
 extern int	g_signal;
 
 int	core_shell(char **envp);
-int	NEW_core_shell(char **envp);
+int manage_signactions(void);
 
 #endif
