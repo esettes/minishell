@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 18:19:47 by antosanc          #+#    #+#             */
-/*   Updated: 2024/04/25 21:45:17 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/04/29 20:39:11 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ int	count_scmd_args(t_token_lst *token_lst)
 			len++;
 		token_lst = token_lst->next;
 	}
+	if (len == 0)
+		len++;
 	return (len);
 }
 

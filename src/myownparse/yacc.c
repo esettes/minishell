@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:44 by antosanc          #+#    #+#             */
-/*   Updated: 2024/04/25 21:48:28 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/04/29 21:11:29 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ static void	check_args(t_scmd *scmd, t_token_lst **token_lst)
 			free(scmd->out_f);
 		scmd->out_f = ft_strdup((*token_lst)->content);
 	}
+	if (scmd->argc == 0)
+		scmd->args[0] = ft_strdup("");
 }
 
 static int	fill_scmd(t_scmd *scmd, t_token_lst **token_lst)
@@ -64,7 +66,7 @@ static int	create_scmd(t_scmd **scmd, t_token_lst **token_lst)
 	{
 		scmd[i]->n_available_args = count_scmd_args(*token_lst);
 		scmd[i]->args = malloc(sizeof(char *)
-				* (scmd[i]->n_available_args + 1));
+			* (scmd[i]->n_available_args + 1));
 		if (!scmd[i]->args)
 			return (EXIT_FAILURE);
 		scmd[i]->args[scmd[i]->n_available_args] = NULL;
@@ -77,6 +79,7 @@ static int	create_scmd(t_scmd **scmd, t_token_lst **token_lst)
 			if (fill_scmd(scmd[i], token_lst))
 				return (EXIT_FAILURE);
 		}
+		printf("%d\n", scmd[i]->append);
 		if (*token_lst && (*token_lst)->content[0] == '|')
 			*token_lst = (*token_lst)->next;
 		i++;

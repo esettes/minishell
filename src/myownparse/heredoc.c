@@ -6,13 +6,13 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 18:19:52 by antosanc          #+#    #+#             */
-/*   Updated: 2024/04/19 22:47:04 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/04/29 21:15:16 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/headers/minishell.h"
 
-//NO esta expandiendo variables de entorno ni poniendo saltos de linea
+//NO esta expandiendo variables de entorno ni poniendo saltos de linea, solucionar segfault
 static int	heredoc_write(int fd, char *delimiter)
 {
 	int		bytes_written;
