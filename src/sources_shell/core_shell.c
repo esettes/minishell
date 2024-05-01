@@ -1,0 +1,111 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   core_shell.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/05 20:06:11 by iostancu          #+#    #+#             */
+/*   Updated: 2024/05/01 20:04:56 by antosanc         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+
+int g_signal;
+
+char	*get_prompt(t_pipe *data);
+
+static void	free_all(t_cmd *cmd, t_pipe *p_data, t_buff *buff)
+{
+	free_cmd_tony(cmd);
+	free(p_data->envp);
+	free_memory((const char **)p_data->envp_minish,
+		get_array_size(p_data->envp_minish));
+	free(p_data);
+	free(buff->buffer);
+	free(buff->oldbuffer);
+}
+
+int	core_shell(char **envp)
+{
+	t_buff	b;
+	t_cmd	*cmd;
+	t_pipe	*p_data;
+	char	*prompt;
+
+	g_signal = 0;
+	if (manage_signactions(MODE_STANDARD))
+		return (EXIT_FAILURE);
+	p_data = init_pipe_struct(envp);
+	if (!p_data)
+		return (EXIT_FAILURE);
+	b.buffer = ft_strdup("");
+	b.oldbuffer = ft_strdup("");
+	prompt = NULL;
+	while(b.buffer)
+	{
+		if (disable_signal())
+			return (free_all(NULL, p_data, &b), EXIT_FAILURE);
+		if (b.buffer)
+		{
+			free(b.buffer);
+			b.buffer = (char *)NULL;
+		}
+		prompt = get_prompt(p_data);
+		b.buffer = readline(prompt);
+		free (prompt);
+		if (!b.buffer)
+			return (f_error());
+		if (b.buffer && *b.buffer && f_strict_strncmp(b.buffer,
+			b.oldbuffer, sizeof(b.oldbuffer)) != 0)
+			add_history(b.buffer);
+		cmd = parser(b.buffer, p_data->envp_minish);
+		if (cmd == NULL)
+		{
+			printf("no llego aqui\n");
+			continue ;
+		}
+		if (ft_strncmp("", b.buffer, 1) == 0)
+			continue ;
+		free(b.oldbuffer);
+		b.oldbuffer = (char *)NULL;
+		b.oldbuffer = ft_strdup(b.buffer);
+		
+		f_pipex(p_data, cmd);
+		free_cmd_tony(cmd);
+		cmd = NULL;
+	}
+	free_all(cmd, p_data, &b);
+	return (EXIT_SUCCESS);
+}
+
+char	*get_prompt(t_pipe *data)
+{
+	t_prompt	prompt;
+
+	prompt.home_substr = ft_substr(getcwd(NULL, 0), f_strlen(get_env_var_value
+				(data->envp_minish, "HOME")), f_strlen(getcwd(NULL, 0)));
+	if (!prompt.home_substr)
+		prompt.home_substr = f_strdup(getcwd(NULL, 0));
+	prompt.curr_dir = f_strjoin(prompt.home_substr, " > ");
+	if (f_strlen(prompt.curr_dir) <= 3)
+	{
+		free (prompt.curr_dir);
+		prompt.curr_dir = f_strjoin(getcwd(NULL, 0), " > ");
+	}
+	prompt.usr = f_strjoin(get_env_var_value(data->envp_minish, "USER"),
+							" in ");
+	if (!prompt.usr)
+		prompt.usr = f_strdup("minishell in ");
+	prompt.join_usr_color = f_strjoin(GREEN_, prompt.usr);
+	prompt.join_usr_curr_dir = f_strjoin(prompt.join_usr_color,
+							prompt.curr_dir);
+	prompt.prompt = f_strjoin(prompt.join_usr_curr_dir, RESET_);
+	free(prompt.curr_dir);
+	free(prompt.usr);
+	free(prompt.join_usr_color);
+	free(prompt.join_usr_curr_dir);
+	free(prompt.home_substr);
+	return (prompt.prompt);
+}
