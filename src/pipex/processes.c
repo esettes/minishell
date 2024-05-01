@@ -24,7 +24,7 @@ int	exec_process(t_pipe *data, char **cmd)
 		return (EXIT_SUCCESS);
 	}
 	path = get_path(cmd[0], get_env_var_value(data->envp_minish, "PATH"));
-	printf("path: %s\n", path);
+	//dprintf(2, "path: %s\n", path);
 	if ((cmd_have_current_path(cmd[0]) || !path))
 	{
 		printf("no path!\n");

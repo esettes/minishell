@@ -43,11 +43,11 @@ int	f_error(void)
 {
 	g_signal = errno;
 	if (g_signal == 0)
-		return (g_signal);
+		return (EXIT_SUCCESS);
 	ft_putstrc_fd(RED_, "minishell: ", 2);
 	ft_putstrc_fd(RED_, strerror(g_signal), 2);
 	ft_putstrc_fd(RESET_, "\n", 2);
-	return (g_signal);
+	return (EXIT_FAILURE);
 }
 
 int	duplicate_fd(int oldfd, int newfd)

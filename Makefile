@@ -19,7 +19,7 @@ LGREEN	= \033[2;32m
 NAME = minishell
 
 CC = clang
-CFLAGS = -g3 -Wall -Wextra -Werror -fsanitize=address #-fsanitize-ignorelist=/home/settes/cursus/minishell/ignorelist.txt #-Wall -Wextra -Werror -pedantic
+CFLAGS = -g3 -fsanitize=address #-Wall -Wextra -Werror #-fsanitize-ignorelist=/home/settes/cursus/minishell/ignorelist.txt #-Wall -Wextra -Werror -pedantic
 LDFLAGS	= -L/Users/$(USER)/.brew/opt/readline/lib -lreadline
 CFLAGS += -I/Users/$(USER)/.brew/opt/readline/include
 

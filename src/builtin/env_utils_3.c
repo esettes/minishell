@@ -84,7 +84,7 @@ void	print_env_not_set(char *cmd, char *var)
 
 void	print_err_msg(char *cmd, char *var, char *msg)
 {
-	ft_putstrc_fd(RED_, "minishell: ", STDERR_FILENO);
+	ft_putstrc_fd(RED_, "wee minishell: ", STDERR_FILENO);
 	if (cmd)
 	{
 		ft_putstrc_fd(RED_, cmd, STDERR_FILENO);
