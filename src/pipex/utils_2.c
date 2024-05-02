@@ -43,8 +43,15 @@ int	open_file(t_cmd *cmd, t_pipe *data, int pos)
 		data->infile = -1;
 	if (cmd->scmd[pos]->out_f)
 	{
-		data->outfile = open(cmd->scmd[pos]->out_f,
-				O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (cmd->scmd[pos]->append)
+		{
+			dprintf(2, "append\n");
+			data->outfile = open(cmd->scmd[pos]->out_f,
+				O_WRONLY | O_APPEND, 0644);
+		}
+		else
+			data->outfile = open(cmd->scmd[pos]->out_f,
+					O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (data->outfile < 0)
 			return (f_error());
 	}
@@ -64,10 +71,16 @@ void	close_files(int *infile, int *outfile)
 int	dup_files(int *infile, int *outfile)
 {
 	if (*infile > -1)
+	{
+		dprintf(2, "infile: %d\n", *infile);
 		if (dup2(*infile, 0) < 0)
 			return (f_error());
+	}
 	if (*outfile > -1)
+	{
+		dprintf(2, "outfile: %d\n", *outfile);
 		if (dup2(*outfile, 1) < 0)
 			return (f_error());
+	}
 	return (EXIT_SUCCESS);
 }

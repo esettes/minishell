@@ -43,9 +43,9 @@ int	exec_process(t_pipe *data, char **cmd)
 int	run_child(t_pipe *data, t_cmd *cmd, int pos)
 {
 	close(data->pip[R]);
-	if (duplicate_fd(data->pip[W], STDOUT_FILENO))
+	if (dup2(data->pip[W], STDOUT_FILENO))
 		return (EXIT_FAILURE);
-	close(data->pip[W]);
+	//close(data->pip[W]);
 	if (dup_files(&data->infile, &data->outfile))
 		return (EXIT_FAILURE);
 	if (is_parent_exec(data->cmd[0]))
@@ -65,10 +65,10 @@ int	run_child(t_pipe *data, t_cmd *cmd, int pos)
 
 int	run_child2(t_pipe *data, t_cmd *cmd, int pos)
 {
-	close(data->pip[W]);
-	if (duplicate_fd(data->pip[R], STDIN_FILENO))
+	//close(data->pip[W]);
+	if (dup2(data->pip[R], STDIN_FILENO))
 		return (EXIT_FAILURE);
-	close(data->pip[R]);
+	//close(data->pip[R]);
 	if (dup_files(&data->infile, &data->outfile))
 		return (EXIT_FAILURE);
 	if (is_parent_exec(data->last_cmd[0]))

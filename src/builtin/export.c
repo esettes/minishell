@@ -107,5 +107,6 @@ void	print_export_no_args(char **envp_minish, char **env, size_t len)
 		else
 			printf("\n");
 		free(var);
+		free(value);
 	}
 }
