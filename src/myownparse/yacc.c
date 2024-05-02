@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:44 by antosanc          #+#    #+#             */
-/*   Updated: 2024/05/01 20:14:37 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/02 12:20:13 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,15 @@ static void	check_args(t_scmd *scmd, t_token_lst **token_lst)
 		scmd->args[0] = ft_strdup("");
 }
 
-static int	fill_scmd(t_scmd *scmd, t_token_lst **token_lst, char **envp)
+static int	fill_scmd(t_scmd *scmd, t_token_lst **token_lst, char **envp,
+	int *error_h)
 {
 	if (ft_strncmp((*token_lst)->content, "<<", 2) == 0
 		&& (*token_lst)->quotes == 0)
 	{
 		if (scmd->argc == 0)
 			scmd->args[0] = ft_strdup("");
-		if (heredoc_init(scmd, token_lst, envp))
+		if (heredoc_init(scmd, token_lst, envp, error_h))
 			return (EXIT_FAILURE);
 	}
 	else if (((*token_lst)->content[0] == '<'
@@ -59,7 +60,8 @@ static int	fill_scmd(t_scmd *scmd, t_token_lst **token_lst, char **envp)
 	return (EXIT_SUCCESS);
 }
 
-static int	create_scmd(t_scmd **scmd, t_token_lst **token_lst, char **envp)
+static int	create_scmd(t_scmd **scmd, t_token_lst **token_lst, char **envp,
+	int *error_h)
 {
 	int	i;
 
@@ -78,7 +80,7 @@ static int	create_scmd(t_scmd **scmd, t_token_lst **token_lst, char **envp)
 		scmd[i]->out_f = NULL;
 		while (*token_lst && (*token_lst)->content[0] != '|')
 		{
-			if (fill_scmd(scmd[i], token_lst, envp))
+			if (fill_scmd(scmd[i], token_lst, envp, error_h))
 				return (EXIT_FAILURE);
 		}
 		if (*token_lst && (*token_lst)->content[0] == '|')
@@ -88,7 +90,8 @@ static int	create_scmd(t_scmd **scmd, t_token_lst **token_lst, char **envp)
 	return (EXIT_SUCCESS);
 }
 
-t_cmd	*yacc_tony(t_cmd *cmd, t_token_lst **token_lst, char **envp)
+t_cmd	*yacc_tony(t_cmd *cmd, t_token_lst **token_lst, char **envp,
+	int *error_h)
 {
 	int	i;
 
@@ -110,7 +113,7 @@ t_cmd	*yacc_tony(t_cmd *cmd, t_token_lst **token_lst, char **envp)
 		i++;
 	}
 	cmd->scmd[cmd->n_scmd] = NULL;
-	if (create_scmd(cmd->scmd, token_lst, envp))
-		return (free_cmd_tony(cmd), NULL);
+	if (create_scmd(cmd->scmd, token_lst, envp, error_h))
+		return (NULL);
 	return (cmd);
 }

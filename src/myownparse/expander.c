@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:59:16 by antosanc          #+#    #+#             */
-/*   Updated: 2024/05/01 16:25:49 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/02 13:36:57 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,12 @@ static char	*expander_process(char *str, char **envp, t_token **token)
 	free(env_value);
 	return (expanded_str);
 }
-
+// leak en itoa
 char	*expander(char *str, char **envp, t_token **token)
 {
 	char	*expanded_str;
 	int		i;
+	char	*signal;
 
 	i = 0;
 	while (str[i] && str[i] != '$')
@@ -83,7 +84,11 @@ char	*expander(char *str, char **envp, t_token **token)
 	if (str[i] && !(str[i + 1] == '?'))
 		expanded_str = expander_process(str, envp, token);
 	else
-		expanded_str = create_expanded_str(str, ft_itoa(g_signal), token);
+	{
+		signal = ft_itoa(g_signal);
+		expanded_str = create_expanded_str(str, signal, token);
+		free(signal);
+	}
 	free(str);
 	return (expanded_str);
 }

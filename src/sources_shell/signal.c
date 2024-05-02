@@ -19,7 +19,9 @@ static void	c_handler_heredoc(int sig)
 {
 	(void)sig;
 	g_signal = 130;
-	ioctl(STDIN_FILENO, TIOCSTI, "\r");
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	ioctl(0, TIOCSTI, "\n");
 }
 
 int manage_signactions(int mode)

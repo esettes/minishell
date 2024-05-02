@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 19:04:03 by uliherre          #+#    #+#             */
-/*   Updated: 2024/05/01 16:26:19 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/02 12:23:03 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,15 @@ char		*get_env_value(char *var_env, char **envp);
 int			validator_tony(t_token *token);
 
 //Yacc
-t_cmd		*yacc_tony(t_cmd *cmd, t_token_lst **token_lst, char **envp);
+t_cmd	*yacc_tony(t_cmd *cmd, t_token_lst **token_lst, char **envp,
+	int *error_h);
 int			count_cmd(t_token_lst *token_lst);
 int			count_scmd_args(t_token_lst *token_lst);
 void		free_scmd_tony(t_cmd *cmd);
 void		free_cmd_tony(t_cmd *cmd);
 
 //Heredoc
-int			heredoc_init(t_scmd *scmd, t_token_lst **token_lst, char **envp);
+int	heredoc_init(t_scmd *scmd, t_token_lst **token_lst, char **envp,
+	int *error_h);
 
 #endif

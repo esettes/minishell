@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:06:11 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/01 20:04:56 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/02 12:53:03 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,17 @@ int	core_shell(char **envp)
 	char	*prompt;
 
 	g_signal = 0;
-	if (manage_signactions(MODE_STANDARD))
-		return (EXIT_FAILURE);
 	p_data = init_pipe_struct(envp);
 	if (!p_data)
 		return (EXIT_FAILURE);
 	b.buffer = ft_strdup("");
 	b.oldbuffer = ft_strdup("");
 	prompt = NULL;
+
 	while(b.buffer)
 	{
+		if (manage_signactions(MODE_STANDARD))
+			return (EXIT_FAILURE);
 		if (disable_signal())
 			return (free_all(NULL, p_data, &b), EXIT_FAILURE);
 		if (b.buffer)
@@ -62,10 +63,7 @@ int	core_shell(char **envp)
 			add_history(b.buffer);
 		cmd = parser(b.buffer, p_data->envp_minish);
 		if (cmd == NULL)
-		{
-			printf("no llego aqui\n");
 			continue ;
-		}
 		if (ft_strncmp("", b.buffer, 1) == 0)
 			continue ;
 		free(b.oldbuffer);
