@@ -5,9 +5,10 @@
 	(void) sig;
 }*/
 
+//necesito hacer una funcion para ctrl-c de comandos hijos y si no usar esta
 static void	c_handler(int sig)
 {
-	(void) sig;
+	(void)sig;
 	write(1, "\n", 1);
 	rl_replace_line("", 1);
 	rl_on_new_line();
