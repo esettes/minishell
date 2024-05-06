@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:06:11 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/06 21:15:34 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/06 21:46:23 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,17 +78,20 @@ int	core_shell(char **envp)
 char	*get_prompt(t_pipe *data)
 {
 	t_prompt	prompt;
+	char		*cwd;
 
-	prompt.home_substr = ft_substr(getcwd(NULL, 0), f_strlen(get_env_var_value
-				(data->envp_minish, "HOME")), f_strlen(getcwd(NULL, 0)));
+	cwd = getcwd(NULL, 0);
+	prompt.home_substr = ft_substr(cwd, f_strlen(get_env_var_value
+				(data->envp_minish, "HOME")), f_strlen(cwd));
 	if (!prompt.home_substr)
-		prompt.home_substr = f_strdup(getcwd(NULL, 0));
+		prompt.home_substr = f_strdup(cwd);
 	prompt.curr_dir = f_strjoin(prompt.home_substr, " > ");
 	if (f_strlen(prompt.curr_dir) <= 3)
 	{
 		free (prompt.curr_dir);
-		prompt.curr_dir = f_strjoin(getcwd(NULL, 0), " > ");
+		prompt.curr_dir = f_strjoin(cwd, " > ");
 	}
+	free(cwd);
 	prompt.usr = f_strjoin(get_env_var_value(data->envp_minish, "USER"),
 							" in ");
 	if (!prompt.usr)
