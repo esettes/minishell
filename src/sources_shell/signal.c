@@ -1,10 +1,5 @@
 #include "minishell.h"
 
-/*static void	bs_handler(int sig)
-{
-	(void) sig;
-}*/
-
 static void	c_handler_child(int sig)
 {
 	(void)sig;
@@ -46,12 +41,13 @@ int manage_signactions(int mode)
 	s0.sa_flags = SA_RESTART;
 	if (sigaction(SIGINT, &s0, NULL))
 		return (ft_puterror("error: sigaction\n"), EXIT_FAILURE);
-	//if (signal(SIGQUIT, bs_handler))
-	//	return (EXIT_FAILURE);
+	s0.sa_handler = SIG_IGN;
+	if (sigaction(SIGQUIT, &s0, NULL))
+		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
 
-int	disable_signal(void)
+/*int	disable_signal(void)
 {
 	struct termios	term;
 
@@ -61,4 +57,4 @@ int	disable_signal(void)
 	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) != 0)
 		return (perror("tcgetattr"), EXIT_FAILURE);
 	return (EXIT_SUCCESS);
-}
+}*/

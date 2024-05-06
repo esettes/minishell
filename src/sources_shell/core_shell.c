@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:06:11 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/02 12:53:03 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/06 21:15:34 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,10 @@ int	core_shell(char **envp)
 	b.buffer = ft_strdup("");
 	b.oldbuffer = ft_strdup("");
 	prompt = NULL;
-
 	while(b.buffer)
 	{
 		if (manage_signactions(MODE_STANDARD))
 			return (EXIT_FAILURE);
-		if (disable_signal())
-			return (free_all(NULL, p_data, &b), EXIT_FAILURE);
 		if (b.buffer)
 		{
 			free(b.buffer);
