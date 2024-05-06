@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:23 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/29 20:54:26 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/06 20:29:13 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	f_pipex(t_pipe *p_data, t_cmd *cmd)
 
 	i = -1;
 	n_cmds = cmd->n_scmd;
+	manage_signactions(MODE_CHILD);
 	while (n_cmds-- != 1)
 	{
 		p_data->cmd = cmd->scmd[++i]->args;

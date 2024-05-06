@@ -5,7 +5,15 @@
 	(void) sig;
 }*/
 
-//necesito hacer una funcion para ctrl-c de comandos hijos y si no usar esta
+static void	c_handler_child(int sig)
+{
+	(void)sig;
+	write(1, "\n", 1);
+	rl_replace_line("", 1);
+	rl_on_new_line();
+    g_signal = 130;
+}
+
 static void	c_handler(int sig)
 {
 	(void)sig;
@@ -31,8 +39,10 @@ int manage_signactions(int mode)
 
 	if (mode == MODE_HEREDOC)
 		s0.sa_handler = &c_handler_heredoc;
-	else
+	else if (mode == MODE_STANDARD)
 		s0.sa_handler = &c_handler;
+	else if (mode == MODE_CHILD)
+		s0.sa_handler = &c_handler_child;
 	s0.sa_flags = SA_RESTART;
 	if (sigaction(SIGINT, &s0, NULL))
 		return (ft_puterror("error: sigaction\n"), EXIT_FAILURE);
@@ -52,4 +62,3 @@ int	disable_signal(void)
 		return (perror("tcgetattr"), EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
-

@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:07 by antosanc          #+#    #+#             */
-/*   Updated: 2024/05/02 13:32:14 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/06 20:48:07 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,18 +48,24 @@
     }
 }*/
 
-static int	parse_checker(t_cmd *cmd, char *str, char **envp, int *error_h)
+static int	parse_checker(t_cmd *cmd, char *str, char **envp)
 {
 	t_token		*token;
 	t_token_lst	*head;
 
 	token = lex_tony(str, envp);
 	if (token == NULL)
+	{
+		g_signal = 2;
 		return (EXIT_FAILURE);
+	}
 	if (validator_tony(token))
+	{
+		g_signal = 2;
 		return (clear_all(&token, NULL), EXIT_FAILURE);
+	}
 	head = token->token_lst;
-	cmd = yacc_tony(cmd, &token->token_lst, envp, error_h);
+	cmd = yacc_tony(cmd, &token->token_lst, envp);
 	token->token_lst = head;
 	if (cmd == NULL)
 		return (clear_all(&token, NULL), EXIT_FAILURE);
@@ -71,18 +77,13 @@ t_cmd	*parser(char *str, char **envp)
 	t_cmd	*command;
 	int		error_h;
 
-	error_h = 0;
 	if (!str || !*str || !envp || !*envp)
 		return (NULL);
 	command = ft_calloc(1, sizeof(t_cmd));
 	if (!command)
 		return (NULL);
-	if (parse_checker(command, str, envp, &error_h))
-	{
-		if (error_h == 0)
-			g_signal = 2;
+	if (parse_checker(command, str, envp))
 		return (free_cmd_tony(command), NULL);
-	}
 	return (command);
 }
 

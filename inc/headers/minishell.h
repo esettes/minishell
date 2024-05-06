@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 19:03:59 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/01 18:35:12 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/06 20:28:14 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 
 # define MODE_HEREDOC 1
 # define MODE_STANDARD 0
+# define MODE_CHILD 2
 
 extern int	g_signal;
 

@@ -6,13 +6,13 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 18:19:52 by antosanc          #+#    #+#             */
-/*   Updated: 2024/05/02 13:03:39 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/06 20:49:37 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/headers/minishell.h"
 
-static int	heredoc_write(int fd, char *delimiter, char **envp, int *error_h)
+static int	heredoc_write(int fd, char *delimiter, char **envp)
 {
 	char	*buff;
 
@@ -20,11 +20,7 @@ static int	heredoc_write(int fd, char *delimiter, char **envp, int *error_h)
 	{
 		buff = readline("> ");
 		if (!buff || g_signal == 130)
-		{
-			if (g_signal == 130)
-				*error_h = 1;
 			return (free(buff), EXIT_FAILURE);
-		}
 		if (ft_strchr(buff, '$') != 0)
 			buff = expander(buff, envp, NULL);
 		if (ft_strcmp(buff, delimiter) == 0)
@@ -39,8 +35,7 @@ static int	heredoc_write(int fd, char *delimiter, char **envp, int *error_h)
 	return (EXIT_SUCCESS);
 }
 
-int	heredoc_init(t_scmd *scmd, t_token_lst **token_lst, char **envp,
-	int *error_h)
+int	heredoc_init(t_scmd *scmd, t_token_lst **token_lst, char **envp)
 {
 	char	*delimiter;
 	int		fd;
@@ -55,7 +50,7 @@ int	heredoc_init(t_scmd *scmd, t_token_lst **token_lst, char **envp,
 	fd = open("/tmp/heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 		return (perror("Failed to open file"), EXIT_FAILURE);
-	if (heredoc_write(fd, delimiter, envp, error_h))
+	if (heredoc_write(fd, delimiter, envp))
 		return (close(fd), EXIT_FAILURE);
 	close(fd);
 	return (EXIT_SUCCESS);
