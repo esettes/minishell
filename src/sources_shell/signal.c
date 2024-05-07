@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signal.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/07 20:45:35 by antosanc          #+#    #+#             */
+/*   Updated: 2024/05/07 20:46:23 by antosanc         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static void	c_handler_child(int sig)
@@ -6,7 +18,7 @@ static void	c_handler_child(int sig)
 	write(1, "\n", 1);
 	rl_replace_line("", 1);
 	rl_on_new_line();
-    g_signal = 130;
+	g_signal = 130;
 }
 
 static void	c_handler(int sig)
@@ -16,7 +28,7 @@ static void	c_handler(int sig)
 	rl_replace_line("", 1);
 	rl_on_new_line();
 	rl_redisplay();
-    g_signal = 130;
+	g_signal = 130;
 }
 
 static void	c_handler_heredoc(int sig)
@@ -28,7 +40,7 @@ static void	c_handler_heredoc(int sig)
 	ioctl(0, TIOCSTI, "\n");
 }
 
-int manage_signactions(int mode)
+int	manage_signactions(int mode)
 {
 	struct sigaction	s0;
 

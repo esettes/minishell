@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils_3.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:07:23 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/25 00:30:59 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/05/07 20:41:08 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ char	*get_env_var_value(char **envp_minish, char *var)
 			free(env_var);
 			return (envp_minish[i] + f_strlen(var) + 1);
 		}
+		free(env_var);
 		i++;
 	}
 	free(env_var);

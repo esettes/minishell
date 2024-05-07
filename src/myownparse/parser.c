@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:07 by antosanc          #+#    #+#             */
-/*   Updated: 2024/05/06 20:48:07 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/07 20:44:56 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static int	parse_checker(t_cmd *cmd, char *str, char **envp)
 		return (clear_all(&token, NULL), EXIT_FAILURE);
 	return (clear_all(&token, NULL), EXIT_SUCCESS);
 }
-//ctrl-d g_signal 2 error
+
 t_cmd	*parser(char *str, char **envp)
 {
 	t_cmd	*command;

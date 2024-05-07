@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 19:59:01 by antosanc          #+#    #+#             */
-/*   Updated: 2024/04/25 22:08:41 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/07 21:47:48 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ int	len_expanded_str(char *str, char *env_value)
 	int	i;
 
 	len_str = 0;
-	while (str[len_str] != '$' && str[len_str])
+	while (str[len_str] && str[len_str] != '$')
 		len_str++;
 	i = len_str;
-	while ((ft_isalnum(str[i]) || str[i] == '_') && str[i])
+	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
 		i++;
 	while (str[i])
 	{
@@ -45,7 +45,7 @@ char	*get_env_value(char *var_env, char **envp)
 			&& tmp_envp[i][ft_strlen(var_env)] == '=')
 		{
 			j = 0;
-			while (tmp_envp[i][j] != '=' && tmp_envp[i][j])
+			while (tmp_envp[i][j] && tmp_envp[i][j] != '=')
 				j++;
 			if (tmp_envp[i][j + 1])
 				return (ft_substr(tmp_envp[i] + j, 1,

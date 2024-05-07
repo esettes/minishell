@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:44 by antosanc          #+#    #+#             */
-/*   Updated: 2024/05/06 20:49:01 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/07 20:45:11 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static int	create_scmd(t_scmd **scmd, t_token_lst **token_lst, char **envp)
 	{
 		scmd[i]->n_available_args = count_scmd_args(*token_lst);
 		scmd[i]->args = malloc(sizeof(char *)
-			* (scmd[i]->n_available_args + 1));
+				* (scmd[i]->n_available_args + 1));
 		if (!scmd[i]->args)
 			return (EXIT_FAILURE);
 		scmd[i]->args[scmd[i]->n_available_args] = NULL;

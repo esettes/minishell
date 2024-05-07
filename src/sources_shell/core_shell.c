@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:06:11 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/06 21:46:23 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/07 21:33:21 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ int	core_shell(char **envp)
 		cmd = parser(b.buffer, p_data->envp_minish);
 		if (cmd == NULL)
 			continue ;
-		if (ft_strncmp("", b.buffer, 1) == 0)
-			continue ;
+		//if (ft_strncmp("", b.buffer, 1) == 0)
+		//	continue ;
 		free(b.oldbuffer);
 		b.oldbuffer = (char *)NULL;
 		b.oldbuffer = ft_strdup(b.buffer);
@@ -73,6 +73,15 @@ int	core_shell(char **envp)
 	}
 	free_all(cmd, p_data, &b);
 	return (EXIT_SUCCESS);
+}
+
+static void	free_prompt(t_prompt *prompt)
+{
+	free(prompt->curr_dir);
+	free(prompt->usr);
+	free(prompt->join_usr_color);
+	free(prompt->join_usr_curr_dir);
+	free(prompt->home_substr);
 }
 
 char	*get_prompt(t_pipe *data)
@@ -93,17 +102,13 @@ char	*get_prompt(t_pipe *data)
 	}
 	free(cwd);
 	prompt.usr = f_strjoin(get_env_var_value(data->envp_minish, "USER"),
-							" in ");
+			" in ");
 	if (!prompt.usr)
 		prompt.usr = f_strdup("minishell in ");
 	prompt.join_usr_color = f_strjoin(GREEN_, prompt.usr);
 	prompt.join_usr_curr_dir = f_strjoin(prompt.join_usr_color,
-							prompt.curr_dir);
+			prompt.curr_dir);
 	prompt.prompt = f_strjoin(prompt.join_usr_curr_dir, RESET_);
-	free(prompt.curr_dir);
-	free(prompt.usr);
-	free(prompt.join_usr_color);
-	free(prompt.join_usr_curr_dir);
-	free(prompt.home_substr);
+	free_prompt(&prompt);
 	return (prompt.prompt);
 }
