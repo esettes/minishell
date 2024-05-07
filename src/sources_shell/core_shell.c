@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:06:11 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/07 21:33:21 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/07 21:54:24 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,9 @@ int	core_shell(char **envp)
 		cmd = parser(b.buffer, p_data->envp_minish);
 		if (cmd == NULL)
 			continue ;
-		//if (ft_strncmp("", b.buffer, 1) == 0)
-		//	continue ;
 		free(b.oldbuffer);
 		b.oldbuffer = (char *)NULL;
 		b.oldbuffer = ft_strdup(b.buffer);
-		
 		f_pipex(p_data, cmd);
 		free_cmd_tony(cmd);
 		cmd = NULL;
