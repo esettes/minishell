@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:24 by antosanc          #+#    #+#             */
-/*   Updated: 2024/04/24 20:38:11 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/07 21:50:13 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static t_token_lst	*quotes_content(char *str, t_token **token)
 	flag = 0;
 	if (!ft_strchr(str + (*token)->i, quote))
 		return (clear_all(token, "unclosed quotes"));
-	while (str[(*token)->i] != quote && str[(*token)->i])
+	while (str[(*token)->i] && str[(*token)->i] != quote)
 	{
 		if (str[(*token)->i] == '$')
 			flag++;
