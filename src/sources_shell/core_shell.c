@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:06:11 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/07 21:54:24 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/08 21:16:08 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ char	*get_prompt(t_pipe *data);
 
 static void	free_all(t_cmd *cmd, t_pipe *p_data, t_buff *buff)
 {
+
 	free_cmd_tony(cmd);
 	free(p_data->envp);
 	free_memory((const char **)p_data->envp_minish,
@@ -27,6 +28,19 @@ static void	free_all(t_cmd *cmd, t_pipe *p_data, t_buff *buff)
 	free(buff->oldbuffer);
 }
 
+static void	reset_minishell(t_buff *b, char *prompt, t_cmd **cmd)
+{
+	if (b->buffer && *b->buffer && f_strict_strncmp(b->buffer,
+			b->oldbuffer, sizeof(b->oldbuffer)) != 0)
+		add_history(b->buffer);
+	free (prompt);
+	free(b->oldbuffer);
+	b->oldbuffer = ft_strdup(b->buffer);
+	free(b->buffer);
+	free_cmd_tony(*cmd);
+	cmd = NULL;
+}
+//problem with ctrl-d
 int	core_shell(char **envp)
 {
 	t_buff	b;
@@ -34,39 +48,23 @@ int	core_shell(char **envp)
 	t_pipe	*p_data;
 	char	*prompt;
 
-	g_signal = 0;
 	p_data = init_pipe_struct(envp);
 	if (!p_data)
-		return (EXIT_FAILURE);
-	b.buffer = ft_strdup("");
+		return (EXIT_FAILURE); 
 	b.oldbuffer = ft_strdup("");
-	prompt = NULL;
-	while(b.buffer)
+	while (1)
 	{
 		if (manage_signactions(MODE_STANDARD))
 			return (EXIT_FAILURE);
-		if (b.buffer)
-		{
-			free(b.buffer);
-			b.buffer = (char *)NULL;
-		}
 		prompt = get_prompt(p_data);
 		b.buffer = readline(prompt);
-		free (prompt);
 		if (!b.buffer)
-			return (f_error());
-		if (b.buffer && *b.buffer && f_strict_strncmp(b.buffer,
-			b.oldbuffer, sizeof(b.oldbuffer)) != 0)
-			add_history(b.buffer);
+			break ;
 		cmd = parser(b.buffer, p_data->envp_minish);
 		if (cmd == NULL)
 			continue ;
-		free(b.oldbuffer);
-		b.oldbuffer = (char *)NULL;
-		b.oldbuffer = ft_strdup(b.buffer);
 		f_pipex(p_data, cmd);
-		free_cmd_tony(cmd);
-		cmd = NULL;
+		reset_minishell(&b, prompt, &cmd);
 	}
 	free_all(cmd, p_data, &b);
 	return (EXIT_SUCCESS);
@@ -87,25 +85,26 @@ char	*get_prompt(t_pipe *data)
 	char		*cwd;
 
 	cwd = getcwd(NULL, 0);
-	prompt.home_substr = ft_substr(cwd, f_strlen(get_env_var_value
-				(data->envp_minish, "HOME")), f_strlen(cwd));
+	prompt.home_substr = ft_substr(cwd, ft_strlen(get_env_var_value
+				(data->envp_minish, "HOME")), ft_strlen(cwd));
 	if (!prompt.home_substr)
-		prompt.home_substr = f_strdup(cwd);
-	prompt.curr_dir = f_strjoin(prompt.home_substr, " > ");
-	if (f_strlen(prompt.curr_dir) <= 3)
+		prompt.home_substr = ft_strdup(cwd);
+	prompt.curr_dir = ft_strjoin(prompt.home_substr, " > ");
+	if (ft_strlen(prompt.curr_dir) <= 3)
 	{
 		free (prompt.curr_dir);
-		prompt.curr_dir = f_strjoin(cwd, " > ");
+		prompt.curr_dir = ft_strjoin(cwd, " > ");
 	}
 	free(cwd);
-	prompt.usr = f_strjoin(get_env_var_value(data->envp_minish, "USER"),
+	prompt.usr = ft_strjoin(get_env_var_value(data->envp_minish, "USER"),
 			" in ");
 	if (!prompt.usr)
-		prompt.usr = f_strdup("minishell in ");
-	prompt.join_usr_color = f_strjoin(GREEN_, prompt.usr);
-	prompt.join_usr_curr_dir = f_strjoin(prompt.join_usr_color,
+		prompt.usr = ft_strdup("minishell in ");
+	prompt.join_usr_color = ft_strjoin(GREEN_, prompt.usr);
+	prompt.join_usr_curr_dir = ft_strjoin(prompt.join_usr_color,
 			prompt.curr_dir);
-	prompt.prompt = f_strjoin(prompt.join_usr_curr_dir, RESET_);
+	prompt.prompt = ft_strjoin(prompt.join_usr_curr_dir, RESET_);
 	free_prompt(&prompt);
 	return (prompt.prompt);
 }
+

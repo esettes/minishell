@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 18:19:47 by antosanc          #+#    #+#             */
-/*   Updated: 2024/05/02 12:00:39 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/08 20:21:23 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,5 +88,4 @@ void	free_cmd_tony(t_cmd *cmd)
 	if (cmd->scmd)
 		free_scmd_tony(cmd);
 	free(cmd);
-	cmd = NULL;
 }
