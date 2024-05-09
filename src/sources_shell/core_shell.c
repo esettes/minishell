@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:06:11 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/08 21:16:08 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/09 21:50:45 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,12 @@ int g_signal;
 
 char	*get_prompt(t_pipe *data);
 
-static void	free_all(t_cmd *cmd, t_pipe *p_data, t_buff *buff)
+static void	free_all(t_cmd *cmd, t_pipe *p_data, t_buff *buff, char *prompt)
 {
-
-	free_cmd_tony(cmd);
-	free(p_data->envp);
 	free_memory((const char **)p_data->envp_minish,
 		get_array_size(p_data->envp_minish));
+	if (prompt)
+		free(prompt);
 	free(p_data);
 	free(buff->buffer);
 	free(buff->oldbuffer);
@@ -30,17 +29,17 @@ static void	free_all(t_cmd *cmd, t_pipe *p_data, t_buff *buff)
 
 static void	reset_minishell(t_buff *b, char *prompt, t_cmd **cmd)
 {
+	free(prompt);
 	if (b->buffer && *b->buffer && f_strict_strncmp(b->buffer,
 			b->oldbuffer, sizeof(b->oldbuffer)) != 0)
 		add_history(b->buffer);
-	free (prompt);
 	free(b->oldbuffer);
 	b->oldbuffer = ft_strdup(b->buffer);
 	free(b->buffer);
 	free_cmd_tony(*cmd);
 	cmd = NULL;
 }
-//problem with ctrl-d
+
 int	core_shell(char **envp)
 {
 	t_buff	b;
@@ -57,7 +56,7 @@ int	core_shell(char **envp)
 		if (manage_signactions(MODE_STANDARD))
 			return (EXIT_FAILURE);
 		prompt = get_prompt(p_data);
-		b.buffer = readline(prompt);
+		b.buffer = readline("minishell> ");
 		if (!b.buffer)
 			break ;
 		cmd = parser(b.buffer, p_data->envp_minish);
@@ -66,7 +65,7 @@ int	core_shell(char **envp)
 		f_pipex(p_data, cmd);
 		reset_minishell(&b, prompt, &cmd);
 	}
-	free_all(cmd, p_data, &b);
+	free_all(cmd, p_data, &b, prompt);
 	return (EXIT_SUCCESS);
 }
 
