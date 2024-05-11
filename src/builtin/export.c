@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 21:01:32 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/18 23:16:03 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/05/11 15:51:41 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,6 @@ int	exec_export(t_pipe *data, t_cmd *cmd, int pos)
 				continue ;
 			}
 			if (manage_variable(data, cmd->scmd[pos]->args[i]))
-				//free_memory((const char **)data->envp_minish,
-				//	get_array_size(data->envp_minish));
 				return (EXIT_FAILURE);
 			i++;
 		}

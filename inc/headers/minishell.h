@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 19:03:59 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/06 20:28:14 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/11 14:09:17 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,10 @@
 
 extern int	g_signal;
 
-int	core_shell(char **envp);
-int manage_signactions(int mode);
-int	disable_signal(void);
+int			core_shell(char **envp);
+int 		manage_signactions(int mode);
+int			disable_signal(void);
+void		get_prompt(t_pipe *data, t_prompt *prompt);
+t_prompt	*init_prompt(void);
 
 #endif

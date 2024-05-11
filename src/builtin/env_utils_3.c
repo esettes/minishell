@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:07:23 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/07 20:41:08 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/11 15:51:28 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ char	*get_env_var_value(char **envp_minish, char *var)
 		free(env_var);
 		i++;
 	}
-	free(env_var);
 	return (NULL);
 }
 
@@ -74,7 +73,6 @@ void	print_env_not_set(char *cmd, char *var)
 	if (cmd)
 	{
 		ft_putstrc_fd(RED_, cmd, STDERR_FILENO);
-		
 		ft_putstrc_fd(RED_, ": ", STDERR_FILENO);
 	}
 	if (var)

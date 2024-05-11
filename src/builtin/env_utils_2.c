@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils_2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 23:41:36 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/23 21:38:23 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/05/11 15:50:25 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,18 +121,16 @@ char	**create_new_var(t_pipe *data, char *var)
 		tmp[len] = f_strdup(data->envp_minish[len]);
 		len++;
 	}
-	printf("var: %s\n", var);
 	tmp[len] = f_strdup(var);
 	tmp[len + 1] = NULL;
-	free_memory((const char **)data->envp_minish, get_array_size(data->envp_minish));
-	//envp_minish = tmp;
-	//create_new_envp_minish(&envp_minish, tmp);
+	free_memory((const char **)data->envp_minish,
+		get_array_size(data->envp_minish));
 	return (tmp);
 }
 
-void create_new_envp_minish(char ***envp_minish, char **tmp)
+void	create_new_envp_minish(char ***envp_minish, char **tmp)
 {
-	size_t		i;
+	size_t	i;
 
 	i = 0;
 	*envp_minish = malloc(sizeof(char *) * (get_array_size(tmp) + 1));

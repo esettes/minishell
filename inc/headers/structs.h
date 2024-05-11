@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 19:43:08 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/02 12:16:02 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/11 13:18:11 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct s_cmd
 
 typedef struct s_prompt
 {
+	char	*old_cwd;
 	char	*curr_dir;
 	char	*home_substr;
 	char	*join_usr_color;

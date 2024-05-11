@@ -6,7 +6,7 @@
 #    By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/21 19:03:34 by uliherre          #+#    #+#              #
-#    Updated: 2024/05/06 21:38:38 by antosanc         ###   ########.fr        #
+#    Updated: 2024/05/11 13:42:45 by antosanc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,8 @@ DIR_SHELL = ./src/sources_shell/
 SOURCES_SHELL = \
 	core_shell.c \
 	main.c \
-	signal.c
+	signal.c \
+	prompt.c
 
 A_SHELL = $(addprefix $(DIR_SHELL),$(SOURCES_SHELL))
 SOURCES += $(A_SHELL)

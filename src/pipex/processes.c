@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   processes.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/24 23:10:14 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/05/11 15:43:11 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	exec_process(t_pipe *data, char **cmd)
 	return (EXIT_SUCCESS);
 }
 
-int	run_child(t_pipe *data, t_cmd *cmd, int pos)
+int	run_child(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 {
 	close(data->pip[R]);
 	if (duplicate_fd(data->pip[W], STDOUT_FILENO))
@@ -48,7 +48,7 @@ int	run_child(t_pipe *data, t_cmd *cmd, int pos)
 		return (EXIT_FAILURE);
 	if (is_parent_exec(data->cmd[0]))
 	{
-		if (run_parent(cmd, &data, pos))
+		if (run_parent(cmd, &data, pos, old_cwd))
 			exit(f_error());
 		else
 			exit(EXIT_SUCCESS);
@@ -61,7 +61,7 @@ int	run_child(t_pipe *data, t_cmd *cmd, int pos)
 	return (EXIT_SUCCESS);
 }
 
-int	run_child2(t_pipe *data, t_cmd *cmd, int pos)
+int	run_child2(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 {
 	close(data->pip[W]);
 	if (duplicate_fd(data->pip[R], STDIN_FILENO))
@@ -71,7 +71,7 @@ int	run_child2(t_pipe *data, t_cmd *cmd, int pos)
 		return (EXIT_FAILURE);
 	if (is_parent_exec(data->last_cmd[0]))
 	{
-		if (run_parent(cmd, &data, pos))
+		if (run_parent(cmd, &data, pos, old_cwd))
 		{
 			printf("builtin error\n");
 			exit(f_error());

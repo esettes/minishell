@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 19:10:04 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/17 23:16:46 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/05/11 15:51:09 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ int	exec_unset(t_cmd *cmd, t_pipe *data, int pos)
 			if (!uset.tmp)
 				return (EXIT_FAILURE);
 			unset_variables(data, cmd, &uset, pos);
-			
 			uset.tmp[uset.j] = NULL;
 			free_memory((const char **)data->envp_minish, uset.arr_size);
 			data->envp_minish = uset.tmp;
@@ -56,7 +55,6 @@ static void	unset_variables(t_pipe *data, t_cmd *cmd, t_unset *uset, int pos)
 {
 	char	*var;
 
-	
 	uset->i = 0;
 	while (data->envp_minish[uset->i])
 	{
