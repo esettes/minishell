@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:09:44 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/23 23:07:45 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/05/11 15:43:57 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,13 @@ int		f_error(void);
  */
 int		duplicate_fd(int oldfd, int newfd);
 int		exec_process(t_pipe *data, char **cmd);
-int		run_child(t_pipe *data, t_cmd *cmd, int pos);
-int		run_child2(t_pipe *data, t_cmd *cmd, int pos);
+int		run_child(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd);
+int		run_child2(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd);
 int		cmd_have_path(char *cmd);
 int		cmd_have_current_path(char *cmd);
 char	*get_path(char *cmd, char *path_envp);
 void	free_split(char **s);
-int		f_pipex(t_pipe *p_data, t_cmd *cmd);
+int		f_pipex(t_pipe *p_data, t_cmd *cmd, char *old_cwd);
 void	ft_putstrc_fd(char *color, char *s, int fd);
 char	*f_strdup(const char *s1);
 int		f_strncmp(const char *s1, const char *s2, size_t n);
@@ -77,7 +77,7 @@ char	*f_strjoin(char const *s1, char const *s2);
 int		f_strict_strncmp(const char *s1, const char *s2, size_t n);
 
 int		is_parent_exec(char *str);
-int		run_parent(t_cmd *cmd, t_pipe **p_data, int pos);
+int		run_parent(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd);
 t_pipe	*init_pipe_struct(char *envp[]);
 /**
  * @brief Frees all the strings allocated in the double ptr, and then frees

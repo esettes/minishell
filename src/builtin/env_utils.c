@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 19:27:39 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/17 23:21:27 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/05/11 15:29:14 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	change_var_value(char **envp_minish, char *raw_variable)
 	in_var = get_env_variable(raw_variable);
 	envp_size = get_array_size(envp_minish);
 	if (!in_var)
-		return (EXIT_SUCCESS);
+		return (EXIT_FAILURE);
 	while (i < envp_size)
 	{
 		var = get_env_variable(envp_minish[i]);
@@ -85,9 +85,10 @@ int	change_var_value(char **envp_minish, char *raw_variable)
 			free_vars(in_var, var, raw_variable);
 			return (EXIT_SUCCESS);
 		}
+		free(var);
 		i++;
 	}
-	free_vars(in_var, var, raw_variable);
+	free_vars(in_var, NULL, raw_variable);
 	return (EXIT_SUCCESS);
 }
 

@@ -3,25 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   ft_striteri.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uliherre <uliherre@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antosanc <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/16 20:57:40 by uliherre          #+#    #+#             */
-/*   Updated: 2022/06/16 20:57:41 by uliherre         ###   ########.fr       */
+/*   Created: 2023/11/25 11:21:23 by antosanc          #+#    #+#             */
+/*   Updated: 2023/11/25 11:21:26 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/libft.h"
 
-void	ft_striteri(char *s, void (*f)(unsigned int, char *))
+void	ft_striteri(char *s, void (*f)(unsigned int, char*))
 {
-	register char	*str;
-	register size_t	tam;
+	unsigned int	i;
 
-	str = s;
-	if (NULL != str)
+	if (s == 0 || f == 0)
+		return ;
+	i = 0;
+	while (s[i])
 	{
-		tam = ft_strlen(str);
-		while (ZERO != tam--)
-			f(tam, &str[tam]);
+		f(i, s + i);
+		i++;
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstnew_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uliherre <uliherre@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antosanc <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/14 19:27:29 by uherrero          #+#    #+#             */
-/*   Updated: 2022/07/02 14:29:16 by uliherre         ###   ########.fr       */
+/*   Created: 2023/11/25 11:19:48 by antosanc          #+#    #+#             */
+/*   Updated: 2023/11/25 11:19:51 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,12 @@
 
 t_list	*ft_lstnew(void *content)
 {
-	t_list	*new;
+	t_list	*node;
 
-	new = (t_list *) ft_calloc(TRUE, sizeof(t_list));
-	if (NULL != new)
-	{
-		new->next = NULL;
-		new->content = content;
-	}
-	return (new);
-}
-
-t_list_d	*ft_lstnew_d(void *content)
-{
-	t_list_d	*new;
-
-	new = (t_list_d *) ft_calloc(TRUE, sizeof(t_list_d));
-	if (NULL != new)
-	{
-		new->next = NULL;
-		new->prev = NULL;
-		new->content = content;
-	}
-	return (new);
+	node = (t_list *)malloc(sizeof (t_list));
+	if (node == 0)
+		return (NULL);
+	node->content = content;
+	node->next = NULL;
+	return (node);
 }

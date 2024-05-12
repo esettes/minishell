@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   processes.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/24 23:10:14 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/05/11 15:43:11 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,8 @@ int	exec_process(t_pipe *data, char **cmd)
 		return (EXIT_SUCCESS);
 	}
 	path = get_path(cmd[0], get_env_var_value(data->envp_minish, "PATH"));
-	//dprintf(2, "path: %s\n", path);
 	if ((cmd_have_current_path(cmd[0]) || !path))
 	{
-		printf("no path!\n");
 		free_split(cmd);
 		g_signal = 2;
 		return (2);
@@ -40,17 +38,17 @@ int	exec_process(t_pipe *data, char **cmd)
 	return (EXIT_SUCCESS);
 }
 
-int	run_child(t_pipe *data, t_cmd *cmd, int pos)
+int	run_child(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 {
 	close(data->pip[R]);
-	if (dup2(data->pip[W], STDOUT_FILENO))
+	if (duplicate_fd(data->pip[W], STDOUT_FILENO))
 		return (EXIT_FAILURE);
-	//close(data->pip[W]);
+	close(data->pip[W]);
 	if (dup_files(&data->infile, &data->outfile))
 		return (EXIT_FAILURE);
 	if (is_parent_exec(data->cmd[0]))
 	{
-		if (run_parent(cmd, &data, pos))
+		if (run_parent(cmd, &data, pos, old_cwd))
 			exit(f_error());
 		else
 			exit(EXIT_SUCCESS);
@@ -63,17 +61,17 @@ int	run_child(t_pipe *data, t_cmd *cmd, int pos)
 	return (EXIT_SUCCESS);
 }
 
-int	run_child2(t_pipe *data, t_cmd *cmd, int pos)
+int	run_child2(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 {
-	//close(data->pip[W]);
-	if (dup2(data->pip[R], STDIN_FILENO))
+	close(data->pip[W]);
+	if (duplicate_fd(data->pip[R], STDIN_FILENO))
 		return (EXIT_FAILURE);
-	//close(data->pip[R]);
+	close(data->pip[R]);
 	if (dup_files(&data->infile, &data->outfile))
 		return (EXIT_FAILURE);
 	if (is_parent_exec(data->last_cmd[0]))
 	{
-		if (run_parent(cmd, &data, pos))
+		if (run_parent(cmd, &data, pos, old_cwd))
 		{
 			printf("builtin error\n");
 			exit(f_error());

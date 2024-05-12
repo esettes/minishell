@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils_3.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:07:23 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/25 00:30:59 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/05/11 15:51:28 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ char	*get_env_var_value(char **envp_minish, char *var)
 	while (envp_minish[i])
 	{
 		env_var = get_env_variable(envp_minish[i]);
+		if (!env_var)
+			return (NULL);
 		if (f_strict_strncmp(env_var, var, f_strlen(var)) == 0)
 		{
 			if (envp_minish[i][f_strlen(env_var)] == '\0')
@@ -47,9 +49,9 @@ char	*get_env_var_value(char **envp_minish, char *var)
 			free(env_var);
 			return (envp_minish[i] + f_strlen(var) + 1);
 		}
+		free(env_var);
 		i++;
 	}
-	free(env_var);
 	return (NULL);
 }
 
@@ -71,7 +73,6 @@ void	print_env_not_set(char *cmd, char *var)
 	if (cmd)
 	{
 		ft_putstrc_fd(RED_, cmd, STDERR_FILENO);
-		
 		ft_putstrc_fd(RED_, ": ", STDERR_FILENO);
 	}
 	if (var)
@@ -84,7 +85,7 @@ void	print_env_not_set(char *cmd, char *var)
 
 void	print_err_msg(char *cmd, char *var, char *msg)
 {
-	ft_putstrc_fd(RED_, "wee minishell: ", STDERR_FILENO);
+	ft_putstrc_fd(RED_, "minishell: ", STDERR_FILENO);
 	if (cmd)
 	{
 		ft_putstrc_fd(RED_, cmd, STDERR_FILENO);

@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:07:02 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/05 20:07:03 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/04/18 20:27:57 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,6 @@
 int	exit_handler(t_cmd *cmd)
 {
 	printf("exit\n");
-	free_cmd(&cmd);
+	free_cmd_tony(cmd);
 	exit (EXIT_SUCCESS);
 }

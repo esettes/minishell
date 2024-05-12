@@ -3,71 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   core_shell.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:06:11 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/23 22:59:43 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/05/11 15:33:12 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int g_signal;
+int	g_signal;
 
-char	*get_prompt(t_pipe *data);
-void	sig_interrupt(int signum);
-void	sig_newentry(int signum);
-
-static void	c_handler(int sig)
+static void	free_all(t_cmd *cmd, t_pipe *p_data, t_buff *buff, t_prompt	*prompt)
 {
-	//termina la readline y muestra otra entrada
-	(void) sig;
-	write(1, "\n", 1);
-	rl_replace_line("", 1);
-	rl_on_new_line();
-	rl_redisplay();
-}
-
-static void	bs_handler(int sig)
-{
-
-	(void) sig;
-	printf("bs signal catch");
-	exit (42);
-}
-
-static int	enmask_signals(void)
-{
-	static struct sigaction	s1;
-
-	s1.sa_handler = &bs_handler;
-	if (sigaction(SIGQUIT, &s1, NULL))
-		return (ft_puterror("error: sigaction\n"), EXIT_FAILURE);
-	// while (TRUE)
-	// {
-	// 	printf("Esperando por una señal\n");
-	// 	sleep(2);
-	// }
-	return (EXIT_SUCCESS);
-}
-
-int manage_signactions(void)
-{
-	struct sigaction	s0;
-
-	s0.sa_handler = &c_handler;
-	s0.sa_flags = SA_RESTART;
-	if (sigaction(SIGINT, &s0, NULL))
-		return (ft_puterror("error: sigaction\n"), EXIT_FAILURE);
-	if (enmask_signals())
-		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
-}
-
-static void	free_all(t_cmd *cmd, t_pipe *p_data, t_buff *buff)
-{
-	free_cmd(&cmd);
-	free(p_data->envp);
+	if (prompt->old_cwd)
+		free(prompt->old_cwd);
+	free(prompt);
 	free_memory((const char **)p_data->envp_minish,
 		get_array_size(p_data->envp_minish));
 	free(p_data);
@@ -75,89 +26,55 @@ static void	free_all(t_cmd *cmd, t_pipe *p_data, t_buff *buff)
 	free(buff->oldbuffer);
 }
 
-int	core_shell(char **envp)
+static void	reset_minishell(t_buff *b, t_cmd **cmd)
 {
-	t_buff	b;
-	t_cmd	*cmd;
-	t_pipe	*p_data;
-	char	*prompt;
+	if (b->buffer && *b->buffer && f_strict_strncmp(b->buffer,
+			b->oldbuffer, sizeof(b->oldbuffer)) != 0)
+		add_history(b->buffer);
+	free(b->oldbuffer);
+	b->oldbuffer = ft_strdup(b->buffer);
+	free(b->buffer);
+	free_cmd_tony(*cmd);
+	cmd = NULL;
+}
 
-	g_signal = 0;
-	b.buffer = ft_strdup("");
-	b.oldbuffer = ft_strdup("");
-	p_data = init_pipe_struct(envp);
+static int	init_shell(t_pipe **p_data, t_prompt **prompt, t_buff *b,
+	char **envp)
+{
+	*p_data = init_pipe_struct(envp);
 	if (!p_data)
 		return (EXIT_FAILURE);
-	prompt = NULL;
-	while(b.buffer)
-	{
-		if (b.buffer)
-		{
-			free(b.buffer);
-			b.buffer = (char *)NULL;
-		}
-		prompt = get_prompt(p_data);
-		b.buffer = readline(prompt);
-		free (prompt);
-		if (!b.buffer)
-			return (f_error());
-		if (b.buffer && *b.buffer && f_strict_strncmp(b.buffer,
-			b.oldbuffer, sizeof(b.oldbuffer)) != 0)
-			add_history(b.buffer);
-		cmd = parser(b.buffer, p_data->envp_minish);
-		if (NULL == cmd)
-			continue ;
-		if (ft_strncmp("", b.buffer, 1) == 0)
-			continue ;
-		free(b.oldbuffer);
-		b.oldbuffer = (char *)NULL;
-		b.oldbuffer = ft_strdup(b.buffer);
-		
-		f_pipex(p_data, cmd);
-	}
-	free_all(cmd, p_data, &b);
+	*prompt = init_prompt();
+	if (!prompt)
+		return (EXIT_FAILURE);
+	b->oldbuffer = ft_strdup("");
 	return (EXIT_SUCCESS);
 }
 
-char	*get_prompt(t_pipe *data)
+int	core_shell(char **envp)
 {
-	t_prompt	prompt;
+	t_buff		b;
+	t_cmd		*cmd;
+	t_pipe		*p_data;
+	t_prompt	*prompt;
 
-	prompt.home_substr = ft_substr(getcwd(NULL, 0), f_strlen(get_env_var_value
-				(data->envp_minish, "HOME")), f_strlen(getcwd(NULL, 0)));
-	if (!prompt.home_substr)
-		prompt.home_substr = f_strdup(getcwd(NULL, 0));
-	prompt.curr_dir = f_strjoin(prompt.home_substr, " > ");
-	if (f_strlen(prompt.curr_dir) <= 3)
+	if (init_shell(&p_data, &prompt, &b, envp))
+		return (EXIT_FAILURE);
+	while (1)
 	{
-		free (prompt.curr_dir);
-		prompt.curr_dir = f_strjoin(getcwd(NULL, 0), " > ");
+		if (manage_signactions(MODE_STANDARD))
+			return (EXIT_FAILURE);
+		get_prompt(p_data, prompt);
+		b.buffer = readline(prompt->prompt);
+		free(prompt->prompt);
+		if (!b.buffer)
+			break ;
+		cmd = parser(b.buffer, p_data->envp_minish);
+		if (cmd == NULL)
+			continue ;
+		f_pipex(p_data, cmd, prompt->old_cwd);
+		reset_minishell(&b, &cmd);
 	}
-	prompt.usr = f_strjoin(get_env_var_value(data->envp_minish, "USER"),
-							" in ");
-	if (!prompt.usr)
-		prompt.usr = f_strdup("minishell in ");
-	prompt.join_usr_color = f_strjoin(GREEN_, prompt.usr);
-	prompt.join_usr_curr_dir = f_strjoin(prompt.join_usr_color,
-							prompt.curr_dir);
-	prompt.prompt = f_strjoin(prompt.join_usr_curr_dir, RESET_);
-	free(prompt.curr_dir);
-	free(prompt.usr);
-	free(prompt.join_usr_color);
-	free(prompt.join_usr_curr_dir);
-	free(prompt.home_substr);
-	return (prompt.prompt);
-}
-
-void	sig_interrupt(int signum)
-{
-	(void)signum;
-	ft_putstrc_fd(YELLOW_, "Caught interruption...\n", 1);
-	exit(1);
-}
-
-void	sig_newentry(int signum)
-{
-	(void)signum;
-	ft_putstrc_fd(RESET_, "^C\n", 1);
+	free_all(cmd, p_data, &b, prompt);
+	return (EXIT_SUCCESS);
 }

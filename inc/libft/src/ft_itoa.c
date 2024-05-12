@@ -3,88 +3,67 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uliherre <uliherre@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antosanc <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/13 19:50:56 by uherrero          #+#    #+#             */
-/*   Updated: 2022/07/17 21:56:05 by uliherre         ###   ########.fr       */
+/*   Created: 2023/09/29 14:52:26 by antosanc          #+#    #+#             */
+/*   Updated: 2023/09/29 17:08:26 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/libft.h"
+#include <stdio.h>
 
-static void	ft_digit_itoa(unsigned int nb, char *str)
+static	int	ft_intlen(int n)
 {
-	if (nb / 10)
-		ft_digit_itoa(nb / 10, str + 1);
-	*str = '0' + (nb % 10);
+	int			cont;
+	long long	num;
+
+	num = n;
+	cont = 0;
+	if (num == 0)
+		return (1);
+	if (num < 0)
+		cont++;
+	while (num != 0)
+	{
+		num = num / 10;
+		cont++;
+	}
+	return (cont);
 }
 
-static void	ft_putnbr_itoa(int nb, char *str)
+static	char	*ft_intrev(int n, char *array, int len)
 {
-	if (nb < 0)
-	{
-		nb = -nb;
-		*(str++) = '-';
-	}
-	ft_digit_itoa(nb, str);
-}
+	long long	num;
+	int			is_neg;
 
-static size_t	ft_numlen(int num)
-{
-	register size_t			len;
-	register unsigned int	n;
-
-	len = TRUE;
-	if (ZERO > num)
+	num = n;
+	is_neg = 0;
+	array[len] = '\0';
+	if (num < 0)
 	{
-		len++;
-		n = -num;
+		array[0] = '-';
+		num *= -1;
+		is_neg = 1;
 	}
-	else
-		n = num;
-	while (ZERO < n / 10)
+	while (len > is_neg)
 	{
-		n /= 10;
-		len++;
+		len--;
+		if (num > 9)
+			array[len] = (num % 10) + '0';
+		else
+			array[len] = num + '0';
+		num = num / 10;
 	}
-	return (len);
-}
-
-void	ft_strrev(char *str)
-{
-	register size_t	size;
-	register char	*end;
-	register char	aux;
-
-	size = ft_strlen(str);
-	end = str + size - 1;
-	while (str < end)
-	{
-		aux = *str;
-		*str = *end;
-		*end = aux;
-		str++;
-		end--;
-	}
+	return (array);
 }
 
 char	*ft_itoa(int n)
 {
-	register size_t	num_len;
-	register char	*str_num;
+	char	*array;
 
-	str_num = NULL;
-	num_len = ft_numlen(n);
-	if (ZERO != num_len)
-	{
-		str_num = (char *) ft_calloc(num_len + 1, sizeof(char));
-		if (NULL == str_num)
-			return (NULL);
-		ft_putnbr_itoa(n, str_num);
-		if (*str_num == '-')
-			ft_strrev(str_num + 1);
-		else
-			ft_strrev(str_num);
-	}
-	return (str_num);
+	array = (char *)malloc(ft_intlen(n) + 1);
+	if (array == 0)
+		return (0);
+	return (ft_intrev(n, array, ft_intlen(n)));
 }

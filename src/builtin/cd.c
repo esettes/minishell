@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 18:43:21 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/23 22:38:38 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/05/11 15:48:13 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,15 +46,26 @@ int	exec_cd(t_pipe *data, t_cmd *cmd, int pos)
 	if (cd.is_hyphen)
 		printf("%s\n", cd.last_dir);
 	change_and_create_env_var(&data, cd.curr_dir);
+	free(cd.curr_dir);
 	return (EXIT_SUCCESS);
 }
 
 static void	change_and_create_env_var(t_pipe **data, char *curr_dir)
 {
+	char	*cwd;
+
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+	{
+		printf("cd: error retrieving current directory: getcwd: cannot access"
+			"parent directories: No such file or directory\n");
+		return ;
+	}
 	if (!env_var_already_exist((*data)->envp_minish, "OLDPWD="))
 		(*data)->envp_minish = create_new_var(*data, "OLDPWD=");
 	change_var_value((*data)->envp_minish, f_strjoin("OLDPWD=", curr_dir));
-	change_var_value((*data)->envp_minish, f_strjoin("PWD=", getcwd(NULL, 0)));
+	change_var_value((*data)->envp_minish, f_strjoin("PWD=", cwd));
+	free(cwd);
 }
 
 static void	is_home_directory(t_cmd *cmd, t_cd *cd)
@@ -66,7 +77,6 @@ static void	is_home_directory(t_cmd *cmd, t_cd *cd)
 
 static char	*set_home_directory(t_pipe *data)
 {
-	printf("HOME: '%s'\n", get_env_var_value(data->envp_minish, "HOME"));
 	return (get_env_var_value(data->envp_minish, "HOME"));
 }
 

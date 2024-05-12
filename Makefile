@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+         #
+#    By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/21 19:03:34 by uliherre          #+#    #+#              #
-#    Updated: 2024/04/16 22:53:26 by iostancu         ###   ########.fr        #
+#    Updated: 2024/05/11 13:42:45 by antosanc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,18 +23,20 @@ CFLAGS = -g3 -fsanitize=address #-Wall -Wextra -Werror #-fsanitize-ignorelist=/h
 LDFLAGS	= -L/Users/$(USER)/.brew/opt/readline/lib -lreadline
 CFLAGS += -I/Users/$(USER)/.brew/opt/readline/include
 
-INCLUDES = -I include -I ./inc/headers -I ./inc/libft/inc 
+INCLUDES = -I include -I ./inc/headers -I ./inc/libft/inc
 
 ############################ PARSER ###########################
-DIR_PARSER = ./src/sources_parser/
+DIR_PARSER = ./src/myownparse/
 SOURCES_PARSER = \
-	command.c \
+	expander_utils.c \
 	expander.c \
+	heredoc.c \
+	lex_utils.c \
 	lex.c \
+	list_utils.c \
 	parser.c \
-	redirects.c \
-	scommand.c \
 	validator.c \
+	yacc_utils.c \
 	yacc.c
 
 A_PARSER = $(addprefix $(DIR_PARSER),$(SOURCES_PARSER))
@@ -45,22 +47,13 @@ OBJECTS = $(addprefix $(OBJDIR), $(SOURCES_PARSER:.c=.o))
 DIR_SHELL = ./src/sources_shell/
 SOURCES_SHELL = \
 	core_shell.c \
-	main.c
+	main.c \
+	signal.c \
+	prompt.c
 
 A_SHELL = $(addprefix $(DIR_SHELL),$(SOURCES_SHELL))
 SOURCES += $(A_SHELL)
 OBJECTS += $(addprefix $(OBJDIR), $(SOURCES_SHELL:.c=.o))
-
-########################## EXECUTER ###########################
-DIR_EXECUTER = ./src/sources_executer/
-SOURCES_EXECUTER = \
-	executer_tools.c \
-	executer.c \
-	path.c
-
-A_EXECUTER = $(addprefix $(DIR_EXECUTER),$(SOURCES_EXECUTER))
-SOURCES += $(A_EXECUTER)
-OBJECTS += $(addprefix $(OBJDIR), $(SOURCES_EXECUTER:.c=.o))
 
 ########################## BUILTIN ############################
 DIR_BUILTIN = ./src/builtin/
@@ -101,7 +94,7 @@ OBJDIR = ./src/obj/
 
 LIBFT = ./inc/libft/libft.a
 
-COMPS = $(LIBFT) 
+COMPS = $(LIBFT)
 
 $(OBJDIR)%.o:$(DIR_PARSER)%.c
 	@mkdir -p $(OBJDIR)

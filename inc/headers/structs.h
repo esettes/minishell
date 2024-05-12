@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 19:43:08 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/12 00:12:37 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/05/11 13:18:11 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,13 @@ typedef struct s_scmd
 
 typedef struct s_cmd
 {
-	int			n_available_scmd;
 	int			n_scmd;
 	t_scmd		**scmd;
-	int			*stdout_copy;
 }				t_cmd;
 
 typedef struct s_prompt
 {
+	char	*old_cwd;
 	char	*curr_dir;
 	char	*home_substr;
 	char	*join_usr_color;
