@@ -46,8 +46,12 @@ int	run_child(t_pipe *data, t_cmd *cmd, int pos)
 	if (dup2(data->pip[W], STDOUT_FILENO))
 		return (EXIT_FAILURE);
 	//close(data->pip[W]);
+	dprintf(2, "child before dup files, outfile: %d\n", data->outfile);
+	dprintf(2, "child before dup files, infile: %d\n", data->infile);
 	if (dup_files(&data->infile, &data->outfile))
 		return (EXIT_FAILURE);
+	dprintf(2, "outfile: %d\n", data->outfile);
+	dprintf(2, "infile: %d\n", data->infile);
 	if (is_parent_exec(data->cmd[0]))
 	{
 		if (run_parent(cmd, &data, pos))
@@ -69,8 +73,13 @@ int	run_child2(t_pipe *data, t_cmd *cmd, int pos)
 	if (dup2(data->pip[R], STDIN_FILENO))
 		return (EXIT_FAILURE);
 	//close(data->pip[R]);
+		dprintf(2, "father before dup files, outfile: %d\n", data->outfile);
+	dprintf(2, "father before dup filesinfile: %d\n", data->infile);
+
 	if (dup_files(&data->infile, &data->outfile))
 		return (EXIT_FAILURE);
+	dprintf(2, "father after dup files, outfile: %d\n", data->outfile);
+	dprintf(2, "father after dup filesinfile: %d\n", data->infile);
 	if (is_parent_exec(data->last_cmd[0]))
 	{
 		if (run_parent(cmd, &data, pos))
