@@ -102,7 +102,6 @@ int	is_parent_exec(char *str)
 
 int	process_loop(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 {
-
 	if (open_file(cmd, *p_data, pos))
 		return (EXIT_FAILURE);
 	(*p_data)->pid = fork();
@@ -122,8 +121,6 @@ int	process_loop(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 
 int	run_last_process(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 {
-	if (pipe((*p_data)->pip) < 0)
-		return (f_error());
 	if (open_file(cmd, *p_data, pos))
 		return (EXIT_FAILURE);
 	if ((cmd->n_scmd > 1)
