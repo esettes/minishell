@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:44 by antosanc          #+#    #+#             */
-/*   Updated: 2024/05/07 20:45:11 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/13 20:20:01 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static void	check_args(t_scmd *scmd, t_token_lst **token_lst)
 		if (scmd->out_f)
 			free(scmd->out_f);
 		scmd->out_f = ft_strdup((*token_lst)->content);
+		open_file_parse(scmd);
 	}
 	if (scmd->argc == 0)
 		scmd->args[0] = ft_strdup("");

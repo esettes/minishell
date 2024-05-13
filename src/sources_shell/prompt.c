@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 13:05:06 by antosanc          #+#    #+#             */
-/*   Updated: 2024/05/11 14:39:07 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/13 21:36:07 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,10 @@ static void	free_prompt(t_prompt *prompt)
 
 static void	create_prompt(t_pipe *data, t_prompt *prompt, char *cwd)
 {
-	prompt->home_substr = ft_substr(cwd, ft_strlen(get_env_var_value
-				(data->envp_minish, "HOME")), ft_strlen(cwd));
-	if (!prompt->home_substr)
+	if (get_env_var_value(data->envp_minish, "HOME"))
+		prompt->home_substr = ft_substr(cwd, ft_strlen(get_env_var_value
+					(data->envp_minish, "HOME")), ft_strlen(cwd));
+	else
 		prompt->home_substr = ft_strdup(cwd);
 	prompt->curr_dir = ft_strjoin(prompt->home_substr, " > ");
 	if (ft_strlen(prompt->curr_dir) <= 3)

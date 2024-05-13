@@ -6,7 +6,7 @@
 #    By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/21 19:03:34 by uliherre          #+#    #+#              #
-#    Updated: 2024/05/11 13:42:45 by antosanc         ###   ########.fr        #
+#    Updated: 2024/05/13 20:31:43 by antosanc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -127,7 +127,7 @@ obj:
 	@mkdir -p $(OBJDIR)
 
 clean:
-	@/bin/rm -rf $(OBJECTS)
+	@rm -rf $(OBJDIR)
 	@$(MAKE) -C $(dir $(LIBFT)) clean
 	@echo "${LWHITE}Clean minishell... ${LGREEN}✓$(RESET)"
 

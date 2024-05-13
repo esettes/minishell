@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 19:59:01 by antosanc          #+#    #+#             */
-/*   Updated: 2024/05/07 21:47:48 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/13 20:37:42 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ char	*get_env_value(char *var_env, char **envp)
 	char	**tmp_envp;
 
 	i = 0;
+	if (!envp || !*envp)
+		return (ft_strdup(""));
 	tmp_envp = envp;
 	while (tmp_envp[i])
 	{

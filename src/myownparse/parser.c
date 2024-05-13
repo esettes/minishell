@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:07 by antosanc          #+#    #+#             */
-/*   Updated: 2024/05/07 20:44:56 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/13 21:43:01 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ t_cmd	*parser(char *str, char **envp)
 	t_cmd	*command;
 	int		error_h;
 
-	if (!str || !*str || !envp || !*envp)
+	if (!str || !*str)
 		return (NULL);
 	command = ft_calloc(1, sizeof(t_cmd));
 	if (!command)
