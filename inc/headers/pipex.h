@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:09:44 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/11 15:43:57 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/14 20:43:44 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ size_t	f_strlen(const char *s);
 char	**f_split(char const *s, char c);
 char	*f_strjoin(char const *s1, char const *s2);
 int		f_strict_strncmp(const char *s1, const char *s2, size_t n);
+void	create_simple_envp(t_pipe *data);
 
 int		is_parent_exec(char *str);
 int		run_parent(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd);

@@ -6,7 +6,7 @@
 #    By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/21 19:03:34 by uliherre          #+#    #+#              #
-#    Updated: 2024/05/13 20:31:43 by antosanc         ###   ########.fr        #
+#    Updated: 2024/05/14 20:50:07 by antosanc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -82,7 +82,8 @@ SOURCES_PIPEX = \
 	pipex.c \
 	processes.c \
 	utils.c \
-	utils_2.c
+	utils_2.c \
+	utils_3.c
 
 A_PIPEX = $(addprefix $(DIR_PIPEX),$(SOURCES_PIPEX))
 SOURCES += $(A_PIPEX)
