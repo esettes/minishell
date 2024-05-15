@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:23 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/15 13:23:23 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/15 15:12:36 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ int	run_parent(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 	if (ft_strncmp(*cmd->scmd[pos]->args, "exit", sizeof("exit")) == 0)
 		if (exit_handler(cmd))
 			return (EXIT_FAILURE);
+	g_signal = 0;
 	return (EXIT_SUCCESS);
 }
 
@@ -137,11 +138,8 @@ int	run_last_process(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 				return (EXIT_FAILURE);
 	}
 	else
-	{
 		if (run_parent(cmd, p_data, pos, old_cwd))
 			return (EXIT_FAILURE);
-		g_signal = 0;
-	}
 	close((*p_data)->pip[R]);
 	close((*p_data)->pip[W]);
 	close_files(&(*p_data)->infile, &(*p_data)->outfile);

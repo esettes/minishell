@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 19:27:39 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/11 15:29:14 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/15 15:20:40 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 size_t		var_lenght(char *var);
 static int	check_chars(char *var, char *cmd);
 static void	free_vars(char *s1, char *s2, char *s3);
-
+//ahora unset elimina la varible _
 int	is_correct_env_variable(char *var, char *cmd)
 {
 	size_t	count;
@@ -27,7 +27,7 @@ int	is_correct_env_variable(char *var, char *cmd)
 	i = 0;
 	while (var[i] && var[i] != '=')
 	{
-		if (ft_isdigit(var[i]) || var[i] == '_')
+		if (ft_isdigit(var[i]))
 			count++;
 		i++;
 	}
@@ -49,11 +49,11 @@ static int	check_chars(char *var, char *cmd)
 
 	i = 0;
 	ret = TRUE;
-	if (!(ft_isalpha(var[0]) || var[0] == '_'))
+	if (!ft_isalpha(var[0]) && var[0] != '_')
 		ret = FALSE;
 	while (var[i] && var[i] != '=')
 	{
-		if (!ft_isalnum(var[i]) && var[i] != '_')
+		if (!ft_isalnum(var[i]) && var[0] != '_')
 			ret = FALSE;
 		i++;
 	}
