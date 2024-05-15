@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 18:43:21 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/14 21:19:50 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/15 12:20:05 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,11 @@ static void	change_and_create_env_var(t_pipe **data, char *curr_dir);
 static void	is_home_directory(t_cmd *cmd, t_cd *cd);
 static char	*set_home_directory(t_pipe *data);
 
-static void	error_case(t_cd *cd, const char *cmd, const char *var)
+static void	error_case(t_cd *cd, char *cmd, char *var)
 {
+	g_signal = 1;
 	free(cd->curr_dir);
-	print_env_not_set("cd", "OLDPWD");
+	print_env_not_set(cmd, var);
 }
 
 int	exec_cd(t_pipe *data, t_cmd *cmd, int pos)
@@ -33,13 +34,13 @@ int	exec_cd(t_pipe *data, t_cmd *cmd, int pos)
 	{
 		cd.is_hyphen = 1;
 		if (!cd.last_dir)
-			return (error_case(&cd, "cd", "OLDPWD"), EXIT_SUCCESS);
+			return (error_case(&cd, "cd", "OLDPWD"), EXIT_FAILURE);
 		cd.dir_to_exec = cd.last_dir;
 	}
 	if (cd.is_home)
 		cd.dir_to_exec = get_env_var_value(data->envp_minish, "HOME");
 	if (cd.is_home && (!env_var_already_exist(data->envp_minish, "HOME=")))
-		return (error_case(&cd, "cd", "HOME"), EXIT_SUCCESS);
+		return (error_case(&cd, "cd", "HOME"), EXIT_FAILURE);
 	if (chdir(cd.dir_to_exec) < 0)
 		return (f_error());
 	if (cd.is_hyphen)

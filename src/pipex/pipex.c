@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:23 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/11 15:44:49 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/15 13:23:23 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,11 @@ int	f_pipex(t_pipe *p_data, t_cmd *cmd, char *old_cwd)
 	if (g_signal == 2)
 		print_err_msg(p_data->last_cmd[0], p_data->last_cmd[1], strerror(g_signal));
 	if (g_signal == 127)
-		print_err_msg(p_data->last_cmd[0], p_data->last_cmd[1], "Command not found");
+	 	print_err_msg(p_data->last_cmd[0], p_data->last_cmd[1], "Command not found");
 	if (g_signal == 13)
 		print_err_msg(p_data->last_cmd[0], p_data->last_cmd[1], strerror(g_signal));
 	if (g_signal != 0 && g_signal != 2 && g_signal != 13 && g_signal != 127)
-	{
 		print_err_msg(p_data->last_cmd[0], p_data->last_cmd[1], strerror(g_signal));
-	}
 	while (n_cmds--)
 		wait(NULL);
 	return (EXIT_SUCCESS);
@@ -139,10 +137,13 @@ int	run_last_process(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 				return (EXIT_FAILURE);
 	}
 	else
+	{
 		if (run_parent(cmd, p_data, pos, old_cwd))
 			return (EXIT_FAILURE);
+		g_signal = 0;
+	}
 	close((*p_data)->pip[R]);
-		close((*p_data)->pip[W]);
+	close((*p_data)->pip[W]);
 	close_files(&(*p_data)->infile, &(*p_data)->outfile);
 	return (EXIT_SUCCESS);
 }
