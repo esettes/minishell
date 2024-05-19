@@ -74,7 +74,7 @@ int	cmd_have_path(char *cmd)
 
 	i = 0;
 	while (cmd[i])
-		if (cmd[i++] == '/')
+		if (cmd[i++] == '/' && access(cmd, F_OK) == 0)
 			return (TRUE);
 	return (FALSE);
 }

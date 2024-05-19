@@ -15,7 +15,7 @@
 size_t		var_lenght(char *var);
 static int	check_chars(char *var, char *cmd);
 static void	free_vars(char *s1, char *s2, char *s3);
-//ahora unset elimina la varible _
+
 int	is_correct_env_variable(char *var, char *cmd)
 {
 	size_t	count;

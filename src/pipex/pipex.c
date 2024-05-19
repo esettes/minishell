@@ -47,14 +47,14 @@ int	f_pipex(t_pipe *p_data, t_cmd *cmd, char *old_cwd)
 			g_signal = WEXITSTATUS(status);
 		}
 	}
-	if (g_signal == 2)
-		print_err_msg(p_data->last_cmd[0], p_data->last_cmd[1], strerror(g_signal));
-	if (g_signal == 127)
-	 	print_err_msg(p_data->last_cmd[0], p_data->last_cmd[1], "Command not found");
-	if (g_signal == 13)
-		print_err_msg(p_data->last_cmd[0], p_data->last_cmd[1], strerror(g_signal));
-	if (g_signal != 0 && g_signal != 2 && g_signal != 13 && g_signal != 127)
-		print_err_msg(p_data->last_cmd[0], p_data->last_cmd[1], strerror(g_signal));
+	// if (g_signal == 2)
+	//		print_err_msg(p_data->last_cmd[0], p_data->last_cmd[1], strerror(g_signal));
+	// if (g_signal == 127)
+	//  	print_err_msg(p_data->last_cmd[0], p_data->last_cmd[1], "Command not found");
+	// if (g_signal == 13)
+	// 	print_err_msg(p_data->last_cmd[0], p_data->last_cmd[1], strerror(g_signal));
+	// if (g_signal != 0 && g_signal != 2 && g_signal != 13 && g_signal != 127)
+	// 	print_err_msg(p_data->last_cmd[0], p_data->last_cmd[1], strerror(g_signal));
 	while (n_cmds--)
 		wait(NULL);
 	return (EXIT_SUCCESS);
@@ -122,13 +122,7 @@ int	run_last_process(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 {
 	if (open_file(cmd, *p_data, pos))
 		return (EXIT_FAILURE);
-	if ((cmd->n_scmd > 1)
-		|| (ft_strncmp("cd", (*p_data)->last_cmd[0], sizeof("cd")) != 0
-		&& ft_strncmp("exit", (*p_data)->last_cmd[0], sizeof("exit")) != 0
-		&& ft_strncmp("echo", (*p_data)->last_cmd[0], sizeof("echo")) != 0
-		&& ft_strncmp("export", (*p_data)->last_cmd[0], sizeof("export")) != 0
-		&& ft_strncmp("unset", (*p_data)->last_cmd[0], sizeof("unset")) != 0
-		&& ft_strncmp("env", (*p_data)->last_cmd[0], sizeof("env")) != 0))
+	if (cmd->n_scmd > 1 || !is_parent_exec((*p_data)->last_cmd[0]))
 	{
 		(*p_data)->pid2 = fork();
 		if ((*p_data)->pid2 < 0)

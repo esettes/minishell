@@ -67,6 +67,7 @@ int	check_heredoc(t_token_lst *token_lst)
 t_token_lst	*create_token_lst(char *str, int j, t_token **token, int flag)
 {
 	t_token_lst	*token_lst;
+	char		*new_content;
 
 	token_lst = token_new();
 	token_lst->content = ft_substr(str, j, (*token)->i - j);

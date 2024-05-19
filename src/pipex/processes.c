@@ -12,6 +12,7 @@
 
 #include <minishell.h>
 
+//no devuelve  No such file or directory
 int	exec_process(t_pipe *data, char **cmd)
 {
 	char	*path;
@@ -20,15 +21,19 @@ int	exec_process(t_pipe *data, char **cmd)
 	{
 		path = f_strdup(cmd[0]);
 		if (execve(path, cmd, data->envp_minish) < 0)
-			return (f_error());
+		{
+			free(path);
+			return (EXIT_FAILURE);
+		}
 		return (EXIT_SUCCESS);
 	}
 	path = get_path(cmd[0], get_env_var_value(data->envp_minish, "PATH"));
 	if ((cmd_have_current_path(cmd[0]) || !path))
 	{
+		g_signal = 127;
+		print_err_msg(data->last_cmd[0], data->last_cmd[1], "Command not found");
 		free_split(cmd);
-		g_signal = 2;
-		return (2);
+		exit(127);
 	}
 	if (execve(path, cmd, data->envp_minish) < 0)
 	{

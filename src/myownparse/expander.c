@@ -70,6 +70,7 @@ static char	*expander_process(char *str, char **envp, t_token **token, int *i)
 	return (expanded_str);
 }
 
+//problema, creo que no entra al if ni siquiera, por lo que no expanded_str no  vale nada
 char	*expander(char *str, char **envp, t_token **token)
 {
 	char	*expanded_str;
