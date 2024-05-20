@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 18:43:21 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/15 12:20:05 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/20 19:29:39 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ int	exec_cd(t_pipe *data, t_cmd *cmd, int pos)
 		cd.dir_to_exec = get_env_var_value(data->envp_minish, "HOME");
 	if (cd.is_home && (!env_var_already_exist(data->envp_minish, "HOME=")))
 		return (error_case(&cd, "cd", "HOME"), EXIT_FAILURE);
-	//El mensaje de error que devuelve aqui no es el que devuelve bash
 	if (chdir(cd.dir_to_exec) < 0)
-		return (free(cd.curr_dir), f_error());
+		return (free(cd.curr_dir), print_err_msg("cd", data->last_cmd[1], NULL),
+			EXIT_FAILURE);
 	if (cd.is_hyphen)
 		printf("%s\n", cd.last_dir);
 	change_and_create_env_var(&data, cd.curr_dir);

@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 20:38:33 by antosanc          #+#    #+#             */
-/*   Updated: 2024/05/14 20:49:21 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/20 20:58:56 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	create_simple_envp(t_pipe *data)
 
 	cwd = getcwd(NULL, 0);
 	data->envp_minish = create_new_var(data,
-		"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:"
+			"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:"
 			"/usr/bin:/sbin:/bin:/home/ubuntu/.local/bin");
 	data->envp_minish = create_new_var(data, "PWD=");
 	change_var_value(data->envp_minish, f_strjoin("PWD=", cwd));

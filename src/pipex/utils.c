@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:39 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/23 22:40:02 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/05/20 20:59:20 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ int	duplicate_fd(int oldfd, int newfd)
 	return (EXIT_SUCCESS);
 }
 
-char	*get_path(char *cmd, char *path_envp)
+static char	*check_path(char *cmd, char *path_envp)
 {
-	char	**paths;
 	char	*path;
+	char	**paths;
 	char	*tmp;
 	int		i;
 
@@ -68,13 +68,19 @@ char	*get_path(char *cmd, char *path_envp)
 	return (NULL);
 }
 
-int	cmd_have_path(char *cmd)
+char	*get_path(char *cmd, char *path_envp)
 {
-	register int	i;
+	char	*path;
 
-	i = 0;
-	while (cmd[i])
-		if (cmd[i++] == '/' && access(cmd, F_OK) == 0)
-			return (TRUE);
-	return (FALSE);
+	if (ft_strchr(cmd, '/') != NULL)
+	{
+		if (access(cmd, F_OK) == 0)
+			return (cmd);
+		else
+			return ("1");
+	}
+	path = check_path(cmd, path_envp);
+	if (!path)
+		return ("2");
+	return (path);
 }

@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:59:16 by antosanc          #+#    #+#             */
-/*   Updated: 2024/05/13 20:36:30 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/20 19:12:17 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static char	*expander_process(char *str, char **envp, t_token **token, int *i)
 	int		l;
 
 	if (str[*i + 1] && !((ft_isalnum(str[*i + 1]) || str[*i + 1] == '_')))
-		return (str);
+		return (ft_strdup(str));
 	l = 1;
 	while (str[*i + l] && (ft_isalnum(str[*i + l]) || str[*i + l] == '_'))
 		l++;
@@ -70,7 +70,6 @@ static char	*expander_process(char *str, char **envp, t_token **token, int *i)
 	return (expanded_str);
 }
 
-//problema, creo que no entra al if ni siquiera, por lo que no expanded_str no  vale nada
 char	*expander(char *str, char **envp, t_token **token)
 {
 	char	*expanded_str;

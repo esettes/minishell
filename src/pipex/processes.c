@@ -6,29 +6,20 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/11 15:43:11 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/20 20:50:41 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-//no devuelve  No such file or directory
 int	exec_process(t_pipe *data, char **cmd)
 {
 	char	*path;
 
-	if (cmd_have_path(cmd[0]))
-	{
-		path = f_strdup(cmd[0]);
-		if (execve(path, cmd, data->envp_minish) < 0)
-		{
-			free(path);
-			return (EXIT_FAILURE);
-		}
-		return (EXIT_SUCCESS);
-	}
 	path = get_path(cmd[0], get_env_var_value(data->envp_minish, "PATH"));
-	if ((cmd_have_current_path(cmd[0]) || !path))
+	if (!ft_strcmp("1", path))
+		return (EXIT_FAILURE);
+	if ((cmd_have_current_path(cmd[0]) || !ft_strcmp("2", path)))
 	{
 		g_signal = 127;
 		print_err_msg(data->last_cmd[0], data->last_cmd[1], "Command not found");
@@ -87,7 +78,10 @@ int	run_child2(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 	else
 	{
 		if (exec_process(data, data->last_cmd))
-			exit(f_error());
+		{
+			print_err_msg(data->last_cmd[0], data->last_cmd[1], NULL);
+			exit(g_signal);
+		}
 	}
 	return (EXIT_SUCCESS);
 }

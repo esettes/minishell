@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:07:23 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/13 20:35:04 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/20 19:28:59 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ void	print_env_not_set(char *cmd, char *var)
 
 void	print_err_msg(char *cmd, char *var, char *msg)
 {
+	g_signal = errno;
 	ft_putstrc_fd(RED_, "minishell: ", STDERR_FILENO);
 	if (cmd)
 	{
@@ -102,5 +103,10 @@ void	print_err_msg(char *cmd, char *var, char *msg)
 	{
 		ft_putstrc_fd(RED_, msg, STDERR_FILENO);
 		ft_putstrc_fd(RED_, "\n", STDERR_FILENO);
+	}
+	else
+	{
+		ft_putstr_fd(strerror(g_signal), STDERR_FILENO);
+		ft_putstr_fd("\n", STDERR_FILENO);
 	}
 }
