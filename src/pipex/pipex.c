@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:23 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/15 15:12:36 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/21 21:25:33 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,8 @@ int	run_last_process(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 {
 	if (open_file(cmd, *p_data, pos))
 		return (EXIT_FAILURE);
+	if (!cmd->scmd[0]->args[0][0])
+		return (EXIT_SUCCESS);
 	if (cmd->n_scmd > 1 || !is_parent_exec((*p_data)->last_cmd[0]))
 	{
 		(*p_data)->pid2 = fork();

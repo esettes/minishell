@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:07:46 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/11 15:36:03 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/21 21:29:35 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,6 @@ int		change_var_value(char **envp_minish, char *raw_variable);
 char	*get_env_variable_from_minish_environ(char **envp_minish, char *var);
 void	init_env(char **env, size_t len, char **envp_minish);
 void	print_env_not_set(char *cmd, char *var);
-void	print_err_msg(char *cmd, char *var, char *msg);
+int		print_err_msg(char *cmd, char *var, char *msg);
 
 #endif

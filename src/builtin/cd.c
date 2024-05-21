@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 18:43:21 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/20 19:29:39 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/21 21:34:25 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ int	exec_cd(t_pipe *data, t_cmd *cmd, int pos)
 	if (cd.is_home && (!env_var_already_exist(data->envp_minish, "HOME=")))
 		return (error_case(&cd, "cd", "HOME"), EXIT_FAILURE);
 	if (chdir(cd.dir_to_exec) < 0)
-		return (free(cd.curr_dir), print_err_msg("cd", data->last_cmd[1], NULL),
-			EXIT_FAILURE);
+		return (free(cd.curr_dir),
+			print_err_msg("cd", data->last_cmd[1], NULL));
 	if (cd.is_hyphen)
 		printf("%s\n", cd.last_dir);
 	change_and_create_env_var(&data, cd.curr_dir);

@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:34 by antosanc          #+#    #+#             */
-/*   Updated: 2024/04/19 22:51:05 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/21 21:16:56 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ static int	check_error_cases(t_token_lst *tokens)
 	return (EXIT_SUCCESS);
 }
 
+//Se tiene que para cuando encuentre un | < o > por que si no no muestra el error despues de que haya pipes ls | < h
 int	validator_tony(t_token *token)
 {
 	t_token_lst	*last;

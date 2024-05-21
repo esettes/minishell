@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/20 20:50:41 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/21 21:32:10 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,7 @@ int	exec_process(t_pipe *data, char **cmd)
 		exit(127);
 	}
 	if (execve(path, cmd, data->envp_minish) < 0)
-	{
-		printf("Execve error\n");
-		return (f_error());
-	}
+		return (free(path), EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
 
@@ -52,7 +49,10 @@ int	run_child(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 	else
 	{
 		if (exec_process(data, data->cmd))
-			exit(f_error());
+		{
+			print_err_msg(data->last_cmd[0], data->last_cmd[1], NULL);
+			exit(g_signal);
+		}
 	}
 	return (EXIT_SUCCESS);
 }

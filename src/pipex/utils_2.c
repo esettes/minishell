@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 23:30:58 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/14 20:53:59 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/21 21:30:54 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	open_file(t_cmd *cmd, t_pipe *data, int pos)
 	{
 		data->infile = open(cmd->scmd[pos]->in_f, O_RDONLY, 0644);
 		if (data->infile < 0)
-			return (f_error());
+			return (print_err_msg(cmd->scmd[pos]->in_f, NULL, NULL));
 	}
 	else
 		data->infile = -1;
