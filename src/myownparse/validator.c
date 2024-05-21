@@ -6,11 +6,10 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:34 by antosanc          #+#    #+#             */
-/*   Updated: 2024/05/21 22:08:41 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/21 22:09:57 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// casi terminado falta probarlo y darle una revision
 #include "../../inc/headers/minishell.h"
 
 static void	syntax_error(char *str)
