@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:06:11 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/13 21:37:47 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/21 22:06:33 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,17 @@ static void	free_all(t_cmd *cmd, t_pipe *p_data, t_buff *buff, t_prompt	*prompt)
 	free(buff->oldbuffer);
 }
 
-static void	reset_minishell(t_buff *b, t_cmd **cmd)
+static void	manage_history(t_buff *b)
 {
 	if (b->buffer && *b->buffer && f_strict_strncmp(b->buffer,
 			b->oldbuffer, sizeof(b->oldbuffer)) != 0)
 		add_history(b->buffer);
 	free(b->oldbuffer);
 	b->oldbuffer = ft_strdup(b->buffer);
+}
+
+static void	reset_minishell(t_buff *b, t_cmd **cmd)
+{
 	free(b->buffer);
 	free_cmd_tony(*cmd);
 	cmd = NULL;
@@ -67,6 +71,7 @@ int	core_shell(char **envp)
 		get_prompt(p_data, prompt);
 		b.buffer = readline(prompt->prompt);
 		free(prompt->prompt);
+		manage_history(&b);
 		if (!b.buffer)
 			break ;
 		cmd = parser(b.buffer, p_data->envp_minish);

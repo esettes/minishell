@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:34 by antosanc          #+#    #+#             */
-/*   Updated: 2024/05/21 21:16:56 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/21 22:08:41 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,21 +32,30 @@ static int	check_error_cases(t_token_lst *tokens)
 	if (t_current == '|' && tokens->quotes == 0 && t_next == '|'
 		&& next->quotes == 0)
 		return (syntax_error("||"), EXIT_FAILURE);
-	if ((t_current == '>' || t_current == '<') && tokens->quotes == 0
-		&& (t_next == '>' || t_next == '<' || t_next == '|')
+	if (t_current == '|' && (t_next == '>' || t_next == '<')
 		&& next->quotes == 0)
+		return (syntax_error(tokens->content), EXIT_FAILURE);
+	if ((t_current == '>' && tokens->quotes == 0) && (t_next == '<'
+			&& next->quotes == 0))
 		return (syntax_error(next->content), EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
 
-//Se tiene que para cuando encuentre un | < o > por que si no no muestra el error despues de que haya pipes ls | < h
 int	validator_tony(t_token *token)
 {
 	t_token_lst	*last;
 	t_token_lst	*token_lst;
+	t_token_lst	*tmp_token_lst;
 
 	last = token_last(token->token_lst);
 	token_lst = token->token_lst;
+	tmp_token_lst = token->token_lst;
+	while (tmp_token_lst)
+	{
+		if (check_error_cases(token_lst))
+			return (EXIT_FAILURE);
+		tmp_token_lst = tmp_token_lst->next;
+	}
 	if (last && last->content && last->quotes == 0
 		&& (((char *)last->content)[0] == '>'
 		|| ((char *)last->content)[0] == '<'))
@@ -54,11 +63,5 @@ int	validator_tony(t_token *token)
 	if ((((char *)token_lst->content)[0] == '|' && token_lst->quotes == 0)
 		|| (((char *)last->content)[0] == '|' && last->quotes == 0))
 		return (syntax_error("|"), EXIT_FAILURE);
-	while (token_lst)
-	{
-		if (check_error_cases(token_lst))
-			return (EXIT_FAILURE);
-		token_lst = token_lst->next;
-	}
 	return (EXIT_SUCCESS);
 }
