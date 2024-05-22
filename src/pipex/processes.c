@@ -6,12 +6,13 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/21 21:32:10 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/22 22:52:48 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
+//problema no deja ejecutar programas con ./ porque se evalua despues de get_path y get_path devuelve 2
 int	exec_process(t_pipe *data, char **cmd)
 {
 	char	*path;

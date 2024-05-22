@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:39 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/20 21:18:06 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/22 22:48:26 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ char	*get_path(char *cmd, char *path_envp)
 {
 	char	*path;
 
+	if (ft_strncmp(".", cmd, 1) == 0)
+		return (cmd);
 	if (ft_strchr(cmd, '/') != NULL)
 	{
 		if (access(cmd, F_OK) == 0)
