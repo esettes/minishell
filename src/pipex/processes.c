@@ -6,13 +6,12 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/22 22:52:48 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/23 20:42:52 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-//problema no deja ejecutar programas con ./ porque se evalua despues de get_path y get_path devuelve 2
 int	exec_process(t_pipe *data, char **cmd)
 {
 	char	*path;
@@ -20,7 +19,7 @@ int	exec_process(t_pipe *data, char **cmd)
 	path = get_path(cmd[0], get_env_var_value(data->envp_minish, "PATH"));
 	if (!ft_strcmp("1", path))
 		return (EXIT_FAILURE);
-	if ((cmd_have_current_path(cmd[0]) || !ft_strcmp("2", path)))
+	if (!ft_strcmp("2", path))
 	{
 		g_signal = 127;
 		print_err_msg(data->last_cmd[0], data->last_cmd[1], "Command not found");
