@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/23 21:55:04 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/23 22:00:20 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,13 @@ int	exec_process(t_pipe *data, char **cmd)
 	path = get_path(cmd[0], get_env_var_value(data->envp_minish, "PATH"));
 	if (!ft_strcmp("3", path))
 	{
-		g_signal = 126;
 		print_err_msg(data->last_cmd[0], data->last_cmd[1], "Is a directory");
 		exit(126);
 	}
 	if (!ft_strcmp("1", path))
-	{
-		g_signal = 127;
 		return (EXIT_FAILURE);
-	}
 	if (!ft_strcmp("2", path))
 	{
-		g_signal = 127;
 		print_err_msg(data->last_cmd[0], data->last_cmd[1], "Command not found");
 		free_split(cmd);
 		exit(127);
