@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 19:07:06 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/22 22:36:40 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/05/23 20:48:46 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,13 @@ int	exec_env(t_pipe *data)
 {
 	int	i;
 	int	envp_minish_size;
-	int		arg_printed;
 
 	i = 0;
 	envp_minish_size = get_array_size(data->envp_minish);
-	arg_printed = 0;
 	while (i < envp_minish_size)
 	{
-		if (arg_printed)
-			printf("\n");
 		printf("%s", data->envp_minish[i]);
-		arg_printed = 1;
+		printf("\n");
 		i++;
 	}
 	return (EXIT_SUCCESS);
