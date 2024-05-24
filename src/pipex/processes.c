@@ -41,11 +41,12 @@ int	exec_process(t_pipe *data, char **cmd)
 int	run_child(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 {
 	close(data->pip[R]);
+	if (dup_files(&data->infile, &data->outfile))
+		return (EXIT_FAILURE);
 	if (dup2(data->pip[W], STDOUT_FILENO))
 		return (EXIT_FAILURE);
 	close(data->pip[W]);
-	if (dup_files(&data->infile, &data->outfile))
-		return (EXIT_FAILURE);
+	
 	if (is_parent_exec(data->cmd[0]))
 	{
 		if (run_parent(cmd, &data, pos, old_cwd))
@@ -69,20 +70,19 @@ int	run_child2(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 	close(data->pip[R]);
 	if (dup_files(&data->infile, &data->outfile))
 		return (EXIT_FAILURE);
-	if (is_parent_exec(data->last_cmd[0]))
-	{
-		if (run_parent(cmd, &data, pos, old_cwd))
-		{
-			printf("builtin error\n");
-			exit(f_error());
-		}
-		else
-			exit(EXIT_SUCCESS);
-	}
-	else
-	{
+	// if (is_parent_exec(data->last_cmd[0]))
+	// {
+	// 	if (run_parent(cmd, &data, pos, old_cwd))
+	// 	{
+	// 		printf("builtin error\n");
+	// 		exit(f_error());
+	// 	}
+	// 	else
+	// 		exit(EXIT_SUCCESS);
+	// }
+	// else
+	// {
 		if (exec_process(data, data->last_cmd))
-			exit(f_error());
-	}
+			return(f_error());
 	return (EXIT_SUCCESS);
 }

@@ -25,8 +25,7 @@ int	f_pipex(t_pipe *p_data, t_cmd *cmd, char *old_cwd)
 	i = -1;
 	status = 0;
 	n_cmds = cmd->n_scmd;
-	if (pipe(p_data->pip) < 0)
-		return (f_error());
+	
 	manage_signactions(MODE_CHILD);
 	while (n_cmds-- != 1)
 	{
@@ -102,6 +101,8 @@ int	is_parent_exec(char *str)
 
 int	process_loop(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 {
+	if (pipe((*p_data)->pip) < 0)
+		return (f_error());
 	if (open_file(cmd, *p_data, pos))
 		return (EXIT_FAILURE);
 	(*p_data)->pid = fork();
@@ -111,11 +112,12 @@ int	process_loop(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 	if ((*p_data)->pid == 0)
 		if (run_child(*p_data, cmd, pos, old_cwd))
 			return (EXIT_FAILURE);
-	close((*p_data)->pip[W]);
-	close_files(&(*p_data)->infile, &(*p_data)->outfile);
-	if ((*p_data)->infile > -1)
-		(*p_data)->infile = (*p_data)->pip[R];
+	//close((*p_data)->pip[W]);
 	close((*p_data)->pip[R]);
+	close_files(&(*p_data)->infile, &(*p_data)->outfile);
+	//if ((*p_data)->infile > -1)
+		(*p_data)->infile = (*p_data)->pip[R];
+	
 	return (EXIT_SUCCESS);
 }
 
@@ -142,7 +144,7 @@ int	run_last_process(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 		if (run_parent(cmd, p_data, pos, old_cwd))
 			return (EXIT_FAILURE);
 	close((*p_data)->pip[R]);
-		close((*p_data)->pip[W]);
+	close((*p_data)->pip[W]);
 	close_files(&(*p_data)->infile, &(*p_data)->outfile);
 	return (EXIT_SUCCESS);
 }
