@@ -23,11 +23,15 @@ t_pipe	*init_pipe_struct(char *envp[])
 	init_envp_minishell(tmp, envp);
 	tmp->envp = get_env_var_value(tmp->envp_minish, "PATH");
 	tmp->cmd = NULL;
-	tmp->infile = -1;
-	tmp->outfile = -1;
+	tmp->infile = 0;
+	tmp->outfile = 0;
 	tmp->pid = -1;
 	tmp->pid2 = -1;
 	tmp->last_cmd = NULL;
+	tmp->std_[0] = 0;
+	tmp->std_[1] = 0;
+	tmp->n_cmds = 0;
+	tmp->old_fd = 0;
 	return (tmp);
 }
 
@@ -40,13 +44,14 @@ int	open_file(t_cmd *cmd, t_pipe *data, int pos)
 			return (f_error());
 	}
 	else
-		data->infile = -1;
+		data->infile = 0;
 	if (cmd->scmd[pos]->out_f)
 	{
 		if (cmd->scmd[pos]->append)
 		{
 			data->outfile = open(cmd->scmd[pos]->out_f,
 				O_WRONLY | O_CREAT | O_APPEND, 0644);
+				dprintf(2, "fd: %d\n", data->outfile);
 		}
 		else
 			data->outfile = open(cmd->scmd[pos]->out_f,
@@ -55,16 +60,22 @@ int	open_file(t_cmd *cmd, t_pipe *data, int pos)
 			return (f_error());
 	}
 	else
-		data->outfile = -1;
+		data->outfile = 0;
 	return (EXIT_SUCCESS);
 }
 
 void	close_files(int *infile, int *outfile)
 {
-	if (*infile > -1)
+	if (*infile)
+	{
 		close(*infile);
-	if (*outfile > -1)
+		*infile = 0;
+	}
+	if (*outfile)
+	{
 		close(*outfile);
+		*outfile = 0;
+	}
 }
 
 int	dup_files(int *infile, int *outfile)

@@ -27,7 +27,9 @@ typedef struct s_pipe
 	char	**envp_minish;
 	int		infile;
 	int		outfile;
-	int		stdout_cpy;
+	int		std_[2];
+	int		n_cmds;
+	int		old_fd;
 }	t_pipe;
 
 # define COLORED 1

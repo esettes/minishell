@@ -27,6 +27,8 @@ int	f_pipex(t_pipe *p_data, t_cmd *cmd, char *old_cwd)
 	n_cmds = cmd->n_scmd;
 	
 	manage_signactions(MODE_CHILD);
+	p_data->std_[0] = dup(STDIN_FILENO);
+	p_data->std_[1] = dup(STDOUT_FILENO);
 	while (n_cmds-- != 1)
 	{
 		p_data->cmd = cmd->scmd[++i]->args;
@@ -46,6 +48,10 @@ int	f_pipex(t_pipe *p_data, t_cmd *cmd, char *old_cwd)
 			g_signal = WEXITSTATUS(status);
 		}
 	}
+	dup2(p_data->std_[STDIN_FILENO], STDIN_FILENO);
+	close(p_data->std_[STDIN_FILENO]);
+	dup2(p_data->std_[STDOUT_FILENO], STDOUT_FILENO);
+	close(p_data->std_[STDOUT_FILENO]);
 	if (g_signal == 2)
 		print_err_msg(p_data->last_cmd[0], p_data->last_cmd[1], strerror(g_signal));
 	if (g_signal == 127)
@@ -63,9 +69,22 @@ int	f_pipex(t_pipe *p_data, t_cmd *cmd, char *old_cwd)
 
 int	run_parent(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 {
+	if ((*p_data)->n_cmds == 1)
+	{
+		if ((*p_data)->infile)
+		{
+			dup2((*p_data)->infile, STDIN_FILENO);
+			close((*p_data)->infile);
+		}
+		if ((*p_data)->outfile)
+		{
+			dup2((*p_data)->outfile, STDOUT_FILENO);
+			close((*p_data)->outfile);
+		}
+	}
 	if (f_strncmp(*cmd->scmd[pos]->args, "cd", sizeof("cd")) == 0)
 		if (exec_cd(*p_data, cmd, pos))
-			return (EXIT_FAILURE);
+			return (f_error());
 	if (f_strncmp(*cmd->scmd[pos]->args, "pwd", sizeof("pwd")) == 0)
 		pwd_handler(old_cwd);
 	if (f_strncmp(*cmd->scmd[pos]->args, "env", sizeof("env")) == 0)
@@ -81,7 +100,7 @@ int	run_parent(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 		if (echo_handler(*cmd->scmd[pos]))
 			return (EXIT_FAILURE);
 	if (ft_strncmp(*cmd->scmd[pos]->args, "exit", sizeof("exit")) == 0)
-		if (exit_handler(cmd))
+		if (exit_handler(cmd, *p_data))
 			return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
@@ -110,14 +129,23 @@ int	process_loop(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 		return (f_error());
 	
 	if ((*p_data)->pid == 0)
+	{
 		if (run_child(*p_data, cmd, pos, old_cwd))
 			return (EXIT_FAILURE);
-	//close((*p_data)->pip[W]);
+	}
+	else
+	{
+		if (pos != 0)
+			close((*p_data)->old_fd);
+		close((*p_data)->pip[W]);
+		(*p_data)->old_fd = (*p_data)->pip[R];
+	}
+	dprintf(1, "father closing multiple commands!\n");
+	close((*p_data)->std_[R]);
+	close((*p_data)->std_[W]);
 	close((*p_data)->pip[R]);
+	close((*p_data)->pip[W]);
 	close_files(&(*p_data)->infile, &(*p_data)->outfile);
-	//if ((*p_data)->infile > -1)
-		(*p_data)->infile = (*p_data)->pip[R];
-	
 	return (EXIT_SUCCESS);
 }
 
@@ -126,12 +154,12 @@ int	run_last_process(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 	if (open_file(cmd, *p_data, pos))
 		return (EXIT_FAILURE);
 	if ((cmd->n_scmd > 1)
-		|| (ft_strncmp("cd", (*p_data)->last_cmd[0], sizeof("cd")) != 0
+		|| ((ft_strncmp("cd", (*p_data)->last_cmd[0], sizeof("cd")) != 0
 		&& ft_strncmp("exit", (*p_data)->last_cmd[0], sizeof("exit")) != 0
 		&& ft_strncmp("echo", (*p_data)->last_cmd[0], sizeof("echo")) != 0
 		&& ft_strncmp("export", (*p_data)->last_cmd[0], sizeof("export")) != 0
 		&& ft_strncmp("unset", (*p_data)->last_cmd[0], sizeof("unset")) != 0
-		&& ft_strncmp("env", (*p_data)->last_cmd[0], sizeof("env")) != 0))
+		&& ft_strncmp("env", (*p_data)->last_cmd[0], sizeof("env")) != 0)))
 	{
 		(*p_data)->pid2 = fork();
 		if ((*p_data)->pid2 < 0)
@@ -143,8 +171,16 @@ int	run_last_process(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 	else
 		if (run_parent(cmd, p_data, pos, old_cwd))
 			return (EXIT_FAILURE);
-	close((*p_data)->pip[R]);
-	close((*p_data)->pip[W]);
+	if ((*p_data)->n_cmds > 1)
+		{
+			dprintf(1, "father closing only multiple commands that must be closed by child!\n");
+			close((*p_data)->std_[R]);
+			close((*p_data)->std_[W]);
+			close((*p_data)->pip[R]);
+			close((*p_data)->pip[W]);
+		}
+	// close((*p_data)->pip[R]);
+	// close((*p_data)->pip[W]);
 	close_files(&(*p_data)->infile, &(*p_data)->outfile);
 	return (EXIT_SUCCESS);
 }

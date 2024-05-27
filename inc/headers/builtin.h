@@ -45,7 +45,7 @@ typedef struct s_unset
 }	t_unset;
 
 int		echo_handler(t_scmd scmd);
-int		exit_handler(t_cmd *cmd);
+int		exit_handler(t_cmd *cmd, t_pipe *data);
 char	*ft_getenv(char **envp, char *var_name);
 int		exec_cd(t_pipe *data, t_cmd *cmd, int pos);
 int		exec_env(t_pipe *data);
