@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:09:44 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/11 15:43:57 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/06/06 22:07:22 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ typedef struct s_pipe
 	int		outfile;
 	int		std_[2];
 	int		n_cmds;
+	int		cmd_counter;
+	int		previous_out;
 	int		old_fd;
 }	t_pipe;
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   processes.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/11 15:43:11 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/06/06 23:56:49 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,48 +45,55 @@ int	exec_process(t_pipe *data, char **cmd)
 
 int	run_child(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 {
-	if (data->infile)
+	if (cmd->scmd[pos]->out_f)
 	{
+		if (cmd->scmd[pos]->append)
+			data->outfile = open(cmd->scmd[pos]->out_f,
+				O_WRONLY | O_CREAT | O_APPEND, 0644);
+		else
+			data->outfile = open(cmd->scmd[pos]->out_f,
+				O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (data->outfile < 0)
+			return (f_error());
+		dup2(data->outfile, STDOUT_FILENO);
+		close(data->outfile);
+		data->pip[W] = data->outfile;
+		close(data->pip[W]); // (?)
+	}
+	else
+	{
+		data->outfile = -1;
+		//data->pip[W] = STDOUT_FILENO;
+		
+	}
+	if (!cmd->scmd[pos]->in_f)
+	{
+		dup2(data->previous_out, STDIN_FILENO);
+		close(data->previous_out);
+	}
+	else
+	{
+		data->infile = open(cmd->scmd[pos]->in_f, O_RDONLY, 0644);
+		if (data->infile < 0)
+			return (f_error());
 		dup2(data->infile, STDIN_FILENO);
 		close(data->infile);
 	}
-	else if (pos != 0)
-	{
-		dup2(data->old_fd, STDIN_FILENO);
-		close(data->old_fd);
-	}
-	if (data->outfile)
-	{
-		dup2(data->outfile, STDOUT_FILENO);
-		close(data->outfile);
-	}
-	else
-	{
-		close(data->pip[R]);
-		dup2(data->pip[W], W);
-		close(data->pip[W]);
-	}
-	if (is_parent_exec(data->cmd[0]))
-	{
-		if (run_parent(cmd, &data, pos, old_cwd))
-			exit(f_error());
-	}
-	else
-	{
-		if (exec_process(data, data->cmd))
-			exit(f_error());
-	}
-	dprintf(1, "before close all in run_child!\n");
-	close(data->std_[R]);
-	close(data->std_[W]);
+	dup2(data->pip[R], STDIN_FILENO);
+	dup2(data->pip[W], STDOUT_FILENO);
 	close(data->pip[R]);
 	close(data->pip[W]);
+	data->previous_out = data->pip[W];
+	
+	if (is_parent_exec(data->cmd[0]))
+		run_parent(cmd, &data, pos, old_cwd);
+	else
+		exec_process(data, data->cmd);
 	return (EXIT_SUCCESS);
 }
 
 int	run_child2(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 {
-	dprintf(1, "single execve command!\n");
 	if (data->n_cmds == 1)
 	{
 		if (data->infile)
@@ -100,34 +107,49 @@ int	run_child2(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 			close(data->outfile);
 		}
 	}
-	if (is_parent_exec(data->cmd[0]))
-	{
-		dprintf(1, "before run_parent!\n");
-		run_parent(cmd, &data, pos, old_cwd);
-		// if (data->n_cmds > 1)
-		// {
-		// 	dprintf(1, "last command closing multiple commands!\n");
-		// 	close(data->std_[R]);
-		// 	close(data->std_[W]);
-		// 	close(data->pip[R]);
-		// 	close(data->pip[W]);
-		// }
-		dprintf(1, "after run_parent!\n");
-	}
 	else
 	{
-		dprintf(1, "before exec_process!\n");
+		if (cmd->scmd[pos]->out_f)
+		{
+			if (cmd->scmd[pos]->append)
+				data->outfile = open(cmd->scmd[pos]->out_f,
+					O_WRONLY | O_CREAT | O_APPEND, 0644);
+			else
+				data->outfile = open(cmd->scmd[pos]->out_f,
+					O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			if (data->outfile < 0)
+				return (f_error());
+			dup2(data->outfile, STDOUT_FILENO);
+			close(data->outfile);
+		}
+		else
+		{
+			data->outfile = -1;
+			//data->pip[W] = STDOUT_FILENO;
+			
+		}
+		if (!cmd->scmd[pos]->in_f)
+		{
+			dup2(data->previous_out, STDIN_FILENO);
+			close(data->previous_out);
+		}
+		else
+		{
+			data->infile = open(cmd->scmd[pos]->in_f, O_RDONLY, 0644);
+			if (data->infile < 0)
+				return (f_error());
+			dup2(data->infile, STDIN_FILENO);
+			close(data->infile);
+		}
+	}
+	dup2(data->pip[R], STDIN_FILENO);
+	dup2(data->pip[W], STDOUT_FILENO);
+	close(data->pip[R]);
+	close(data->pip[W]);
+	if (is_parent_exec(data->cmd[0]))
+		run_parent(cmd, &data, pos, old_cwd);
+	else
 		exec_process(data, data->cmd);
-		dprintf(1, "after exec_process!\n");
-	}
-	if (data->n_cmds > 1)
-	{
-		dprintf(1, "last command closing multiple commands!\n");
-		close(data->std_[R]);
-		close(data->std_[W]);
-		close(data->pip[R]);
-		close(data->pip[W]);
-	}
 	exit(g_signal);
 	return (EXIT_SUCCESS);
 }

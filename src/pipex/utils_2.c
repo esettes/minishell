@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 23:30:58 by iostancu          #+#    #+#             */
-/*   Updated: 2024/04/23 22:53:56 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/06/06 22:13:14 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,17 @@ t_pipe	*init_pipe_struct(char *envp[])
 	init_envp_minishell(tmp, envp);
 	tmp->envp = get_env_var_value(tmp->envp_minish, "PATH");
 	tmp->cmd = NULL;
-	tmp->infile = 0;
-	tmp->outfile = 0;
+	tmp->infile = -1;
+	tmp->outfile = -1;
 	tmp->pid = -1;
 	tmp->pid2 = -1;
 	tmp->last_cmd = NULL;
 	tmp->std_[0] = 0;
-	tmp->std_[1] = 0;
+	tmp->std_[1] =0;
 	tmp->n_cmds = 0;
 	tmp->old_fd = 0;
+	tmp->previous_out = -1;
+	tmp->cmd_counter = 0;
 	return (tmp);
 }
 
@@ -44,7 +46,7 @@ int	open_file(t_cmd *cmd, t_pipe *data, int pos)
 			return (f_error());
 	}
 	else
-		data->infile = 0;
+		data->infile = -1;
 	if (cmd->scmd[pos]->out_f)
 	{
 		if (cmd->scmd[pos]->append)
@@ -60,7 +62,7 @@ int	open_file(t_cmd *cmd, t_pipe *data, int pos)
 			return (f_error());
 	}
 	else
-		data->outfile = 0;
+		data->outfile = -1;
 	return (EXIT_SUCCESS);
 }
 

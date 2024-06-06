@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:23 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/11 15:44:49 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/06/07 00:03:48 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	f_pipex(t_pipe *p_data, t_cmd *cmd, char *old_cwd)
 	i = -1;
 	status = 0;
 	n_cmds = cmd->n_scmd;
-	
+	p_data->cmd_counter = n_cmds;
 	manage_signactions(MODE_CHILD);
 	p_data->std_[0] = dup(STDIN_FILENO);
 	p_data->std_[1] = dup(STDOUT_FILENO);
@@ -34,6 +34,7 @@ int	f_pipex(t_pipe *p_data, t_cmd *cmd, char *old_cwd)
 		p_data->cmd = cmd->scmd[++i]->args;
 		if (process_loop(cmd, &p_data, i, old_cwd))
 			return (EXIT_FAILURE);
+		p_data->cmd_counter--;
 	}
 	p_data->last_cmd = cmd->scmd[++i]->args;
 	p_data->cmd = p_data->last_cmd;
@@ -62,26 +63,38 @@ int	f_pipex(t_pipe *p_data, t_cmd *cmd, char *old_cwd)
 	{
 		print_err_msg(p_data->last_cmd[0], p_data->last_cmd[1], strerror(g_signal));
 	}
-	while (n_cmds--)
-		wait(NULL);
+	// while (n_cmds--)
+	// 	wait(NULL);
 	return (EXIT_SUCCESS);
+}
+
+int	*get_previous_cmd_fd(t_cmd **cmd, t_pipe pipe)
+{
+	int		fd[2];
+	t_cmd	**tmp;
+	t_cmd	*aux;
+	
+	tmp = cmd;
+	//get the previous element of the list **cmd
+	
+	
 }
 
 int	run_parent(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 {
-	if ((*p_data)->n_cmds == 1)
-	{
-		if ((*p_data)->infile)
-		{
-			dup2((*p_data)->infile, STDIN_FILENO);
-			close((*p_data)->infile);
-		}
-		if ((*p_data)->outfile)
-		{
-			dup2((*p_data)->outfile, STDOUT_FILENO);
-			close((*p_data)->outfile);
-		}
-	}
+	// if ((*p_data)->n_cmds == 1)
+	// {
+	// 	if ((*p_data)->infile)
+	// 	{
+	// 		dup2((*p_data)->infile, STDIN_FILENO);
+	// 		close((*p_data)->infile);
+	// 	}
+	// 	if ((*p_data)->outfile)
+	// 	{
+	// 		dup2((*p_data)->outfile, STDOUT_FILENO);
+	// 		close((*p_data)->outfile);
+	// 	}
+	// }
 	if (f_strncmp(*cmd->scmd[pos]->args, "cd", sizeof("cd")) == 0)
 		if (exec_cd(*p_data, cmd, pos))
 			return (f_error());
@@ -122,8 +135,8 @@ int	process_loop(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 {
 	if (pipe((*p_data)->pip) < 0)
 		return (f_error());
-	if (open_file(cmd, *p_data, pos))
-		return (EXIT_FAILURE);
+	// if (open_file(cmd, *p_data, pos))
+	// 	return (EXIT_FAILURE);
 	(*p_data)->pid = fork();
 	if ((*p_data)->pid < 0)
 		return (f_error());
@@ -140,19 +153,14 @@ int	process_loop(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 		close((*p_data)->pip[W]);
 		(*p_data)->old_fd = (*p_data)->pip[R];
 	}
-	dprintf(1, "father closing multiple commands!\n");
-	close((*p_data)->std_[R]);
-	close((*p_data)->std_[W]);
-	close((*p_data)->pip[R]);
-	close((*p_data)->pip[W]);
-	close_files(&(*p_data)->infile, &(*p_data)->outfile);
+	
 	return (EXIT_SUCCESS);
 }
 
 int	run_last_process(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 {
-	if (open_file(cmd, *p_data, pos))
-		return (EXIT_FAILURE);
+	// if (open_file(cmd, *p_data, pos))
+	// 	return (EXIT_FAILURE);
 	if ((cmd->n_scmd > 1)
 		|| ((ft_strncmp("cd", (*p_data)->last_cmd[0], sizeof("cd")) != 0
 		&& ft_strncmp("exit", (*p_data)->last_cmd[0], sizeof("exit")) != 0
@@ -171,16 +179,17 @@ int	run_last_process(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 	else
 		if (run_parent(cmd, p_data, pos, old_cwd))
 			return (EXIT_FAILURE);
-	if ((*p_data)->n_cmds > 1)
-		{
-			dprintf(1, "father closing only multiple commands that must be closed by child!\n");
-			close((*p_data)->std_[R]);
-			close((*p_data)->std_[W]);
-			close((*p_data)->pip[R]);
-			close((*p_data)->pip[W]);
-		}
+	// if ((*p_data)->n_cmds > 1)
+	// 	{
+	// 		dprintf(1, "father closing only multiple commands that must be closed by child!\n");
+	// 		close((*p_data)->std_[R]);
+	// 		close((*p_data)->std_[W]);
+	// 		close((*p_data)->pip[R]);
+	// 		close((*p_data)->pip[W]);
+	// 	}
 	// close((*p_data)->pip[R]);
 	// close((*p_data)->pip[W]);
 	close_files(&(*p_data)->infile, &(*p_data)->outfile);
+	//sleep(7);
 	return (EXIT_SUCCESS);
 }
