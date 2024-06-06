@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/06/06 23:56:49 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/06/07 00:22:53 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,9 @@ int	run_child(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 	dup2(data->pip[W], STDOUT_FILENO);
 	close(data->pip[R]);
 	close(data->pip[W]);
+	dprintf(2, "STDOUT_FILENO: %d\n", STDOUT_FILENO);
 	data->previous_out = data->pip[W];
-	
+	dprintf(2, "data->previous_out (loop): %d\n", data->previous_out);
 	if (is_parent_exec(data->cmd[0]))
 		run_parent(cmd, &data, pos, old_cwd);
 	else
@@ -96,13 +97,24 @@ int	run_child2(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 {
 	if (data->n_cmds == 1)
 	{
-		if (data->infile)
+		if (cmd->scmd[pos]->in_f)
 		{
+			data->infile = open(cmd->scmd[pos]->in_f, O_RDONLY, 0644);
+			if (data->infile < 0)
+				return (f_error());
 			dup2(data->infile, STDIN_FILENO);
 			close(data->infile);
 		}
-		if (data->outfile)
+		if (cmd->scmd[pos]->out_f)
 		{
+			if (cmd->scmd[pos]->append)
+				data->outfile = open(cmd->scmd[pos]->out_f,
+					O_WRONLY | O_CREAT | O_APPEND, 0644);
+			else
+				data->outfile = open(cmd->scmd[pos]->out_f,
+					O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			if (data->outfile < 0)
+				return (f_error());
 			dup2(data->outfile, STDOUT_FILENO);
 			close(data->outfile);
 		}
@@ -130,6 +142,7 @@ int	run_child2(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 		}
 		if (!cmd->scmd[pos]->in_f)
 		{
+			dprintf(2, "previous_out: %d\n", data->previous_out);
 			dup2(data->previous_out, STDIN_FILENO);
 			close(data->previous_out);
 		}
