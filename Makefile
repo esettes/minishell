@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+         #
+#    By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/21 19:03:34 by uliherre          #+#    #+#              #
-#    Updated: 2024/05/11 13:42:45 by antosanc         ###   ########.fr        #
+#    Updated: 2024/06/19 22:12:20 by iostancu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -118,7 +118,7 @@ $(NAME): $(OBJECTS) $(COMPS)
 	@echo "${GREY}Compilation ${GREEN}[OK]$(RESET)"
 
 $(LIBFT):
-	@$(MAKE) -C $(dir $(LIBFT))
+	@$(MAKE) -sC $(dir $(LIBFT))
 
 
 all: obj $(NAME)
@@ -128,12 +128,12 @@ obj:
 
 clean:
 	@/bin/rm -rf $(OBJECTS)
-	@$(MAKE) -C $(dir $(LIBFT)) clean
+	@$(MAKE) -sC $(dir $(LIBFT)) clean
 	@echo "${LWHITE}Clean minishell... ${LGREEN}✓$(RESET)"
 
 fclean: clean
 	@/bin/rm -rf $(NAME)
-	@$(MAKE) -C $(dir $(LIBFT)) fclean
+	@$(MAKE) -sC $(dir $(LIBFT)) fclean
 
 f: fclean
 

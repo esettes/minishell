@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/06/07 00:22:53 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/06/20 01:54:14 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,69 @@ int	run_child(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 	return (EXIT_SUCCESS);
 }
 
+int	exec_cmd(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
+{
+	if (f_strncmp(*cmd->scmd[pos]->args, "cd", sizeof("cd")) == 0)
+		if (exec_cd(*p_data, cmd, pos))
+			return (f_error());
+	else if (f_strncmp(*cmd->scmd[pos]->args, "pwd", sizeof("pwd")) == 0)
+		pwd_handler(old_cwd);
+	else if (f_strncmp(*cmd->scmd[pos]->args, "env", sizeof("env")) == 0)
+		if (exec_env(*p_data))
+			return (EXIT_FAILURE);
+	else if (f_strncmp(*cmd->scmd[pos]->args, "export", sizeof("export")) == 0)
+		if (exec_export(*p_data, cmd, pos))
+			return (EXIT_FAILURE);
+	else if (f_strncmp(*cmd->scmd[pos]->args, "unset", sizeof("unset")) == 0)
+		if (exec_unset(cmd, *p_data, pos))
+			return (EXIT_FAILURE);
+	else if (ft_strncmp(*cmd->scmd[pos]->args, "echo", sizeof("echo")) == 0)
+		if (echo_handler(*cmd->scmd[pos]))
+			return (EXIT_FAILURE);
+	else if (ft_strncmp(*cmd->scmd[pos]->args, "exit", sizeof("exit")) == 0)
+		if (exit_handler(cmd, *p_data))
+			return (EXIT_FAILURE);
+	else
+		exec_process(*p_data, *cmd->scmd[pos]->args);
+	return (EXIT_SUCCESS);
+}
+
+void	redirect(t_pipe *data, int pos)
+{
+	if (data->infile)
+		(dup2(data->infile, STDIN_FILENO), close(data->infile));
+	else if (pos != 0)
+		(dup2(data->old_fd, 0), close(data->old_fd));
+	if (data->outfile)
+		(dup2(data->outfile, STDOUT_FILENO), close(data->outfile));
+	else if (pos != data->n_cmds - 1)
+		(close(data->pip[0]), dup2(data->pip[1], 1), close(data->pip[1]));
+}
+
+int	run_single_cmd(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
+{
+	if (cmd->scmd[pos]->in_f)
+		{
+			data->infile = open(cmd->scmd[pos]->in_f, O_RDONLY, 0644);
+			if (data->infile < 0)
+				return (f_error());
+			dup2(data->infile, STDIN_FILENO);
+			close(data->infile);
+		}
+		if (cmd->scmd[pos]->out_f)
+		{
+			if (cmd->scmd[pos]->append)
+				data->outfile = open(cmd->scmd[pos]->out_f,
+					O_WRONLY | O_CREAT | O_APPEND, 0644);
+			else
+				data->outfile = open(cmd->scmd[pos]->out_f,
+					O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			if (data->outfile < 0)
+				return (f_error());
+			dup2(data->outfile, STDOUT_FILENO);
+			close(data->outfile);
+		}
+}
 int	run_child2(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 {
 	if (data->n_cmds == 1)
@@ -157,8 +220,12 @@ int	run_child2(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 	}
 	dup2(data->pip[R], STDIN_FILENO);
 	dup2(data->pip[W], STDOUT_FILENO);
-	close(data->pip[R]);
-	close(data->pip[W]);
+	if (data->cmd_counter == 1)
+	{
+		
+		close(data->pip[R]);
+		close(data->pip[W]);
+	}
 	if (is_parent_exec(data->cmd[0]))
 		run_parent(cmd, &data, pos, old_cwd);
 	else
