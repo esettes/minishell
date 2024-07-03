@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/06/20 01:54:14 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/07/03 22:07:18 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,8 +113,10 @@ int	exec_cmd(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 		if (echo_handler(*cmd->scmd[pos]))
 			return (EXIT_FAILURE);
 	else if (ft_strncmp(*cmd->scmd[pos]->args, "exit", sizeof("exit")) == 0)
+	{
 		if (exit_handler(cmd, *p_data))
 			return (EXIT_FAILURE);
+	}
 	else
 		exec_process(*p_data, *cmd->scmd[pos]->args);
 	return (EXIT_SUCCESS);
@@ -135,27 +137,82 @@ void	redirect(t_pipe *data, int pos)
 int	run_single_cmd(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 {
 	if (cmd->scmd[pos]->in_f)
-		{
-			data->infile = open(cmd->scmd[pos]->in_f, O_RDONLY, 0644);
-			if (data->infile < 0)
-				return (f_error());
-			dup2(data->infile, STDIN_FILENO);
-			close(data->infile);
-		}
-		if (cmd->scmd[pos]->out_f)
-		{
-			if (cmd->scmd[pos]->append)
-				data->outfile = open(cmd->scmd[pos]->out_f,
-					O_WRONLY | O_CREAT | O_APPEND, 0644);
-			else
-				data->outfile = open(cmd->scmd[pos]->out_f,
-					O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			if (data->outfile < 0)
-				return (f_error());
-			dup2(data->outfile, STDOUT_FILENO);
-			close(data->outfile);
-		}
+	{
+		data->infile = open(cmd->scmd[pos]->in_f, O_RDONLY, 0644);
+		if (data->infile < 0)
+			return (f_error());
+		dup2(data->infile, STDIN_FILENO);
+		close(data->infile);
+		data->infile = 0;
+	}
+	if (cmd->scmd[pos]->out_f)
+	{
+		if (cmd->scmd[pos]->append)
+			data->outfile = open(cmd->scmd[pos]->out_f,
+				O_WRONLY | O_CREAT | O_APPEND, 0644);
+		else
+			data->outfile = open(cmd->scmd[pos]->out_f,
+				O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (data->outfile < 0)
+			return (f_error());
+		dup2(data->outfile, STDOUT_FILENO);
+		close(data->outfile);
+		data->outfile = 0;
+	}
 }
+
+void close_fds(t_pipe *data)
+{
+	if (data->infile)
+	{
+		close(data->infile);
+		data->infile = 0;
+	}
+	if (data->outfile)
+	{
+		close(data->outfile);
+		data->outfile = 0;
+	}
+}
+
+int	run_multiple_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
+{
+	int	i;
+
+	i = -1;
+	while (++i < data->cmd_counter)
+	{
+		if (i !=data->cmd_counter - 1)
+		{
+			if (pipe(data->pip) < 0)
+				return (f_error());
+		}
+		data->pid = fork();
+		if (data->pid == 0)
+		{
+			redirect(data, i);
+			if (exec_cmd(cmd, &data, i, old_cwd))
+				return (EXIT_FAILURE);
+			close(data->std_[R]);
+			close(data->std_[W]);
+			close(data->pip[0]);
+			close(data->pip[1]);
+			exit(WEXITSTATUS(0));
+		}
+		else
+		{
+			if ( i != 0)
+				close(data->old_fd);
+			if (i != data->cmd_counter - 1)
+			{
+				close(data->pip[1]);
+				data->old_fd = data->pip[0];
+			}
+		}
+		close_fds(data);
+}
+
+
 int	run_child2(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 {
 	if (data->n_cmds == 1)
