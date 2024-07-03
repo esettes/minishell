@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/07/03 22:07:18 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/07/03 22:50:10 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,8 @@ int	exec_process(t_pipe *data, char **cmd)
 		g_signal = 2;
 		return (2);
 	}
-	dprintf(1, "before execve!\n");
 	if (execve(path, cmd, data->envp_minish) < 0)
 		return (f_error());
-	dprintf(1, "after execve!\n");
 	if (data->n_cmds == 1)
 	{
 		close(data->std_[R]);
@@ -96,29 +94,39 @@ int	run_child(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 int	exec_cmd(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 {
 	if (f_strncmp(*cmd->scmd[pos]->args, "cd", sizeof("cd")) == 0)
+	{
 		if (exec_cd(*p_data, cmd, pos))
 			return (f_error());
+	}
 	else if (f_strncmp(*cmd->scmd[pos]->args, "pwd", sizeof("pwd")) == 0)
 		pwd_handler(old_cwd);
 	else if (f_strncmp(*cmd->scmd[pos]->args, "env", sizeof("env")) == 0)
+	{	
 		if (exec_env(*p_data))
 			return (EXIT_FAILURE);
+	}
 	else if (f_strncmp(*cmd->scmd[pos]->args, "export", sizeof("export")) == 0)
+	{
 		if (exec_export(*p_data, cmd, pos))
 			return (EXIT_FAILURE);
+	}
 	else if (f_strncmp(*cmd->scmd[pos]->args, "unset", sizeof("unset")) == 0)
+	{
 		if (exec_unset(cmd, *p_data, pos))
 			return (EXIT_FAILURE);
+	}
 	else if (ft_strncmp(*cmd->scmd[pos]->args, "echo", sizeof("echo")) == 0)
+	{
 		if (echo_handler(*cmd->scmd[pos]))
 			return (EXIT_FAILURE);
+	}
 	else if (ft_strncmp(*cmd->scmd[pos]->args, "exit", sizeof("exit")) == 0)
 	{
 		if (exit_handler(cmd, *p_data))
 			return (EXIT_FAILURE);
 	}
 	else
-		exec_process(*p_data, *cmd->scmd[pos]->args);
+		exec_process(*p_data, cmd->scmd[pos]->args);
 	return (EXIT_SUCCESS);
 }
 
@@ -159,6 +167,7 @@ int	run_single_cmd(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 		close(data->outfile);
 		data->outfile = 0;
 	}
+	exec_cmd(cmd, &data, pos, old_cwd);
 }
 
 void close_fds(t_pipe *data)
@@ -210,6 +219,9 @@ int	run_multiple_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
 			}
 		}
 		close_fds(data);
+	}
+	data->old_fd = 0;
+	return (EXIT_SUCCESS);
 }
 
 

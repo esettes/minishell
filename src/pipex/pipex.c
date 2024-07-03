@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:23 by iostancu          #+#    #+#             */
-/*   Updated: 2024/07/03 21:44:46 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/07/03 22:50:24 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,65 +18,25 @@ int		open_file(t_cmd *cmd, t_pipe *data, int pos);
 
 int	f_pipex(t_pipe *p_data, t_cmd *cmd, char *old_cwd)
 {
-	int	n_cmds;
-	int	i;
 	int status;
 
-	//i = -1;
-	i = 0;
 	status = 0;
-	n_cmds = cmd->n_scmd;
-	dprintf(1, "cmd->n_scmd: %i\n", cmd->n_scmd);
-	p_data->cmd_counter = n_cmds;
+	p_data->cmd_counter = cmd->n_scmd;
+	if (p_data->cmd_counter <= 0)
+		print_err_msg(NULL, NULL, "syntax error near unexpected token.");
 	manage_signactions(MODE_CHILD);
 	p_data->std_[0] = dup(STDIN_FILENO);
 	p_data->std_[1] = dup(STDOUT_FILENO);
-	dprintf(1, "n_cmds befoore while: %i\n",n_cmds);
-	dprintf(1, "cmd_counter before while: %i\n", p_data->cmd_counter);
-	while (p_data->cmd_counter > 0)
+
+	if (p_data->cmd_counter == 1)
+		run_single_cmd(p_data, cmd, 0, old_cwd);
+	else
+		run_multiple_cmd(p_data, cmd, old_cwd);
+
+	waitpid(p_data->pid, &status, 0);
+	if (WIFEXITED(status))
 	{
-		if (p_data->cmd_counter == 1)
-		{
-			p_data->last_cmd = cmd->scmd[i]->args;
-			p_data->cmd = p_data->last_cmd;
-		}
-		else
-			p_data->cmd = cmd->scmd[i]->args;
-		p_data->cmd = cmd->scmd[i]->args;
-		if (p_data->cmd_counter % 2 == 0)
-		{
-			if (process_loop(cmd, &p_data, i, old_cwd))
-				return (EXIT_FAILURE);
-		}
-		else
-		{
-			if (run_last_process(cmd, &p_data, i, old_cwd))
-				return (EXIT_FAILURE);
-		}
-		p_data->cmd_counter--;
-		i++;
-	}
-	// while (n_cmds-- != 1)
-	// {
-	// 	dprintf(1, "n_cmds after while: %i\n", n_cmds);
-	// 	dprintf(1, "cmd_counter after while: %i\n", p_data->cmd_counter);
-	// 	p_data->cmd = cmd->scmd[++i]->args;
-	// 	if (process_loop(cmd, &p_data, i, old_cwd))
-	// 		return (EXIT_FAILURE);
-	// 	p_data->cmd_counter--;
-	// }
-	// p_data->last_cmd = cmd->scmd[++i]->args;
-	// p_data->cmd = p_data->last_cmd;
-	// if (run_last_process(cmd, &p_data, i, old_cwd))
-	// 	return (EXIT_FAILURE);
-	n_cmds = cmd->n_scmd;
-	if (!is_parent_exec(p_data->last_cmd[0]))
-	{
-		waitpid(p_data->pid2, &status, 0);
-		if (WIFEXITED(status))
-		{
-			g_signal = WEXITSTATUS(status);
-		}
+		g_signal = WEXITSTATUS(status);
 	}
 	dup2(p_data->std_[STDIN_FILENO], STDIN_FILENO);
 	close(p_data->std_[STDIN_FILENO]);
