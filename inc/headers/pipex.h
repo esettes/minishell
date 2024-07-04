@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:09:44 by iostancu          #+#    #+#             */
-/*   Updated: 2024/07/03 22:28:00 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/07/04 22:42:03 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct s_pipe
 	int		cmd_counter;
 	int		previous_out;
 	int		old_fd;
+	int		status;
 }	t_pipe;
 
 # define COLORED 1
@@ -56,7 +57,7 @@ typedef struct s_pipe
 #  define RESET_  ""
 # endif
 
-int		f_error(void);
+int		f_error(t_pipe *data);
 /**
  * @brief Redirects the file descriptor oldfd to newfd.
  * 
@@ -71,7 +72,7 @@ int		cmd_have_path(char *cmd);
 int		cmd_have_current_path(char *cmd);
 char	*get_path(char *cmd, char *path_envp);
 void	free_split(char **s);
-int		f_pipex(t_pipe *p_data, t_cmd *cmd, char *old_cwd);
+int		run_executer(t_pipe *p_data, t_cmd *cmd, char *old_cwd);
 void	ft_putstrc_fd(char *color, char *s, int fd);
 char	*f_strdup(const char *s1);
 int		f_strncmp(const char *s1, const char *s2, size_t n);

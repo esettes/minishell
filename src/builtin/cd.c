@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 18:43:21 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/11 15:48:13 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/07/04 22:42:17 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	exec_cd(t_pipe *data, t_cmd *cmd, int pos)
 		return (EXIT_SUCCESS);
 	}
 	if (chdir(cd.dir_to_exec) < 0)
-		return (f_error());
+		return (f_error(data));
 	if (cd.is_hyphen)
 		printf("%s\n", cd.last_dir);
 	change_and_create_env_var(&data, cd.curr_dir);

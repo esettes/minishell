@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:06:11 by iostancu          #+#    #+#             */
-/*   Updated: 2024/06/06 21:11:17 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/07/04 21:04:59 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	core_shell(char **envp)
 		cmd = parser(b.buffer, p_data->envp_minish);
 		if (cmd == NULL)
 			continue ;
-		f_pipex(p_data, cmd, prompt->old_cwd);
+		run_executer(p_data, cmd, prompt->old_cwd);
 		reset_minishell(&b, &cmd);
 	}
 	free_all(cmd, p_data, &b, prompt);

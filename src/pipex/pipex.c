@@ -6,17 +6,15 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:23 by iostancu          #+#    #+#             */
-/*   Updated: 2024/07/03 22:50:24 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/07/04 22:42:31 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-int		process_loop(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd);
-int		run_last_process(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd);
 int		open_file(t_cmd *cmd, t_pipe *data, int pos);
 
-int	f_pipex(t_pipe *p_data, t_cmd *cmd, char *old_cwd)
+int	run_executer(t_pipe *p_data, t_cmd *cmd, char *old_cwd)
 {
 	int status;
 
@@ -31,13 +29,15 @@ int	f_pipex(t_pipe *p_data, t_cmd *cmd, char *old_cwd)
 	if (p_data->cmd_counter == 1)
 		run_single_cmd(p_data, cmd, 0, old_cwd);
 	else
-		run_multiple_cmd(p_data, cmd, old_cwd);
-
-	waitpid(p_data->pid, &status, 0);
-	if (WIFEXITED(status))
 	{
-		g_signal = WEXITSTATUS(status);
+		run_multiple_cmd(p_data, cmd, old_cwd);
+		waitpid(p_data->pid, &status, 0);
+		if (WIFEXITED(status))
+		{
+			g_signal = WEXITSTATUS(status);
+		}
 	}
+	
 	dup2(p_data->std_[STDIN_FILENO], STDIN_FILENO);
 	close(p_data->std_[STDIN_FILENO]);
 	dup2(p_data->std_[STDOUT_FILENO], STDOUT_FILENO);
@@ -52,41 +52,15 @@ int	f_pipex(t_pipe *p_data, t_cmd *cmd, char *old_cwd)
 	{
 		print_err_msg(p_data->last_cmd[0], p_data->last_cmd[1], strerror(g_signal));
 	}
-	// while (n_cmds--)
-	// 	wait(NULL);
 	return (EXIT_SUCCESS);
 }
 
-int	*get_previous_cmd_fd(t_cmd **cmd, t_pipe pipe)
-{
-	int		fd[2];
-	t_cmd	**tmp;
-	t_cmd	*aux;
-	
-	tmp = cmd;
-	//get the previous element of the list **cmd
-	
-	
-}
 
 int	run_parent(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 {
-	// if ((*p_data)->n_cmds == 1)
-	// {
-	// 	if ((*p_data)->infile)
-	// 	{
-	// 		dup2((*p_data)->infile, STDIN_FILENO);
-	// 		close((*p_data)->infile);
-	// 	}
-	// 	if ((*p_data)->outfile)
-	// 	{
-	// 		dup2((*p_data)->outfile, STDOUT_FILENO);
-	// 		close((*p_data)->outfile);
-	// 	}
-	// }
 	if (f_strncmp(*cmd->scmd[pos]->args, "cd", sizeof("cd")) == 0)
 		if (exec_cd(*p_data, cmd, pos))
-			return (f_error());
+			return (f_error(*p_data));
 	if (f_strncmp(*cmd->scmd[pos]->args, "pwd", sizeof("pwd")) == 0)
 		pwd_handler(old_cwd);
 	if (f_strncmp(*cmd->scmd[pos]->args, "env", sizeof("env")) == 0)
@@ -118,68 +92,4 @@ int	is_parent_exec(char *str)
 		|| (ft_strncmp(str, "exit", sizeof("exit")) == 0))
 		return (1);
 	return (0);
-}
-
-int	process_loop(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
-{
-	if (pipe((*p_data)->pip) < 0)
-		return (f_error());
-	// if (open_file(cmd, *p_data, pos))
-	// 	return (EXIT_FAILURE);
-	(*p_data)->pid = fork();
-	if ((*p_data)->pid < 0)
-		return (f_error());
-	
-	if ((*p_data)->pid == 0)
-	{
-		if (run_child(*p_data, cmd, pos, old_cwd))
-			return (EXIT_FAILURE);
-	}
-	else
-	{
-		if (pos != 0)
-			close((*p_data)->old_fd);
-		close((*p_data)->pip[W]);
-		//close ((*p_data)->pip[R]);
-		(*p_data)->old_fd = (*p_data)->pip[R];
-	}
-	
-	return (EXIT_SUCCESS);
-}
-
-int	run_last_process(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
-{
-	// if (open_file(cmd, *p_data, pos))
-	// 	return (EXIT_FAILURE);
-	if ((cmd->n_scmd > 1)
-		|| ((ft_strncmp("cd", (*p_data)->last_cmd[0], sizeof("cd")) != 0
-		&& ft_strncmp("exit", (*p_data)->last_cmd[0], sizeof("exit")) != 0
-		&& ft_strncmp("echo", (*p_data)->last_cmd[0], sizeof("echo")) != 0
-		&& ft_strncmp("export", (*p_data)->last_cmd[0], sizeof("export")) != 0
-		&& ft_strncmp("unset", (*p_data)->last_cmd[0], sizeof("unset")) != 0
-		&& ft_strncmp("env", (*p_data)->last_cmd[0], sizeof("env")) != 0)))
-	{
-		(*p_data)->pid2 = fork();
-		if ((*p_data)->pid2 < 0)
-			return (f_error());
-		if ((*p_data)->pid2 == 0)
-			if (run_child2(*p_data, cmd, pos, old_cwd))
-				return (EXIT_FAILURE);
-	}
-	else
-		if (run_parent(cmd, p_data, pos, old_cwd))
-			return (EXIT_FAILURE);
-	// if ((*p_data)->n_cmds > 1)
-	// 	{
-	// 		dprintf(1, "father closing only multiple commands that must be closed by child!\n");
-	// 		close((*p_data)->std_[R]);
-	// 		close((*p_data)->std_[W]);
-			close((*p_data)->pip[R]);
-	// 		close((*p_data)->pip[W]);
-	// 	}
-	// close((*p_data)->pip[R]);
-	// close((*p_data)->pip[W]);
-	close_files(&(*p_data)->infile, &(*p_data)->outfile);
-	//sleep(7);
-	return (EXIT_SUCCESS);
 }

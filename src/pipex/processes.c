@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/07/03 22:50:10 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/07/04 22:43:06 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	exec_process(t_pipe *data, char **cmd)
 	{
 		path = f_strdup(cmd[0]);
 		if (execve(path, cmd, data->envp_minish) < 0)
-			return (f_error());
+			return (f_error(data));
 		return (EXIT_SUCCESS);
 	}
 	path = get_path(cmd[0], get_env_var_value(data->envp_minish, "PATH"));
@@ -31,7 +31,7 @@ int	exec_process(t_pipe *data, char **cmd)
 		return (2);
 	}
 	if (execve(path, cmd, data->envp_minish) < 0)
-		return (f_error());
+		return (f_error(data));
 	if (data->n_cmds == 1)
 	{
 		close(data->std_[R]);
@@ -52,7 +52,7 @@ int	run_child(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 			data->outfile = open(cmd->scmd[pos]->out_f,
 				O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (data->outfile < 0)
-			return (f_error());
+			return (f_error(data));
 		dup2(data->outfile, STDOUT_FILENO);
 		close(data->outfile);
 		data->pip[W] = data->outfile;
@@ -73,7 +73,7 @@ int	run_child(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 	{
 		data->infile = open(cmd->scmd[pos]->in_f, O_RDONLY, 0644);
 		if (data->infile < 0)
-			return (f_error());
+			return (f_error(data));
 		dup2(data->infile, STDIN_FILENO);
 		close(data->infile);
 	}
@@ -96,7 +96,7 @@ int	exec_cmd(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 	if (f_strncmp(*cmd->scmd[pos]->args, "cd", sizeof("cd")) == 0)
 	{
 		if (exec_cd(*p_data, cmd, pos))
-			return (f_error());
+			return (f_error(*p_data));
 	}
 	else if (f_strncmp(*cmd->scmd[pos]->args, "pwd", sizeof("pwd")) == 0)
 		pwd_handler(old_cwd);
@@ -148,7 +148,7 @@ int	run_single_cmd(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 	{
 		data->infile = open(cmd->scmd[pos]->in_f, O_RDONLY, 0644);
 		if (data->infile < 0)
-			return (f_error());
+			return (f_error(data));
 		dup2(data->infile, STDIN_FILENO);
 		close(data->infile);
 		data->infile = 0;
@@ -162,7 +162,7 @@ int	run_single_cmd(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 			data->outfile = open(cmd->scmd[pos]->out_f,
 				O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (data->outfile < 0)
-			return (f_error());
+			return (f_error(data));
 		dup2(data->outfile, STDOUT_FILENO);
 		close(data->outfile);
 		data->outfile = 0;
@@ -194,7 +194,7 @@ int	run_multiple_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
 		if (i !=data->cmd_counter - 1)
 		{
 			if (pipe(data->pip) < 0)
-				return (f_error());
+				return (f_error(data));
 		}
 		data->pid = fork();
 		if (data->pid == 0)
@@ -233,7 +233,7 @@ int	run_child2(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 		{
 			data->infile = open(cmd->scmd[pos]->in_f, O_RDONLY, 0644);
 			if (data->infile < 0)
-				return (f_error());
+				return (f_error(data));
 			dup2(data->infile, STDIN_FILENO);
 			close(data->infile);
 		}
@@ -246,7 +246,7 @@ int	run_child2(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 				data->outfile = open(cmd->scmd[pos]->out_f,
 					O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			if (data->outfile < 0)
-				return (f_error());
+				return (f_error(data));
 			dup2(data->outfile, STDOUT_FILENO);
 			close(data->outfile);
 		}
@@ -262,7 +262,7 @@ int	run_child2(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 				data->outfile = open(cmd->scmd[pos]->out_f,
 					O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			if (data->outfile < 0)
-				return (f_error());
+				return (f_error(data));
 			dup2(data->outfile, STDOUT_FILENO);
 			close(data->outfile);
 		}
@@ -282,7 +282,7 @@ int	run_child2(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 		{
 			data->infile = open(cmd->scmd[pos]->in_f, O_RDONLY, 0644);
 			if (data->infile < 0)
-				return (f_error());
+				return (f_error(data));
 			dup2(data->infile, STDIN_FILENO);
 			close(data->infile);
 		}
