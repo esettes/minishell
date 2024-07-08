@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils_3.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:07:23 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/11 15:51:28 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/07/08 16:44:40 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ char	*get_env_var_value(char **envp_minish, char *var)
 	char	*env_var;
 
 	i = 0;
+	if (!envp_minish || !*envp_minish)
+		return (NULL);
 	while (envp_minish[i])
 	{
 		env_var = get_env_variable(envp_minish[i]);

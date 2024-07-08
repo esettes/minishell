@@ -6,15 +6,15 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/07/08 07:10:04 by settes           ###   ########.fr       */
+/*   Updated: 2024/07/08 16:48:34 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-int	exec_process(t_pipe *data, char **cmd)
+int exec_process(t_pipe *data, char **cmd)
 {
-	char	*path;
+	char *path;
 
 	if (cmd_have_path(cmd[0]))
 	{
@@ -41,7 +41,7 @@ int	exec_process(t_pipe *data, char **cmd)
 	return (EXIT_SUCCESS);
 }
 
-int	exec_cmd(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
+int exec_cmd(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 {
 	if (f_strncmp(*cmd->scmd[pos]->args, "cd", sizeof("cd")) == 0)
 	{
@@ -51,7 +51,7 @@ int	exec_cmd(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 	else if (f_strncmp(*cmd->scmd[pos]->args, "pwd", sizeof("pwd")) == 0)
 		pwd_handler(old_cwd);
 	else if (f_strncmp(*cmd->scmd[pos]->args, "env", sizeof("env")) == 0)
-	{	
+	{
 		if (exec_env(*p_data))
 			return (EXIT_FAILURE);
 	}
@@ -80,7 +80,7 @@ int	exec_cmd(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 	return (EXIT_SUCCESS);
 }
 
-void	redirect(t_pipe *data, int pos)
+void redirect(t_pipe *data, int pos)
 {
 	if (data->infile)
 		(dup2(data->infile, STDIN_FILENO), close(data->infile));
@@ -92,7 +92,7 @@ void	redirect(t_pipe *data, int pos)
 		(close(data->pip[0]), dup2(data->pip[1], 1), close(data->pip[1]));
 }
 
-int	run_single_cmd(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
+int run_single_cmd(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 {
 	if (cmd->scmd[pos]->in_f)
 	{
@@ -107,10 +107,10 @@ int	run_single_cmd(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 	{
 		if (cmd->scmd[pos]->append)
 			data->outfile = open(cmd->scmd[pos]->out_f,
-				O_WRONLY | O_CREAT | O_APPEND, 0644);
+								 O_WRONLY | O_CREAT | O_APPEND, 0644);
 		else
 			data->outfile = open(cmd->scmd[pos]->out_f,
-				O_WRONLY | O_CREAT | O_TRUNC, 0644);
+								 O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (data->outfile < 0)
 			return (f_error(data));
 		dup2(data->outfile, STDOUT_FILENO);
@@ -119,11 +119,11 @@ int	run_single_cmd(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
 	}
 	// if (!is_parent_exec(cmd->scmd[pos]->args[0]))
 	// {
-		data->pid = fork();
-		if (data->pid < 0)
-			return (f_error(data));
-		if (data->pid == 0)
-			data->status = exec_cmd(cmd, &data, pos, old_cwd);
+	data->pid = fork();
+	if (data->pid < 0)
+		return (f_error(data));
+	if (data->pid == 0)
+		data->status = exec_cmd(cmd, &data, pos, old_cwd);
 	// }
 	// else
 	// 	run_parent(cmd, &data, 0, old_cwd);
@@ -145,15 +145,15 @@ void close_fds(t_pipe *data)
 	}
 }
 
-int	run_multiple_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
+int run_multiple_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
 {
-	int	i;
+	int i;
 
 	i = -1;
 	while (++i < data->cmd_counter)
 	{
 		open_file(cmd, data, i);
-		if (i !=data->cmd_counter - 1)
+		if (i != data->cmd_counter - 1)
 		{
 			if (pipe(data->pip) < 0)
 				return (f_error(data));
@@ -172,7 +172,7 @@ int	run_multiple_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
 		}
 		else
 		{
-			if ( i != 0)
+			if (i != 0)
 				close(data->old_fd);
 			if (i != data->cmd_counter - 1)
 			{

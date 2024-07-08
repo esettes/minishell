@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:09:44 by iostancu          #+#    #+#             */
-/*   Updated: 2024/07/04 22:42:03 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/07/08 16:49:26 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ size_t	f_strlen(const char *s);
 char	**f_split(char const *s, char c);
 char	*f_strjoin(char const *s1, char const *s2);
 int		f_strict_strncmp(const char *s1, const char *s2, size_t n);
+void	create_simple_envp(t_pipe *data);
 
 int		is_parent_exec(char *str);
 int		run_parent(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd);

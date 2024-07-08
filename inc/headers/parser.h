@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 19:04:03 by uliherre          #+#    #+#             */
-/*   Updated: 2024/05/06 20:49:52 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/07/08 16:48:02 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,12 @@ char		*get_env_value(char *var_env, char **envp);
 int			validator_tony(t_token *token);
 
 //Yacc
-t_cmd	*yacc_tony(t_cmd *cmd, t_token_lst **token_lst, char **envp);
+t_cmd		*yacc_tony(t_cmd *cmd, t_token_lst **token_lst, char **envp);
 int			count_cmd(t_token_lst *token_lst);
 int			count_scmd_args(t_token_lst *token_lst);
 void		free_scmd_tony(t_cmd *cmd);
 void		free_cmd_tony(t_cmd *cmd);
+void		open_file_parse(t_scmd *scmd);
 
 //Heredoc
 int	heredoc_init(t_scmd *scmd, t_token_lst **token_lst, char **envp);

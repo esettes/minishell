@@ -3,44 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 18:43:21 by iostancu          #+#    #+#             */
-/*   Updated: 2024/07/04 22:42:17 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/07/08 16:44:24 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static t_cd	init_cd(t_pipe *data);
+static t_cd	init_cd(t_pipe *data, t_cmd *cmd, int pos);
 static void	change_and_create_env_var(t_pipe **data, char *curr_dir);
 static void	is_home_directory(t_cmd *cmd, t_cd *cd);
 static char	*set_home_directory(t_pipe *data);
+
+static void	error_case(t_cd *cd, const char *cmd, const char *var)
+{
+	free(cd->curr_dir);
+	print_env_not_set("cd", "OLDPWD");
+}
 
 int	exec_cd(t_pipe *data, t_cmd *cmd, int pos)
 {
 	t_cd	cd;
 
-	cd = init_cd(data);
-	cd.dir_to_exec = cmd->scmd[pos]->args[1];
+	cd = init_cd(data, cmd, pos);
 	is_home_directory(cmd, &cd);
 	if (cd.dir_to_exec && f_strncmp(cd.dir_to_exec, "-", 1) == 0)
 	{
 		cd.is_hyphen = 1;
 		if (!cd.last_dir)
-		{
-			print_env_not_set("cd", "OLDPWD");
-			return (EXIT_SUCCESS);
-		}
+			return (error_case(&cd, "cd", "OLDPWD"), EXIT_SUCCESS);
 		cd.dir_to_exec = cd.last_dir;
 	}
 	if (cd.is_home)
-		cd.dir_to_exec = set_home_directory(data);
+		cd.dir_to_exec = get_env_var_value(data->envp_minish, "HOME");
 	if (cd.is_home && (!env_var_already_exist(data->envp_minish, "HOME=")))
-	{
-		print_env_not_set("cd", "HOME");
-		return (EXIT_SUCCESS);
-	}
+		return (error_case(&cd, "cd", "HOME"), EXIT_SUCCESS);
 	if (chdir(cd.dir_to_exec) < 0)
 		return (f_error(data));
 	if (cd.is_hyphen)
@@ -75,12 +74,7 @@ static void	is_home_directory(t_cmd *cmd, t_cd *cd)
 		cd->is_home = 1;
 }
 
-static char	*set_home_directory(t_pipe *data)
-{
-	return (get_env_var_value(data->envp_minish, "HOME"));
-}
-
-static t_cd	init_cd(t_pipe *data)
+static t_cd	init_cd(t_pipe *data, t_cmd *cmd, int pos)
 {
 	t_cd	cd;
 
@@ -88,6 +82,6 @@ static t_cd	init_cd(t_pipe *data)
 	cd.curr_dir = getcwd(NULL, 0);
 	cd.is_hyphen = 0;
 	cd.is_home = 0;
-	cd.dir_to_exec = NULL;
+	cd.dir_to_exec = cmd->scmd[pos]->args[1];
 	return (cd);
 }
