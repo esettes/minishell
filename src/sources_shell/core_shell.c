@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   core_shell.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:06:11 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/13 21:37:47 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/07/08 16:51:48 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	core_shell(char **envp)
 		cmd = parser(b.buffer, p_data->envp_minish);
 		if (cmd == NULL)
 			continue ;
-		f_pipex(p_data, cmd, prompt->old_cwd);
+		run_executer(p_data, cmd, prompt->old_cwd);
 		reset_minishell(&b, &cmd);
 	}
 	free_all(cmd, p_data, &b, prompt);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:07:46 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/11 15:36:03 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/07/08 16:47:40 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ typedef struct s_unset
 }	t_unset;
 
 int		echo_handler(t_scmd scmd);
-int		exit_handler(t_cmd *cmd);
+int		exit_handler(t_cmd *cmd, t_pipe *data);
 char	*ft_getenv(char **envp, char *var_name);
 int		exec_cd(t_pipe *data, t_cmd *cmd, int pos);
 int		exec_env(t_pipe *data);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:09:44 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/14 20:43:44 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/07/08 16:49:26 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,12 @@ typedef struct s_pipe
 	char	**envp_minish;
 	int		infile;
 	int		outfile;
-	int		stdout_cpy;
+	int		std_[2];
+	int		n_cmds;
+	int		cmd_counter;
+	int		previous_out;
+	int		old_fd;
+	int		status;
 }	t_pipe;
 
 # define COLORED 1
@@ -52,7 +57,7 @@ typedef struct s_pipe
 #  define RESET_  ""
 # endif
 
-int		f_error(void);
+int		f_error(t_pipe *data);
 /**
  * @brief Redirects the file descriptor oldfd to newfd.
  * 
@@ -67,7 +72,7 @@ int		cmd_have_path(char *cmd);
 int		cmd_have_current_path(char *cmd);
 char	*get_path(char *cmd, char *path_envp);
 void	free_split(char **s);
-int		f_pipex(t_pipe *p_data, t_cmd *cmd, char *old_cwd);
+int		run_executer(t_pipe *p_data, t_cmd *cmd, char *old_cwd);
 void	ft_putstrc_fd(char *color, char *s, int fd);
 char	*f_strdup(const char *s1);
 int		f_strncmp(const char *s1, const char *s2, size_t n);
@@ -92,5 +97,9 @@ char	**free_memory(const char **arr, size_t pos);
 int		open_file(t_cmd *cmd, t_pipe *data, int pos);
 void	close_files(int *infile, int *outfile);
 int		dup_files(int *infile, int *outfile);
+
+int		run_single_cmd(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd);
+int	run_multiple_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd);
+void	close_fds(t_pipe *data);
 
 #endif
