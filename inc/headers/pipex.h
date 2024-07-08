@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:09:44 by iostancu          #+#    #+#             */
-/*   Updated: 2024/03/13 23:03:29 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/07/04 22:42:03 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,12 @@ typedef struct s_pipe
 	char	**envp_minish;
 	int		infile;
 	int		outfile;
-	int		stdout_cpy;
+	int		std_[2];
+	int		n_cmds;
+	int		cmd_counter;
+	int		previous_out;
+	int		old_fd;
+	int		status;
 }	t_pipe;
 
 # define COLORED 1
@@ -52,7 +57,7 @@ typedef struct s_pipe
 #  define RESET_  ""
 # endif
 
-int		f_error(void);
+int		f_error(t_pipe *data);
 /**
  * @brief Redirects the file descriptor oldfd to newfd.
  * 
@@ -60,14 +65,14 @@ int		f_error(void);
  * @param newfd
  */
 int		duplicate_fd(int oldfd, int newfd);
-int		exec_process(char **cmd, char *envp[], char *path_envp);
-int		run_child(t_pipe *data, t_cmd *cmd, char *envp[], int pos);
-int		run_child2(t_pipe *data, t_cmd *cmd, char *envp[], int pos);
+int		exec_process(t_pipe *data, char **cmd);
+int		run_child(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd);
+int		run_child2(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd);
 int		cmd_have_path(char *cmd);
 int		cmd_have_current_path(char *cmd);
 char	*get_path(char *cmd, char *path_envp);
 void	free_split(char **s);
-int		f_pipex(t_pipe *p_data, t_cmd *cmd, char *envp[]);
+int		run_executer(t_pipe *p_data, t_cmd *cmd, char *old_cwd);
 void	ft_putstrc_fd(char *color, char *s, int fd);
 char	*f_strdup(const char *s1);
 int		f_strncmp(const char *s1, const char *s2, size_t n);
@@ -77,19 +82,8 @@ char	*f_strjoin(char const *s1, char const *s2);
 int		f_strict_strncmp(const char *s1, const char *s2, size_t n);
 
 int		is_parent_exec(char *str);
-int		run_parent(t_cmd *cmd, t_pipe **p_data, int pos);
+int		run_parent(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd);
 t_pipe	*init_pipe_struct(char *envp[]);
-/**
- * Fills the first n bytes of the memory area pointed to by 'b' with 
- * the constant byte c.
- * 
- * @param[in] b Pointer to memory to fill.
- * @param[in] c Byte to fill with.
- * @param[in] len Number of bytes to fill.
- */
-void	*f_memset(void *b, int c, size_t len);
-void	*f_memmove(void *dst, const void *src, size_t len);
-void	f_bzero(void *s, size_t n);
 /**
  * @brief Frees all the strings allocated in the double ptr, and then frees
  * the double ptr.
@@ -102,5 +96,9 @@ char	**free_memory(const char **arr, size_t pos);
 int		open_file(t_cmd *cmd, t_pipe *data, int pos);
 void	close_files(int *infile, int *outfile);
 int		dup_files(int *infile, int *outfile);
+
+int		run_single_cmd(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd);
+int	run_multiple_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd);
+void	close_fds(t_pipe *data);
 
 #endif

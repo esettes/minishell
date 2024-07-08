@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isprint.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uliherre <uliherre@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antosanc <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/06 15:44:36 by uherrero          #+#    #+#             */
-/*   Updated: 2022/06/16 19:41:12 by uliherre         ###   ########.fr       */
+/*   Created: 2023/09/11 18:34:03 by antosanc          #+#    #+#             */
+/*   Updated: 2023/09/11 18:39:46 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_isprint(int c)
 {
-	if ((unsigned) c - 32 < 95)
-		return (TRUE);
-	return (FALSE);
+	if (c >= ' ' && c <= '~')
+		return (1);
+	return (0);
 }

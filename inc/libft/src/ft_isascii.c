@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isascii.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uliherre <uliherre@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antosanc <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/06 11:36:57 by uherrero          #+#    #+#             */
-/*   Updated: 2022/06/16 19:40:54 by uliherre         ###   ########.fr       */
+/*   Created: 2023/09/11 18:16:20 by antosanc          #+#    #+#             */
+/*   Updated: 2023/09/11 18:29:33 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_isascii(int c)
 {
-	if ((unsigned) c < 128)
-		return (TRUE);
-	return (FALSE);
+	if (c >= 0 && c <= 127)
+		return (1);
+	return (0);
 }

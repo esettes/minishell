@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uliherre <uliherre@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antosanc <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/11 18:14:30 by uherrero          #+#    #+#             */
-/*   Updated: 2022/07/04 16:07:57 by uliherre         ###   ########.fr       */
+/*   Created: 2023/09/29 14:48:04 by antosanc          #+#    #+#             */
+/*   Updated: 2023/09/29 14:48:06 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,26 @@
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	register char const	*sub_start;
-	register char		*new;
-	register size_t		size;
+	char	*array;
+	size_t	i;
+	size_t	slen;
 
-	if (NULL == s)
-		return (NULL);
-	if ('\0' == *s || start > ft_strlen(s))
+	i = 0;
+	if (!s)
+		return (0);
+	if (start >= ft_strlen(s))
 		return (ft_strdup(""));
-	s += start;
-	sub_start = s;
-	size = ZERO;
-	while ('\0' != *(s++) && ZERO != len--)
-		size++;
-	new = (char *) ft_calloc(++size, sizeof(char));
-	if (NULL != new)
-		ft_strlcpy(new, sub_start, size);
-	return (new);
+	slen = ft_strlen(s + start);
+	if (slen < len)
+		len = slen;
+	array = (char *)malloc(len + 1);
+	if (array == 0)
+		return (0);
+	while (i < len && s[i])
+	{
+		array[i] = s[i + start];
+		i++;
+	}
+	array[i] = '\0';
+	return (array);
 }

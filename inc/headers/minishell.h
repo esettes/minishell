@@ -3,43 +3,48 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/21 19:03:59 by uliherre          #+#    #+#             */
-/*   Updated: 2024/03/13 23:08:05 by iostancu         ###   ########.fr       */
+/*   Created: 2023/10/21 19:03:59 by iostancu          #+#    #+#             */
+/*   Updated: 2024/05/11 14:09:17 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <stdio.h>			/* Para printf */
-# include <stdlib.h>		/* Para malloc, free */
-# include <unistd.h>		/* Para write, access, open, read, close, fork, exit, getcwd, chdir */
-# include <sys/wait.h>		/* Para wait, waitpid, wait3, wait4 */
-# include <signal.h>		/* Para signal, sigaction, kill */
-# include <sys/stat.h>		/* Para stat, lstat, fstat */
-# include <fcntl.h>			/* Para unlink, execve, dup, dup2, pipe */
-# include <dirent.h>		/* Para opendir, readdir, closedir */
-# include <string.h>		/* Para strerror */
-# include <errno.h>			/* Para perror */
-# include <termios.h>		/* Para tcsetattr, tcgetattr */
-# include <curses.h>		/* Para tgetent, tgetflag, tgetnum, tgetstr, tgoto, tputs */
+# include <stdio.h>	
+# include <stdlib.h>
+# include <unistd.h>
+# include <sys/wait.h>
+# include <signal.h>
+# include <sys/stat.h>
+# include <fcntl.h>
+# include <dirent.h>
+# include <string.h>
+# include <errno.h>
 # include <sys/param.h>
-# include "libft.h"
+# include <sys/ioctl.h>
+# include <termios.h>
+# include "../libft/inc/libft.h"
 # include "pipex.h"
-# include "ft_printf.h"
 # include "parser.h"
 # include "structs.h"
-# include "executer.h"
 # include "builtin.h"
 
 # include <readline/readline.h>
 # include <readline/history.h>
 
-extern volatile int	g_signal;
+# define MODE_HEREDOC 1
+# define MODE_STANDARD 0
+# define MODE_CHILD 2
 
-int	core_shell(char **envp);
-int	NEW_core_shell(char **envp);
+extern int	g_signal;
+
+int			core_shell(char **envp);
+int 		manage_signactions(int mode);
+int			disable_signal(void);
+void		get_prompt(t_pipe *data, t_prompt *prompt);
+t_prompt	*init_prompt(void);
 
 #endif
