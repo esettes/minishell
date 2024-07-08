@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 23:30:58 by iostancu          #+#    #+#             */
-/*   Updated: 2024/07/04 22:44:01 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/07/08 03:59:45 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,30 +39,24 @@ t_pipe	*init_pipe_struct(char *envp[])
 
 int	open_file(t_cmd *cmd, t_pipe *data, int pos)
 {
+	if (data->infile)
+		(close(data->infile), data->infile = 0);
 	if (cmd->scmd[pos]->in_f)
-	{
-		if (data->infile)
-			(close(data->infile), data->infile = 0);
-		//else
 		data->infile = open(cmd->scmd[pos]->in_f, O_RDONLY);
-		if (data->infile < 0)
-			f_error(data);
-	}
-	else if (cmd->scmd[pos]->out_f)
+	if (data->outfile)
+		(close(data->outfile), data->outfile = 0);
+	if (cmd->scmd[pos]->out_f)
 	{
-		if (data->outfile)
-			(close(data->outfile), data->outfile = 0);
 		if (cmd->scmd[pos]->append)
 			data->outfile = open(cmd->scmd[pos]->out_f, O_APPEND | O_CREAT | O_WRONLY, 0644);
 		else
 			data->outfile = open(cmd->scmd[pos]->out_f, O_TRUNC | O_CREAT | O_WRONLY, 0644);
 	}
-	else if (!*file_name)
-		error_msg(red);
-	if (rl->infile == -1 || rl->outfile == -1)
-		return (ft_printf("minishell: "), rl->outfile = 0, rl->infile = 0,
-			perror(file_name), -1);
-	return (0);
+	if (data->infile == -1 || data->outfile == -1)
+	{
+		return (f_error(data));
+	}
+	return (EXIT_SUCCESS);
 	// if (cmd->scmd[pos]->in_f)
 	// {
 	// 	data->infile = open(cmd->scmd[pos]->in_f, O_RDONLY, 0644);

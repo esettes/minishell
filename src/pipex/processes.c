@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   processes.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/07/04 22:43:06 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/07/08 04:06:43 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,6 +191,7 @@ int	run_multiple_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
 	i = -1;
 	while (++i < data->cmd_counter)
 	{
+		open_file(cmd, data, i);
 		if (i !=data->cmd_counter - 1)
 		{
 			if (pipe(data->pip) < 0)
