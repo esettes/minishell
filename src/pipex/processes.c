@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/07/08 16:48:34 by settes           ###   ########.fr       */
+/*   Updated: 2024/07/08 17:02:13 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int exec_process(t_pipe *data, char **cmd)
 	if ((cmd_have_current_path(cmd[0]) || !path))
 	{
 		free_split(cmd);
-		dprintf(2, "minishell: command not found");
+		dprintf(2, "minishell: command not found\n");
 		g_signal = 2;
 		return (EXIT_FAILURE);
 	}

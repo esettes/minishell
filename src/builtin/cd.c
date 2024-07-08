@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 18:43:21 by iostancu          #+#    #+#             */
-/*   Updated: 2024/07/08 16:44:24 by settes           ###   ########.fr       */
+/*   Updated: 2024/07/08 17:36:55 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ static void	change_and_create_env_var(t_pipe **data, char *curr_dir);
 static void	is_home_directory(t_cmd *cmd, t_cd *cd);
 static char	*set_home_directory(t_pipe *data);
 
-static void	error_case(t_cd *cd, const char *cmd, const char *var)
+static void	error_case(t_cd *cd, char *cmd, char *var)
 {
 	free(cd->curr_dir);
-	print_env_not_set("cd", "OLDPWD");
+	print_env_not_set(cmd, var);
 }
 
 int	exec_cd(t_pipe *data, t_cmd *cmd, int pos)
@@ -41,7 +41,12 @@ int	exec_cd(t_pipe *data, t_cmd *cmd, int pos)
 	if (cd.is_home && (!env_var_already_exist(data->envp_minish, "HOME=")))
 		return (error_case(&cd, "cd", "HOME"), EXIT_SUCCESS);
 	if (chdir(cd.dir_to_exec) < 0)
+	{
+		g_signal = 2;
+		printf("minishell: cd: %s: No such file or directory.\n", cd.dir_to_exec);
+		//return (free(cd.curr_dir), EXIT_FAILURE);
 		return (f_error(data));
+	}
 	if (cd.is_hyphen)
 		printf("%s\n", cd.last_dir);
 	change_and_create_env_var(&data, cd.curr_dir);
