@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:06:11 by iostancu          #+#    #+#             */
-/*   Updated: 2024/07/08 16:51:48 by settes           ###   ########.fr       */
+/*   Updated: 2024/08/16 21:31:23 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	free_all(t_cmd *cmd, t_pipe *p_data, t_buff *buff, t_prompt	*prompt)
 	free(buff->oldbuffer);
 }
 
-static void	reset_minishell(t_buff *b, t_cmd **cmd)
+static void	reset_minishell(t_buff *b, t_cmd **cmd, t_pipe *p)
 {
 	if (b->buffer && *b->buffer && f_strict_strncmp(b->buffer,
 			b->oldbuffer, sizeof(b->oldbuffer)) != 0)
@@ -36,6 +36,8 @@ static void	reset_minishell(t_buff *b, t_cmd **cmd)
 	free(b->buffer);
 	free_cmd_tony(*cmd);
 	cmd = NULL;
+	free(p->childs);
+	p->childs = NULL;
 }
 
 static int	init_shell(t_pipe **p_data, t_prompt **prompt, t_buff *b,
@@ -73,7 +75,7 @@ int	core_shell(char **envp)
 		if (cmd == NULL)
 			continue ;
 		run_executer(p_data, cmd, prompt->old_cwd);
-		reset_minishell(&b, &cmd);
+		reset_minishell(&b, &cmd, p_data);
 	}
 	free_all(cmd, p_data, &b, prompt);
 	return (EXIT_SUCCESS);

@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:23 by iostancu          #+#    #+#             */
-/*   Updated: 2024/07/08 17:01:34 by settes           ###   ########.fr       */
+/*   Updated: 2024/08/16 19:41:43 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,16 @@ int		open_file(t_cmd *cmd, t_pipe *data, int pos);
 int	run_executer(t_pipe *p_data, t_cmd *cmd, char *old_cwd)
 {
 	int status;
+	pid_t	cpid;
+	pid_t	pids[cmd->n_scmd];
 
 	status = 0;
+	cpid = 0;
 	p_data->cmd_counter = cmd->n_scmd;
-	//dprintf(2, "commands: %i \n", p_data->cmd_counter);
+	dprintf(2, "num commands: %i \n", cmd->n_scmd);
+	p_data->childs = malloc(sizeof(pid_t) * cmd->n_scmd);
+	//p_data->childs[cmd->n_scmd] = NULL;
+	
 	if (p_data->cmd_counter <= 0)
 		print_err_msg(NULL, NULL, "syntax error near unexpected token.");
 	manage_signactions(MODE_CHILD);
@@ -28,13 +34,23 @@ int	run_executer(t_pipe *p_data, t_cmd *cmd, char *old_cwd)
 	p_data->std_[1] = dup(STDOUT_FILENO);
 
 	run_multiple_cmd(p_data, cmd, old_cwd);
-	waitpid(p_data->pid, &status, 0);
-	//dprintf(2, "\nstatus: %i \n", status);
-	if (WIFEXITED(status))
+	int i = 0;
+	while (i < p_data->cmd_counter)
 	{
-		g_signal = WEXITSTATUS(status);
-		//dprintf(2, "g_signal: %i \n", g_signal);
+		cpid = waitpid(p_data->childs[i], &status, 0);
+		i++;
 	}
+	dprintf(2, "exit status: %i \n", WEXITSTATUS(status));
+	
+	// cpid = wait(NULL);
+	// while (cpid > 0)
+	// 	cpid = wait(NULL);
+	// //dprintf(2, "\nstatus: %i \n", status);
+	// if (WIFEXITED(status))
+	// {
+	// 	g_signal = WEXITSTATUS(status);
+	// 	//dprintf(2, "g_signal: %i \n", g_signal);
+	// }
 	
 	dup2(p_data->std_[STDIN_FILENO], STDIN_FILENO);
 	close(p_data->std_[STDIN_FILENO]);

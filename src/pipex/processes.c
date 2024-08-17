@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/07/08 17:02:13 by settes           ###   ########.fr       */
+/*   Updated: 2024/08/16 21:33:57 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,7 @@ int run_multiple_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
 				return (f_error(data));
 		}
 		data->pid = fork();
+		data->childs[i] = data->pid;
 		if (data->pid == 0)
 		{
 			redirect(data, i);
@@ -168,7 +169,7 @@ int run_multiple_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
 			close(data->std_[W]);
 			close(data->pip[0]);
 			close(data->pip[1]);
-			exit(WEXITSTATUS(0));
+			//exit(WEXITSTATUS(0));
 		}
 		else
 		{

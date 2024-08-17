@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:09:44 by iostancu          #+#    #+#             */
-/*   Updated: 2024/07/08 16:49:26 by settes           ###   ########.fr       */
+/*   Updated: 2024/08/16 19:21:05 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ typedef struct s_pipe
 	int		pip[2];
 	pid_t	pid;
 	pid_t	pid2;
+	pid_t	*childs;
+	//pid_t	last_child;
 	char	**cmd;
 	char	**last_cmd;
 	char	*envp;
@@ -99,7 +101,7 @@ void	close_files(int *infile, int *outfile);
 int		dup_files(int *infile, int *outfile);
 
 int		run_single_cmd(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd);
-int	run_multiple_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd);
+int		run_multiple_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd);
 void	close_fds(t_pipe *data);
 
 #endif

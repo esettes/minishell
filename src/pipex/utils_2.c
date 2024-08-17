@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 23:30:58 by iostancu          #+#    #+#             */
-/*   Updated: 2024/07/08 16:50:36 by settes           ###   ########.fr       */
+/*   Updated: 2024/08/16 19:21:18 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,11 @@ t_pipe	*init_pipe_struct(char *envp[])
 	tmp->outfile = 0;
 	tmp->pid = -1;
 	tmp->pid2 = -1;
+	tmp->childs = NULL;
+	//tmp->last_child = -1;
 	tmp->last_cmd = NULL;
 	tmp->std_[0] = 0;
-	tmp->std_[1] =0;
+	tmp->std_[1] = 0;
 	tmp->n_cmds = 0;
 	tmp->old_fd = 0;
 	tmp->previous_out = -1;
