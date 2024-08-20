@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/16 21:33:57 by settes           ###   ########.fr       */
+/*   Updated: 2024/08/20 19:39:08 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,25 @@ void close_fds(t_pipe *data)
 	}
 }
 
+int	run_single_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
+{
+	open_file(cmd, data, 0);
+	if (data->infile)
+	{
+		dup2(data->infile, STDIN_FILENO);
+		close(data->infile);
+	}
+	if (data->outfile)
+	{
+		dup2(data->outfile, STDOUT_FILENO);
+		close(data->outfile);
+	}
+	if (exec_cmd(cmd, &data, 0, old_cwd))
+		return (EXIT_FAILURE);
+	//close fds
+	return (EXIT_SUCCESS);
+}
+
 int run_multiple_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
 {
 	int i;
@@ -169,7 +188,7 @@ int run_multiple_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
 			close(data->std_[W]);
 			close(data->pip[0]);
 			close(data->pip[1]);
-			//exit(WEXITSTATUS(0));
+			//exit(WEXITSTATUS(status));
 		}
 		else
 		{

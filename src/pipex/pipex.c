@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:23 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/16 19:41:43 by settes           ###   ########.fr       */
+/*   Updated: 2024/08/19 18:13:08 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	run_executer(t_pipe *p_data, t_cmd *cmd, char *old_cwd)
 		cpid = waitpid(p_data->childs[i], &status, 0);
 		i++;
 	}
+	g_signal = status;
 	dprintf(2, "exit status: %i \n", WEXITSTATUS(status));
 	
 	// cpid = wait(NULL);
