@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:09:44 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/16 19:21:05 by settes           ###   ########.fr       */
+/*   Updated: 2024/08/20 19:57:29 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int		open_file(t_cmd *cmd, t_pipe *data, int pos);
 void	close_files(int *infile, int *outfile);
 int		dup_files(int *infile, int *outfile);
 
-int		run_single_cmd(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd);
+int		run_single_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd);
 int		run_multiple_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd);
 void	close_fds(t_pipe *data);
 

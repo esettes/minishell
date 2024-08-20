@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   processes.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/20 19:39:08 by settes           ###   ########.fr       */
+/*   Updated: 2024/08/20 20:25:07 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ int exec_process(t_pipe *data, char **cmd)
 	path = get_path(cmd[0], get_env_var_value(data->envp_minish, "PATH"));
 	if ((cmd_have_current_path(cmd[0]) || !path))
 	{
-		free_split(cmd);
+		//if (data->n_cmds > 1)
+		//free_split(cmd);
 		dprintf(2, "minishell: command not found\n");
 		g_signal = 2;
 		return (EXIT_FAILURE);
@@ -92,45 +93,6 @@ void redirect(t_pipe *data, int pos)
 		(close(data->pip[0]), dup2(data->pip[1], 1), close(data->pip[1]));
 }
 
-int run_single_cmd(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd)
-{
-	if (cmd->scmd[pos]->in_f)
-	{
-		data->infile = open(cmd->scmd[pos]->in_f, O_RDONLY, 0644);
-		if (data->infile < 0)
-			return (f_error(data));
-		dup2(data->infile, STDIN_FILENO);
-		close(data->infile);
-		data->infile = 0;
-	}
-	if (cmd->scmd[pos]->out_f)
-	{
-		if (cmd->scmd[pos]->append)
-			data->outfile = open(cmd->scmd[pos]->out_f,
-								 O_WRONLY | O_CREAT | O_APPEND, 0644);
-		else
-			data->outfile = open(cmd->scmd[pos]->out_f,
-								 O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (data->outfile < 0)
-			return (f_error(data));
-		dup2(data->outfile, STDOUT_FILENO);
-		close(data->outfile);
-		data->outfile = 0;
-	}
-	// if (!is_parent_exec(cmd->scmd[pos]->args[0]))
-	// {
-	data->pid = fork();
-	if (data->pid < 0)
-		return (f_error(data));
-	if (data->pid == 0)
-		data->status = exec_cmd(cmd, &data, pos, old_cwd);
-	// }
-	// else
-	// 	run_parent(cmd, &data, 0, old_cwd);
-	close_fds(data);
-	return (data->status);
-}
-
 void close_fds(t_pipe *data)
 {
 	if (data->infile)
@@ -147,6 +109,11 @@ void close_fds(t_pipe *data)
 
 int	run_single_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
 {
+	int		status;
+	pid_t	cpid;
+
+	status = 0;
+	cpid = 0;
 	open_file(cmd, data, 0);
 	if (data->infile)
 	{
@@ -158,9 +125,19 @@ int	run_single_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
 		dup2(data->outfile, STDOUT_FILENO);
 		close(data->outfile);
 	}
-	if (exec_cmd(cmd, &data, 0, old_cwd))
-		return (EXIT_FAILURE);
-	//close fds
+	data->pid = fork();
+	data->childs[0] = data->pid;
+	if (data->pid == 0)
+	{
+		if (exec_cmd(cmd, &data, 0, old_cwd))
+			return (EXIT_FAILURE);
+		cpid = waitpid(data->childs[0], &status, 0);
+		dprintf(2, "exit status in run_single_cmd: %i \n", WEXITSTATUS(status));
+		//exit(status);
+	}
+
+	close_fds(data);
+	//exit(status);
 	return (EXIT_SUCCESS);
 }
 
