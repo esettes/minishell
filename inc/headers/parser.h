@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 19:04:03 by uliherre          #+#    #+#             */
-/*   Updated: 2024/07/08 16:48:02 by settes           ###   ########.fr       */
+/*   Updated: 2024/08/21 21:52:22 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,7 @@ void		open_file_parse(t_scmd *scmd);
 //Heredoc
 int	heredoc_init(t_scmd *scmd, t_token_lst **token_lst, char **envp);
 
+/////
+
+void	get_cwd(char *old_cwd);
 #endif

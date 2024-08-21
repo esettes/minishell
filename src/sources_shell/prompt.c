@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 13:05:06 by antosanc          #+#    #+#             */
-/*   Updated: 2024/07/08 16:52:16 by settes           ###   ########.fr       */
+/*   Updated: 2024/08/21 21:57:01 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,23 @@ void	get_prompt(t_pipe *data, t_prompt *prompt)
 	if (cwd != prompt->old_cwd)
 		free(cwd);
 	free_prompt(prompt);
+}
+
+char	*get_cwd(char *old_cwd)
+{
+	char		*cwd;
+
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+		cwd = ft_strdup(old_cwd);
+		free(old_cwd);
+	else
+	{
+		if (old_cwd)
+			free(old_cwd);
+		old_cwd = ft_strdup(cwd);
+	}
+	if (f_strict_strncmp(cwd, old_cwd, 150) != 0)
+		free(cwd);
+	return (cwd);
 }

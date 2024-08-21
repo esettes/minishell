@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:06:11 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/21 21:15:26 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/08/21 21:54:16 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,10 @@
 
 int	exit_s;
 
-static void	free_all(t_cmd *cmd, t_pipe *p_data, t_buff *buff, t_prompt	*prompt)
+static void	free_all(t_cmd *cmd, t_pipe *p_data, t_buff *buff, char *old_cwd)
 {
-	if (prompt->old_cwd)
-		free(prompt->old_cwd);
-	free(prompt);
+	if (old_cwd)
+		free(old_cwd);
 	free_memory((const char **)p_data->envp_minish,
 		get_array_size(p_data->envp_minish));
 	free(p_data);
@@ -40,14 +39,10 @@ static void	reset_minishell(t_buff *b, t_cmd **cmd, t_pipe *p)
 	p->childs = NULL;
 }
 
-static int	init_shell(t_pipe **p_data, t_prompt **prompt, t_buff *b,
-	char **envp)
+static int	init_shell(t_pipe **p_data, t_buff *b, char **envp)
 {
 	*p_data = init_pipe_struct(envp);
 	if (!p_data)
-		return (EXIT_FAILURE);
-	*prompt = init_prompt();
-	if (!prompt)
 		return (EXIT_FAILURE);
 	b->oldbuffer = ft_strdup("");
 	return (EXIT_SUCCESS);
@@ -58,25 +53,24 @@ int	core_shell(char **envp)
 	t_buff		b;
 	t_cmd		*cmd;
 	t_pipe		*p_data;
-	t_prompt	*prompt;
+	char		*old_cwd;
 
-	if (init_shell(&p_data, &prompt, &b, envp))
+	if (init_shell(&p_data, &b, envp))
 		return (EXIT_FAILURE);
 	while (1)
 	{
 		if (manage_signactions(MODE_STANDARD))
 			return (EXIT_FAILURE);
-		get_prompt(p_data, prompt);
-		b.buffer = readline(prompt->prompt);
-		free(prompt->prompt);
+		b.buffer = readline("minishell$ ");
 		if (!b.buffer)
 			break ;
 		cmd = parser(b.buffer, p_data->envp_minish);
 		if (cmd == NULL)
 			continue ;
-		run_executer(p_data, cmd, prompt->old_cwd);
+		get_cwd(old_cwd);
+		run_executer(p_data, cmd, old_cwd);
 		reset_minishell(&b, &cmd, p_data);
 	}
-	free_all(cmd, p_data, &b, prompt);
+	free_all(cmd, p_data, &b, old_cwd);
 	return (EXIT_SUCCESS);
 }
