@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   processes.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/21 17:51:10 by settes           ###   ########.fr       */
+/*   Updated: 2024/08/21 20:55:07 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ void close_fds(t_pipe *data)
 	}
 }
 
-int	run_single_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
+void	run_single_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
 {
 	int		status;
 	pid_t	cpid;
@@ -149,7 +149,6 @@ int	run_single_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
 
 	close_fds(data);
 	//exit(status);
-	return (EXIT_SUCCESS);
 }
 
 int run_multiple_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:09:44 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/21 17:38:19 by settes           ###   ########.fr       */
+/*   Updated: 2024/08/21 21:21:36 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ typedef struct s_pipe
 	pid_t	*childs;
 	//pid_t	last_child;
 	char	**cmd;
-	char	**last_cmd;
 	char	*envp;
 	char	**envp_minish;
 	int		infile;
@@ -32,7 +31,6 @@ typedef struct s_pipe
 	int		std_[2];
 	int		n_cmds;
 	int		cmd_counter;
-	int		previous_out;
 	int		old_fd;
 	//int		is_heredoc;
 }	t_pipe;
@@ -100,7 +98,7 @@ int		open_file(t_cmd *cmd, t_pipe *data, int pos);
 void	close_files(int *infile, int *outfile);
 int		dup_files(int *infile, int *outfile);
 
-int		run_single_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd);
+void	run_single_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd);
 int		run_multiple_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd);
 void	close_fds(t_pipe *data);
 int		f_perror(int status, char *s);
