@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:07 by antosanc          #+#    #+#             */
-/*   Updated: 2024/07/08 16:46:33 by settes           ###   ########.fr       */
+/*   Updated: 2024/08/21 16:30:30 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,12 @@ static int	parse_checker(t_cmd *cmd, char *str, char **envp)
 	token = lex_tony(str, envp);
 	if (token == NULL)
 	{
-		g_signal = 2;
+		exit_s = 2;
 		return (EXIT_FAILURE);
 	}
 	if (validator_tony(token))
 	{
-		g_signal = 2;
+		exit_s = 2;
 		return (clear_all(&token, NULL), EXIT_FAILURE);
 	}
 	head = token->token_lst;

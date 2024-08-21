@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 19:27:39 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/11 15:29:14 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/08/21 16:30:30 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	is_correct_env_variable(char *var, char *cmd)
 	if (ret == FALSE)
 	{
 		print_cmd_error(var, cmd);
-		g_signal = 1;
+		exit_s = 1;
 		return (FALSE);
 	}
 	return (TRUE);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 20:45:35 by antosanc          #+#    #+#             */
-/*   Updated: 2024/05/07 20:46:23 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/08/21 16:30:30 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	c_handler_child(int sig)
 	write(1, "\n", 1);
 	rl_replace_line("", 1);
 	rl_on_new_line();
-	g_signal = 130;
+	exit_s = 130;
 }
 
 static void	c_handler(int sig)
@@ -28,13 +28,13 @@ static void	c_handler(int sig)
 	rl_replace_line("", 1);
 	rl_on_new_line();
 	rl_redisplay();
-	g_signal = 130;
+	exit_s = 130;
 }
 
 static void	c_handler_heredoc(int sig)
 {
 	(void)sig;
-	g_signal = 130;
+	exit_s = 130;
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	ioctl(0, TIOCSTI, "\n");

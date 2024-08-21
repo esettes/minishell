@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:09:44 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/20 19:57:29 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/08/21 17:38:19 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ typedef struct s_pipe
 	int		cmd_counter;
 	int		previous_out;
 	int		old_fd;
-	int		status;
+	//int		is_heredoc;
 }	t_pipe;
 
 # define COLORED 1
@@ -70,8 +70,8 @@ int		duplicate_fd(int oldfd, int newfd);
 int		exec_process(t_pipe *data, char **cmd);
 int		run_child(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd);
 int		run_child2(t_pipe *data, t_cmd *cmd, int pos, char *old_cwd);
-int		cmd_have_path(char *cmd);
-int		cmd_have_current_path(char *cmd);
+int		cmd_have_abs_path(char *cmd);
+int		cmd_have_relative_path(char *cmd);
 char	*get_path(char *cmd, char *path_envp);
 void	free_split(char **s);
 int		run_executer(t_pipe *p_data, t_cmd *cmd, char *old_cwd);
@@ -103,5 +103,8 @@ int		dup_files(int *infile, int *outfile);
 int		run_single_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd);
 int		run_multiple_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd);
 void	close_fds(t_pipe *data);
+int		f_perror(int status, char *s);
+int		exit_status(int val);
+void	process_waiting(t_pipe *d);
 
 #endif

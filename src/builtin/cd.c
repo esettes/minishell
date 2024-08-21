@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 18:43:21 by iostancu          #+#    #+#             */
-/*   Updated: 2024/07/08 17:36:55 by settes           ###   ########.fr       */
+/*   Updated: 2024/08/21 16:30:30 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	exec_cd(t_pipe *data, t_cmd *cmd, int pos)
 		return (error_case(&cd, "cd", "HOME"), EXIT_SUCCESS);
 	if (chdir(cd.dir_to_exec) < 0)
 	{
-		g_signal = 2;
+		exit_s = 2;
 		printf("minishell: cd: %s: No such file or directory.\n", cd.dir_to_exec);
 		//return (free(cd.curr_dir), EXIT_FAILURE);
 		return (f_error(data));

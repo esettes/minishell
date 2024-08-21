@@ -6,13 +6,13 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:06:11 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/16 21:31:23 by settes           ###   ########.fr       */
+/*   Updated: 2024/08/21 16:30:30 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	g_signal;
+int	exit_s;
 
 static void	free_all(t_cmd *cmd, t_pipe *p_data, t_buff *buff, t_prompt	*prompt)
 {

@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 23:30:58 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/16 19:21:18 by settes           ###   ########.fr       */
+/*   Updated: 2024/08/21 16:38:44 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ t_pipe	*init_pipe_struct(char *envp[])
 	tmp->old_fd = 0;
 	tmp->previous_out = -1;
 	tmp->cmd_counter = 0;
-	tmp->status = 0;
 	return (tmp);
 }
 
@@ -111,7 +110,7 @@ void	close_files(int *infile, int *outfile)
 // 	return (EXIT_SUCCESS);
 // }
 
-int	cmd_have_current_path(char *cmd)
+int	cmd_have_relative_path(char *cmd)
 {
 	register int	i;
 

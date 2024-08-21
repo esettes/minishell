@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 19:03:59 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/11 14:09:17 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/08/21 16:30:30 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@
 # define MODE_STANDARD 0
 # define MODE_CHILD 2
 
-extern int	g_signal;
+extern int	exit_s;
 
 int			core_shell(char **envp);
 int 		manage_signactions(int mode);

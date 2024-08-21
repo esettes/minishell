@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:59:16 by antosanc          #+#    #+#             */
-/*   Updated: 2024/07/08 16:46:06 by settes           ###   ########.fr       */
+/*   Updated: 2024/08/21 16:30:30 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ char	*expander(char *str, char **envp, t_token **token)
 		expanded_str = expander_process(str, envp, token, &i);
 	else
 	{
-		signal = ft_itoa(g_signal);
+		signal = ft_itoa(exit_s);
 		expanded_str = create_expanded_str(str, signal, token);
 		free(signal);
 	}

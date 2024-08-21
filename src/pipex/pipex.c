@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:23 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/20 20:12:13 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/08/21 17:51:56 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	run_executer(t_pipe *p_data, t_cmd *cmd, char *old_cwd)
 		cpid = waitpid(p_data->childs[i], &status, 0);
 		i++;
 	}
-	g_signal = status;
+	exit_s = status;
 	dprintf(2, "exit status after father waits: %i \n", WEXITSTATUS(status));
 	
 	// cpid = wait(NULL);

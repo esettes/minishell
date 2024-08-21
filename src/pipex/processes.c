@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   processes.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/20 20:25:07 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/08/21 17:51:10 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,35 +15,52 @@
 int exec_process(t_pipe *data, char **cmd)
 {
 	char *path;
+	int	status;
 
-	if (cmd_have_path(cmd[0]))
+	status = 0;
+	if (cmd_have_abs_path(cmd[0]))
 	{
 		path = f_strdup(cmd[0]);
-		if (execve(path, cmd, data->envp_minish) < 0)
-			return (f_error(data));
-		return (EXIT_SUCCESS);
+		//if (execve(path, cmd, data->envp_minish) < 0)
+		//	return (f_error(data));
+		//return (EXIT_SUCCESS);
 	}
-	path = get_path(cmd[0], get_env_var_value(data->envp_minish, "PATH"));
-	if ((cmd_have_current_path(cmd[0]) || !path))
+	else
 	{
-		//if (data->n_cmds > 1)
-		//free_split(cmd);
-		dprintf(2, "minishell: command not found\n");
-		g_signal = 2;
-		return (EXIT_FAILURE);
+		path = get_path(cmd[0], get_env_var_value(data->envp_minish, "PATH"));
 	}
-	if (execve(path, cmd, data->envp_minish) < 0)
-		return (f_error(data));
+	printf("before fork!!\n");
+	if (data->n_cmds == 1 && fork())
+		return (process_waiting(data), free(path), WEXITSTATUS(exit_s));
+	if (cmd_have_relative_path(cmd[0]) || !path || execve(path, cmd, data->envp_minish) == -1)
+		(printf("minishell: %s: command not found\n", cmd[0]), status = 127);
+	free(path);
+	free(data->envp_minish);
 	if (data->n_cmds == 1)
 	{
 		close(data->std_[R]);
 		close(data->std_[W]);
+		printf("exiting from exec_process!!!\n");
+		exit(status);
 	}
-	return (EXIT_SUCCESS);
+	return (status);
+}
+
+void	process_waiting(t_pipe *d)
+{
+	printf("in process waiting!!!\n");
+	(signal(SIGINT, SIG_IGN), f_perror(wait(&exit_s), "wait"));
+	if (WTERMSIG(exit_s) == SIGINT)
+		(ft_putchar_fd('\n', STDOUT_FILENO), exit_s = exit_status(130));
+	else if (WTERMSIG(exit_s) == SIGQUIT)
+		(ft_putchar_fd('\n', STDOUT_FILENO), exit_s = exit_status(131));
 }
 
 int exec_cmd(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 {
+	int	status;
+
+	status = 0;
 	if (f_strncmp(*cmd->scmd[pos]->args, "cd", sizeof("cd")) == 0)
 	{
 		if (exec_cd(*p_data, cmd, pos))
@@ -77,8 +94,11 @@ int exec_cmd(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 			return (EXIT_FAILURE);
 	}
 	else
-		exec_process(*p_data, cmd->scmd[pos]->args);
-	return (EXIT_SUCCESS);
+		status = exec_process(*p_data, cmd->scmd[pos]->args);
+	printf("status single command: %i \n", status);
+	printf("exit_status single command: %i \n", exit_status(status));
+	//return (exit_status(status));
+	return (status);
 }
 
 void redirect(t_pipe *data, int pos)
@@ -114,7 +134,7 @@ int	run_single_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
 
 	status = 0;
 	cpid = 0;
-	open_file(cmd, data, 0);
+	//open_file(cmd, data, 0);
 	if (data->infile)
 	{
 		dup2(data->infile, STDIN_FILENO);
@@ -125,16 +145,7 @@ int	run_single_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
 		dup2(data->outfile, STDOUT_FILENO);
 		close(data->outfile);
 	}
-	data->pid = fork();
-	data->childs[0] = data->pid;
-	if (data->pid == 0)
-	{
-		if (exec_cmd(cmd, &data, 0, old_cwd))
-			return (EXIT_FAILURE);
-		cpid = waitpid(data->childs[0], &status, 0);
-		dprintf(2, "exit status in run_single_cmd: %i \n", WEXITSTATUS(status));
-		//exit(status);
-	}
+	exit_s = exec_cmd(cmd, &data, 0, old_cwd);
 
 	close_fds(data);
 	//exit(status);

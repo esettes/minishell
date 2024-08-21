@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 18:19:52 by antosanc          #+#    #+#             */
-/*   Updated: 2024/05/06 20:49:37 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/08/21 16:30:30 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	heredoc_write(int fd, char *delimiter, char **envp)
 	while (1)
 	{
 		buff = readline("> ");
-		if (!buff || g_signal == 130)
+		if (!buff || exit_s == 130)
 			return (free(buff), EXIT_FAILURE);
 		if (ft_strchr(buff, '$') != 0)
 			buff = expander(buff, envp, NULL);
@@ -42,7 +42,7 @@ int	heredoc_init(t_scmd *scmd, t_token_lst **token_lst, char **envp)
 
 	*token_lst = (*token_lst)->next;
 	delimiter = (*token_lst)->content;
-	g_signal = 0;
+	exit_s = 0;
 	manage_signactions(MODE_HEREDOC);
 	if (access("/tmp", W_OK) != 0)
 		return (perror("Access denied to /tmp directory"), EXIT_FAILURE);

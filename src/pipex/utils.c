@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:39 by iostancu          #+#    #+#             */
-/*   Updated: 2024/07/08 16:59:57 by settes           ###   ########.fr       */
+/*   Updated: 2024/08/21 16:47:43 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,28 @@ void	free_split(char **s)
 	free(s);
 }
 
+int	exit_status(int val)
+{
+	return (val << 8);
+}
+
 int	f_error(t_pipe *data)
 {
-	g_signal = errno;
-	if (g_signal == 0)
-	{
-		data->status = 0;
+	exit_s = errno;
+	if (exit_s == 0)
 		return (EXIT_SUCCESS);
-	}
+	//perror("TEST");
 	ft_putstrc_fd(RED_, "minishell: ", 2);
-	ft_putstrc_fd(RED_, strerror(g_signal), 2);
+	ft_putstrc_fd(RED_, strerror(exit_s), 2);
 	ft_putstrc_fd(RESET_, "\n", 2);
-	data->status = 1;
 	return (EXIT_FAILURE);
+}
+
+int	f_perror(int status, char *s)
+{
+	if (status == -1)
+		perror(s);
+	return (status);
 }
 
 // int	duplicate_fd(int oldfd, int newfd)
@@ -72,7 +81,7 @@ char	*get_path(char *cmd, char *path_envp)
 	return (NULL);
 }
 
-int	cmd_have_path(char *cmd)
+int	cmd_have_abs_path(char *cmd)
 {
 	register int	i;
 
