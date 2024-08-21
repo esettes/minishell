@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 19:04:03 by uliherre          #+#    #+#             */
-/*   Updated: 2024/08/21 21:52:22 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/08/22 00:35:40 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,5 +67,5 @@ int	heredoc_init(t_scmd *scmd, t_token_lst **token_lst, char **envp);
 
 /////
 
-void	get_cwd(char *old_cwd);
+//void	get_cwd(char *old_cwd);
 #endif

@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:06:11 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/21 21:54:16 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/08/22 00:36:58 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,19 @@ static void	reset_minishell(t_buff *b, t_cmd **cmd, t_pipe *p)
 	p->childs = NULL;
 }
 
+void f_void(int sig)
+{
+	(void)sig;
+	return ;
+}
+
 static int	init_shell(t_pipe **p_data, t_buff *b, char **envp)
 {
 	*p_data = init_pipe_struct(envp);
 	if (!p_data)
 		return (EXIT_FAILURE);
 	b->oldbuffer = ft_strdup("");
+	signal(SIGQUIT, f_void);
 	return (EXIT_SUCCESS);
 }
 
@@ -57,6 +64,7 @@ int	core_shell(char **envp)
 
 	if (init_shell(&p_data, &b, envp))
 		return (EXIT_FAILURE);
+	old_cwd = getcwd(NULL, 0);
 	while (1)
 	{
 		if (manage_signactions(MODE_STANDARD))
@@ -67,7 +75,7 @@ int	core_shell(char **envp)
 		cmd = parser(b.buffer, p_data->envp_minish);
 		if (cmd == NULL)
 			continue ;
-		get_cwd(old_cwd);
+		//get_cwd(old_cwd);
 		run_executer(p_data, cmd, old_cwd);
 		reset_minishell(&b, &cmd, p_data);
 	}

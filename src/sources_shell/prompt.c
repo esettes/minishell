@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 13:05:06 by antosanc          #+#    #+#             */
-/*   Updated: 2024/08/21 21:57:01 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/08/22 00:33:59 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,16 +79,16 @@ char	*get_cwd(char *old_cwd)
 	char		*cwd;
 
 	cwd = getcwd(NULL, 0);
-	if (!cwd)
-		cwd = ft_strdup(old_cwd);
-		free(old_cwd);
-	else
-	{
-		if (old_cwd)
-			free(old_cwd);
-		old_cwd = ft_strdup(cwd);
-	}
-	if (f_strict_strncmp(cwd, old_cwd, 150) != 0)
-		free(cwd);
+	// if (!cwd)
+	// 	cwd = ft_strdup(old_cwd);
+	// 	free(old_cwd);
+	// else
+	// {
+	// 	if (old_cwd)
+	// 		free(old_cwd);
+	// 	old_cwd = ft_strdup(cwd);
+	// }
+	// if (f_strict_strncmp(cwd, old_cwd, 150) != 0)
+	// 	free(cwd);
 	return (cwd);
 }
