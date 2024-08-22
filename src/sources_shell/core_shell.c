@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   core_shell.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:06:11 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/22 05:50:38 by settes           ###   ########.fr       */
+/*   Updated: 2024/08/22 22:32:53 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	core_shell(char **envp)
 	{
 		if (manage_signactions(MODE_STANDARD))
 			return (EXIT_FAILURE);
-		b.buffer = readline("minishell$ ");
+		b.buffer = readline("\x1b[32mminishell$\x1b[0m ");
 		if (!b.buffer)
 			break ;
 		cmd = parser(b.buffer, p_data->envp_minish);

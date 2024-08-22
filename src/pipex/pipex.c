@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:23 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/21 17:51:56 by settes           ###   ########.fr       */
+/*   Updated: 2024/08/22 22:33:44 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,17 @@ int	run_executer(t_pipe *p_data, t_cmd *cmd, char *old_cwd)
 	if (cmd->n_scmd == 1)
 		run_single_cmd(p_data, cmd, old_cwd);
 	else
-		run_multiple_cmd(p_data, cmd, old_cwd);
-	int i = 0;
-	while (i < p_data->cmd_counter)
 	{
-		cpid = waitpid(p_data->childs[i], &status, 0);
-		i++;
+		run_multiple_cmd(p_data, cmd, old_cwd);
+		int i = 0;
+		while (i < p_data->cmd_counter)
+		{
+			cpid = waitpid(p_data->childs[i], &status, 0);
+			i++;
+		}
+		exit_s = status;
 	}
-	exit_s = status;
+	
 	dprintf(2, "exit status after father waits: %i \n", WEXITSTATUS(status));
 	
 	// cpid = wait(NULL);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   processes.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/22 05:50:17 by settes           ###   ########.fr       */
+/*   Updated: 2024/08/22 22:36:47 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int exec_process(t_pipe *data, char **cmd)
 	if (cmd_have_relative_path(cmd[0]) || !path || execve(path, cmd, data->envp_minish) == -1)
 		(printf("minishell: %s: command not found\n", cmd[0]), status = 127);
 	free(path);
-	free(data->envp_minish);
+	//free(data->envp_minish);
 	if (data->n_cmds == 1)
 	{
 		close(data->std_[R]);
@@ -138,7 +138,7 @@ void	run_single_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
 
 	status = 0;
 	cpid = 0;
-	//open_file(cmd, data, 0);
+	open_file(cmd, data, 0);
 	if (data->infile)
 	{
 		dup2(data->infile, STDIN_FILENO);
