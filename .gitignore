@@ -3,9 +3,6 @@
 *.txt
 minishell
 docker
-<<<<<<< HEAD
-.DS_Store
-=======
 .DS_Store
 *libft.a
->>>>>>> origin/tony-merge-1
+minishell_tester
