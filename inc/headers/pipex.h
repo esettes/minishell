@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:09:44 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/21 21:21:36 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/08/23 00:15:00 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ typedef struct s_pipe
 	//pid_t	last_child;
 	char	**cmd;
 	char	*envp;
-	char	**envp_minish;
+	char	**env_mini;
 	int		infile;
 	int		outfile;
 	int		std_[2];

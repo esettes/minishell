@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 23:30:58 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/21 21:21:09 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/08/23 00:15:00 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_pipe	*init_pipe_struct(char *envp[])
 	if (tmp == NULL)
 		return (NULL);
 	init_envp_minishell(tmp, envp);
-	tmp->envp = get_env_var_value(tmp->envp_minish, "PATH");
+	tmp->envp = get_env_var_value(tmp->env_mini, "PATH");
 	tmp->cmd = NULL;
 	tmp->infile = 0;
 	tmp->outfile = 0;

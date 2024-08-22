@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 18:43:21 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/21 16:30:30 by settes           ###   ########.fr       */
+/*   Updated: 2024/08/23 00:15:00 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ int	exec_cd(t_pipe *data, t_cmd *cmd, int pos)
 		cd.dir_to_exec = cd.last_dir;
 	}
 	if (cd.is_home)
-		cd.dir_to_exec = get_env_var_value(data->envp_minish, "HOME");
-	if (cd.is_home && (!env_var_already_exist(data->envp_minish, "HOME=")))
+		cd.dir_to_exec = get_env_var_value(data->env_mini, "HOME");
+	if (cd.is_home && (!env_var_already_exist(data->env_mini, "HOME=")))
 		return (error_case(&cd, "cd", "HOME"), EXIT_SUCCESS);
 	if (chdir(cd.dir_to_exec) < 0)
 	{
@@ -65,10 +65,10 @@ static void	change_and_create_env_var(t_pipe **data, char *curr_dir)
 			"parent directories: No such file or directory\n");
 		return ;
 	}
-	if (!env_var_already_exist((*data)->envp_minish, "OLDPWD="))
-		(*data)->envp_minish = create_new_var(*data, "OLDPWD=");
-	change_var_value((*data)->envp_minish, f_strjoin("OLDPWD=", curr_dir));
-	change_var_value((*data)->envp_minish, f_strjoin("PWD=", cwd));
+	if (!env_var_already_exist((*data)->env_mini, "OLDPWD="))
+		(*data)->env_mini = create_new_var(*data, "OLDPWD=");
+	change_var_value((*data)->env_mini, f_strjoin("OLDPWD=", curr_dir));
+	change_var_value((*data)->env_mini, f_strjoin("PWD=", cwd));
 	free(cwd);
 }
 
@@ -83,7 +83,7 @@ static t_cd	init_cd(t_pipe *data, t_cmd *cmd, int pos)
 {
 	t_cd	cd;
 
-	cd.last_dir = get_env_var_value(data->envp_minish, "OLDPWD");
+	cd.last_dir = get_env_var_value(data->env_mini, "OLDPWD");
 	cd.curr_dir = getcwd(NULL, 0);
 	cd.is_hyphen = 0;
 	cd.is_home = 0;

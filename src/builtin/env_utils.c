@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 19:27:39 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/21 16:30:30 by settes           ###   ########.fr       */
+/*   Updated: 2024/08/23 00:32:10 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	is_correct_env_variable(char *var, char *cmd)
 	i = 0;
 	while (var[i] && var[i] != '=')
 	{
-		if (ft_isdigit(var[i]) || var[i] == '_')
+		if (ft_isdigit(var[i]))
 			count++;
 		i++;
 	}

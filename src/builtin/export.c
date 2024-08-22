@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 21:01:32 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/11 15:51:41 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/08/23 00:23:06 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	exec_export(t_pipe *data, t_cmd *cmd, int pos)
 	size_t	i;
 
 	if (cmd->scmd[pos]->args[1] == NULL)
-		exec_export_no_args(data->envp_minish);
+		exec_export_no_args(data->env_mini);
 	else
 	{
 		i = 1;
@@ -29,6 +29,8 @@ int	exec_export(t_pipe *data, t_cmd *cmd, int pos)
 		{
 			if (!is_correct_env_variable(cmd->scmd[pos]->args[i], "export"))
 			{
+				print_err_msg("export", cmd->scmd[pos]->args[i],
+					"not a valid identifier");
 				i++;
 				continue ;
 			}
@@ -42,13 +44,16 @@ int	exec_export(t_pipe *data, t_cmd *cmd, int pos)
 
 int	manage_variable(t_pipe *data, char *var)
 {
-	if (env_var_already_exist(data->envp_minish, var))
-		change_var_value(data->envp_minish, var);
+	if (env_var_already_exist(data->env_mini, var))
+		change_var_value(data->env_mini, var);
 	else
 	{
-		data->envp_minish = create_new_var(data, var);
-		if (!data->envp_minish)
+		data->env_mini = create_new_var(data, var);
+		if (!data->env_mini)
+		{
+			printf("minishell: No memory\n");
 			return (EXIT_FAILURE);
+		}
 	}
 	return (EXIT_SUCCESS);
 }

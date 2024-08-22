@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils_2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 23:41:36 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/11 15:50:25 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/08/23 00:15:00 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,20 +111,20 @@ char	**create_new_var(t_pipe *data, char *var)
 	char	**tmp;
 
 	len = 0;
-	len = get_array_size(data->envp_minish);
+	len = get_array_size(data->env_mini);
 	tmp = malloc(sizeof(char *) * (len + 2));
 	if (!tmp)
 		return (NULL);
 	len = 0;
-	while (data->envp_minish[len])
+	while (data->env_mini[len])
 	{
-		tmp[len] = f_strdup(data->envp_minish[len]);
+		tmp[len] = f_strdup(data->env_mini[len]);
 		len++;
 	}
 	tmp[len] = f_strdup(var);
 	tmp[len + 1] = NULL;
-	free_memory((const char **)data->envp_minish,
-		get_array_size(data->envp_minish));
+	free_memory((const char **)data->env_mini,
+		get_array_size(data->env_mini));
 	return (tmp);
 }
 

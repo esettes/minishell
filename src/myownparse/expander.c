@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:59:16 by antosanc          #+#    #+#             */
-/*   Updated: 2024/08/21 21:30:59 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/08/23 00:26:55 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ char	*expander(char *str, char **envp, t_token **token)
 	else
 	{
 		signal = ft_itoa(exit_s);
-		printf("exit_status in expander parser: %i \n", exit_s);
 		expanded_str = create_expanded_str(str, signal, token);
 		free(signal);
 	}

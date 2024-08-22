@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/22 22:36:47 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/08/23 00:24:46 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,32 +19,23 @@ int exec_process(t_pipe *data, char **cmd)
 
 	status = 0;
 	if (cmd_have_abs_path(cmd[0]))
-	{
 		path = f_strdup(cmd[0]);
-		//if (execve(path, cmd, data->envp_minish) < 0)
-		//	return (f_error(data));
-		//return (EXIT_SUCCESS);
-	}
 	else
-	{
-		path = get_path(cmd[0], get_env_var_value(data->envp_minish, "PATH"));
-	}
-	printf("before fork!!\n");
+		path = get_path(cmd[0], get_env_var_value(data->env_mini, "PATH"));
 	if (data->n_cmds == 1)
 	{
 		data->pid = fork();
 		if (data->pid != 0)
-		return (process_waiting(data), free(path), WEXITSTATUS(exit_s));
+			return (process_waiting(data), free(path), WEXITSTATUS(exit_s));
 	}
-	if (cmd_have_relative_path(cmd[0]) || !path || execve(path, cmd, data->envp_minish) == -1)
+	if (cmd_have_relative_path(cmd[0]) || !path
+		|| execve(path, cmd, data->env_mini) == -1)
 		(printf("minishell: %s: command not found\n", cmd[0]), status = 127);
 	free(path);
-	//free(data->envp_minish);
 	if (data->n_cmds == 1)
 	{
 		close(data->std_[R]);
 		close(data->std_[W]);
-		printf("exiting from exec_process!!!\n");
 		exit(status);
 	}
 	return (status);
@@ -52,7 +43,6 @@ int exec_process(t_pipe *data, char **cmd)
 
 void	process_waiting(t_pipe *d)
 {
-	printf("in process waiting!!!\n");
 	(signal(SIGINT, SIG_IGN), f_perror(wait(&exit_s), "wait"));
 	if (WTERMSIG(exit_s) == SIGINT)
 		(ft_putchar_fd('\n', STDOUT_FILENO), exit_s = exit_status(130));
@@ -66,41 +56,21 @@ int exec_cmd(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 
 	status = 0;
 	if (f_strncmp(*cmd->scmd[pos]->args, "cd", sizeof("cd")) == 0)
-	{
-		if (exec_cd(*p_data, cmd, pos))
-			return (EXIT_FAILURE);
-	}
+		status = exec_cd(*p_data, cmd, pos);
 	else if (f_strncmp(*cmd->scmd[pos]->args, "pwd", sizeof("pwd")) == 0)
-		pwd_handler(old_cwd);
+		exec_pwd(old_cwd);
 	else if (f_strncmp(*cmd->scmd[pos]->args, "env", sizeof("env")) == 0)
-	{
-		if (exec_env(*p_data))
-			return (EXIT_FAILURE);
-	}
+		exec_env(*p_data);
 	else if (f_strncmp(*cmd->scmd[pos]->args, "export", sizeof("export")) == 0)
-	{
-		if (exec_export(*p_data, cmd, pos))
-			return (EXIT_FAILURE);
-	}
+		status = exec_export(*p_data, cmd, pos);
 	else if (f_strncmp(*cmd->scmd[pos]->args, "unset", sizeof("unset")) == 0)
-	{
-		if (exec_unset(cmd, *p_data, pos))
-			return (EXIT_FAILURE);
-	}
+		exec_unset(cmd, *p_data, pos);
 	else if (ft_strncmp(*cmd->scmd[pos]->args, "echo", sizeof("echo")) == 0)
-	{
-		if (echo_handler(*cmd->scmd[pos]))
-			return (EXIT_FAILURE);
-	}
+		exec_echo(*cmd->scmd[pos]);
 	else if (ft_strncmp(*cmd->scmd[pos]->args, "exit", sizeof("exit")) == 0)
-	{
-		if (exit_handler(cmd, *p_data))
-			return (EXIT_FAILURE);
-	}
+		exec_exit(cmd, *p_data);
 	else
 		status = exec_process(*p_data, cmd->scmd[pos]->args);
-	printf("status single command: %i \n", status);
-	printf("exit_status single command: %i \n", exit_status(status));
 	//return (exit_status(status));
 	return (status);
 }
@@ -133,11 +103,6 @@ void close_fds(t_pipe *data)
 
 void	run_single_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
 {
-	int		status;
-	pid_t	cpid;
-
-	status = 0;
-	cpid = 0;
 	open_file(cmd, data, 0);
 	if (data->infile)
 	{
@@ -150,9 +115,7 @@ void	run_single_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
 		close(data->outfile);
 	}
 	exit_s = exec_cmd(cmd, &data, 0, old_cwd);
-
 	close_fds(data);
-	//exit(status);
 }
 
 int run_multiple_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
@@ -179,7 +142,7 @@ int run_multiple_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
 			close(data->std_[W]);
 			close(data->pip[0]);
 			close(data->pip[1]);
-			//exit(WEXITSTATUS(status));
+			exit(WEXITSTATUS(exit_s));
 		}
 		else
 		{

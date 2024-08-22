@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:06:51 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/11 15:32:39 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/08/23 00:17:31 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	pwd_handler(char *old_cwd)
+int	exec_pwd(char *old_cwd)
 {
 	char	*buffer;
 

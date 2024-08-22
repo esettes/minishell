@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:23 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/22 22:33:44 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/08/23 00:25:58 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	run_executer(t_pipe *p_data, t_cmd *cmd, char *old_cwd)
 	status = 0;
 	cpid = 0;
 	p_data->cmd_counter = cmd->n_scmd;
-	dprintf(2, "num commands: %i \n", cmd->n_scmd);
+	//dprintf(2, "num commands: %i \n", cmd->n_scmd);
 	p_data->childs = malloc(sizeof(pid_t) * cmd->n_scmd);
 	//p_data->childs[cmd->n_scmd] = NULL;
 	
@@ -47,7 +47,7 @@ int	run_executer(t_pipe *p_data, t_cmd *cmd, char *old_cwd)
 		exit_s = status;
 	}
 	
-	dprintf(2, "exit status after father waits: %i \n", WEXITSTATUS(status));
+	//dprintf(2, "exit status after father waits: %i \n", WEXITSTATUS(status));
 	
 	// cpid = wait(NULL);
 	// while (cpid > 0)

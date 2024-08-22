@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 19:07:06 by iostancu          #+#    #+#             */
-/*   Updated: 2024/02/29 23:30:40 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/08/23 00:15:00 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ int	exec_env(t_pipe *data)
 	int	envp_minish_size;
 
 	i = 0;
-	envp_minish_size = get_array_size(data->envp_minish);
+	envp_minish_size = get_array_size(data->env_mini);
 	while (i < envp_minish_size)
 	{
-		printf("%s\n", data->envp_minish[i]);
+		printf("%s\n", data->env_mini[i]);
 		i++;
 	}
 	return (EXIT_SUCCESS);
@@ -36,8 +36,8 @@ int	init_envp_minishell(t_pipe *data, char *envp[])
 	len = 0;
 	while (envp[len])
 		len++;
-	data->envp_minish = malloc(sizeof(char *) * (len + 1));
-	if (!data->envp_minish)
+	data->env_mini = malloc(sizeof(char *) * (len + 1));
+	if (!data->env_mini)
 		return (EXIT_FAILURE);
 	i = 0;
 	j = 0;
@@ -45,12 +45,12 @@ int	init_envp_minishell(t_pipe *data, char *envp[])
 	{
 		if (envp[i] && (f_strncmp(envp[i], "OLDPWD", 6) == 0))
 			i++;
-		data->envp_minish[j] = f_strdup(envp[i]);
-		if (!data->envp_minish[j])
+		data->env_mini[j] = f_strdup(envp[i]);
+		if (!data->env_mini[j])
 			return (EXIT_FAILURE);
 		i++;
 		j++;
 	}
-	data->envp_minish[j] = NULL;
+	data->env_mini[j] = NULL;
 	return (EXIT_SUCCESS);
 }

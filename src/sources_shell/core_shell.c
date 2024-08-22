@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:06:11 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/22 22:32:53 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/08/23 00:15:00 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ static void	free_all(t_cmd *cmd, t_pipe *p_data, t_buff *buff, char *old_cwd)
 {
 	if (old_cwd)
 		free(old_cwd);
-	free_memory((const char **)p_data->envp_minish,
-		get_array_size(p_data->envp_minish));
+	free_memory((const char **)p_data->env_mini,
+		get_array_size(p_data->env_mini));
 	free(p_data);
 	free(buff->buffer);
 	free(buff->oldbuffer);
@@ -72,7 +72,7 @@ int	core_shell(char **envp)
 		b.buffer = readline("\x1b[32mminishell$\x1b[0m ");
 		if (!b.buffer)
 			break ;
-		cmd = parser(b.buffer, p_data->envp_minish);
+		cmd = parser(b.buffer, p_data->env_mini);
 		if (cmd == NULL)
 			continue ;
 		//get_cwd(old_cwd);

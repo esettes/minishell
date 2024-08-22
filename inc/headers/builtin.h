@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:07:46 by iostancu          #+#    #+#             */
-/*   Updated: 2024/07/08 16:47:40 by settes           ###   ########.fr       */
+/*   Updated: 2024/08/23 00:17:31 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ typedef struct s_unset
 	char	*var;
 }	t_unset;
 
-int		echo_handler(t_scmd scmd);
-int		exit_handler(t_cmd *cmd, t_pipe *data);
+int		exec_echo(t_scmd scmd);
+int		exec_exit(t_cmd *cmd, t_pipe *d);
 char	*ft_getenv(char **envp, char *var_name);
 int		exec_cd(t_pipe *data, t_cmd *cmd, int pos);
 int		exec_env(t_pipe *data);
@@ -58,7 +58,7 @@ size_t	get_array_size(char **arr);
 char	*get_env_variable(char *var);
 int		is_correct_env_variable(char *var, char *cmd);
 char	*get_env_var_value(char **envp_minish, char *var);
-int		pwd_handler(char *old_cwd);
+int		exec_pwd(char *old_cwd);
 char	**create_new_var(t_pipe *data, char *var);
 void	print_cmd_error(char *var, char *cmd);
 int		change_var_value(char **envp_minish, char *raw_variable);

@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 13:05:06 by antosanc          #+#    #+#             */
-/*   Updated: 2024/08/22 00:33:59 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/08/23 00:15:00 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ static void	free_prompt(t_prompt *prompt)
 
 static void	create_prompt(t_pipe *data, t_prompt *prompt, char *cwd)
 {
-	if (get_env_var_value(data->envp_minish, "HOME"))
+	if (get_env_var_value(data->env_mini, "HOME"))
 		prompt->home_substr = ft_substr(cwd, ft_strlen(get_env_var_value
-					(data->envp_minish, "HOME")), ft_strlen(cwd));
+					(data->env_mini, "HOME")), ft_strlen(cwd));
 	else
 		prompt->home_substr = ft_strdup(cwd);
 	prompt->curr_dir = ft_strjoin(prompt->home_substr, " > ");
@@ -45,7 +45,7 @@ static void	create_prompt(t_pipe *data, t_prompt *prompt, char *cwd)
 		free (prompt->curr_dir);
 		prompt->curr_dir = ft_strjoin(cwd, " > ");
 	}
-	prompt->usr = ft_strjoin(get_env_var_value(data->envp_minish, "USER"),
+	prompt->usr = ft_strjoin(get_env_var_value(data->env_mini, "USER"),
 			" in ");
 	if (!prompt->usr)
 		prompt->usr = ft_strdup("minishell in ");
