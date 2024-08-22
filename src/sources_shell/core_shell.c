@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:06:11 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/21 16:30:30 by settes           ###   ########.fr       */
+/*   Updated: 2024/08/21 21:46:05 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ int	core_shell(char **envp)
 	{
 		if (manage_signactions(MODE_STANDARD))
 			return (EXIT_FAILURE);
-		get_prompt(p_data, prompt);
-		b.buffer = readline(prompt->prompt);
+		//get_prompt(p_data, prompt);
+		b.buffer = readline("minishell$ ");
 		free(prompt->prompt);
 		if (!b.buffer)
 			break ;
