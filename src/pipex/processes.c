@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   processes.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/23 00:24:46 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/08/27 17:15:04 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ int exec_process(t_pipe *data, char **cmd)
 		if (data->pid != 0)
 			return (process_waiting(data), free(path), WEXITSTATUS(exit_s));
 	}
-	if (cmd_have_relative_path(cmd[0]) || !path
-		|| execve(path, cmd, data->env_mini) == -1)
+	//if (cmd_have_relative_path(cmd[0]) || !path
+	if (!path || execve(path, cmd, data->env_mini) == -1)
 		(printf("minishell: %s: command not found\n", cmd[0]), status = 127);
 	free(path);
 	if (data->n_cmds == 1)
