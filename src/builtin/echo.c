@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:07:30 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/23 00:17:19 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/08/27 17:09:24 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	exec_echo(t_scmd scmd)
 	while (x < (size_t)scmd.argc && scmd.args[x + TRUE])
 	{
 		ft_putstr_fd(scmd.args[x + TRUE], STDOUT_FILENO);
-		ft_putstr_fd(" ", STDOUT_FILENO);
+		//ft_putstr_fd(" ", STDOUT_FILENO);
 		x++;
 	}
 	if (flag)
