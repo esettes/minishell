@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:23 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/23 00:25:58 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/08/27 18:30:06 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ int	run_executer(t_pipe *p_data, t_cmd *cmd, char *old_cwd)
 	//dprintf(2, "num commands: %i \n", cmd->n_scmd);
 	p_data->childs = malloc(sizeof(pid_t) * cmd->n_scmd);
 	//p_data->childs[cmd->n_scmd] = NULL;
-	
 	if (p_data->cmd_counter <= 0)
 		print_err_msg(NULL, NULL, "syntax error near unexpected token.");
 	manage_signactions(MODE_CHILD);

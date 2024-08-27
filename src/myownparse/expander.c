@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:59:16 by antosanc          #+#    #+#             */
-/*   Updated: 2024/08/23 00:26:55 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/08/27 18:02:38 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ char	*expander(char *str, char **envp, t_token **token)
 	else
 	{
 		signal = ft_itoa(exit_s);
+		if (str[i + 1] != '\0')
+			ft_strlcat(signal, str + 2, sizeof(str) - 1);
 		expanded_str = create_expanded_str(str, signal, token);
 		free(signal);
 	}

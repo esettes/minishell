@@ -6,7 +6,7 @@
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:59:23 by antosanc          #+#    #+#             */
-/*   Updated: 2024/05/07 21:39:19 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/08/27 17:43:45 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,11 @@ t_token_lst	*create_token_lst(char *str, int j, t_token **token, int flag)
 	token_lst->content = ft_substr(str, j, (*token)->i - j);
 	if (check_heredoc((*token)->token_lst))
 		return (token_lst);
+	if (str[j] && str[j] == '$' && (str[j + 1] == '\0' || str[j + 1] == '\"'))
+	{
+		token_lst->content = ft_substr(str, j, (*token)->i - j);
+		return (token_lst);
+	}
 	if (j > 0 && str[j - 1] && !((str[j - 1] == '\'')))
 	{
 		if (flag > 0)
