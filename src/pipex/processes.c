@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/11 14:08:41 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/27 18:38:28 by antosanc         ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2024/08/27 19:13:27 by antosanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include <minishell.h>
 
@@ -28,8 +29,8 @@ int exec_process(t_pipe *data, char **cmd)
 		if (data->pid != 0)
 			return (process_waiting(data), free(path), WEXITSTATUS(exit_s));
 	}
-	if (cmd_have_relative_path(cmd[0]) || !path
-		|| execve(path, cmd, data->env_mini) == -1)
+	//if (cmd_have_relative_path(cmd[0]) || !path
+	if (!path || execve(path, cmd, data->env_mini) == -1)
 		(printf("minishell: %s: command not found\n", cmd[0]), status = 127);
 	free(path);
 	if (data->n_cmds == 1)
