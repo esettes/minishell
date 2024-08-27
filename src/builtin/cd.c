@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 18:43:21 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/23 00:15:00 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/08/28 00:28:18 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,11 @@ int	exec_cd(t_pipe *data, t_cmd *cmd, int pos)
 {
 	t_cd	cd;
 
+	if (get_num_scmd_args(*cmd->scmd[pos]) > 2)
+	{
+		printf("minishell: cd: too many arguments.\n");
+		return (EXIT_FAILURE);
+	}
 	cd = init_cd(data, cmd, pos);
 	is_home_directory(cmd, &cd);
 	if (cd.dir_to_exec && f_strncmp(cd.dir_to_exec, "-", 1) == 0)
@@ -43,7 +48,7 @@ int	exec_cd(t_pipe *data, t_cmd *cmd, int pos)
 	if (chdir(cd.dir_to_exec) < 0)
 	{
 		exit_s = 2;
-		printf("minishell: cd: %s: No such file or directory.\n", cd.dir_to_exec);
+		//printf("minishell: cd: %s: No such file or directory.\n", cd.dir_to_exec);
 		//return (free(cd.curr_dir), EXIT_FAILURE);
 		return (f_error(data));
 	}

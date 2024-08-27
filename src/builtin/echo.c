@@ -6,13 +6,13 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:07:30 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/28 00:06:34 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/08/28 00:17:43 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	get_num_args(t_scmd scmd)
+int	get_num_scmd_args(t_scmd scmd)
 {
 	int	i;
 
@@ -30,7 +30,7 @@ int	exec_echo(t_scmd scmd)
 
 	x = ZERO;
 	flag = TRUE;
-	args = get_num_args(scmd);
+	args = get_num_scmd_args(scmd);
 	while (x < (size_t)scmd.argc && scmd.args[x + TRUE]
 		&& !ft_strncmp(scmd.args[x + TRUE], "-n", sizeof("-n")))
 	{

@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 21:01:32 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/23 00:23:06 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/08/28 00:35:13 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,9 @@ int		manage_variable(t_pipe *data, char *var);
 int	exec_export(t_pipe *data, t_cmd *cmd, int pos)
 {
 	size_t	i;
+	int		status;
 
+	status = 0;
 	if (cmd->scmd[pos]->args[1] == NULL)
 		exec_export_no_args(data->env_mini);
 	else
@@ -29,17 +31,18 @@ int	exec_export(t_pipe *data, t_cmd *cmd, int pos)
 		{
 			if (!is_correct_env_variable(cmd->scmd[pos]->args[i], "export"))
 			{
-				print_err_msg("export", cmd->scmd[pos]->args[i],
-					"not a valid identifier");
+				// print_err_msg("export", cmd->scmd[pos]->args[i],
+				// 	"not a valid identifier");
 				i++;
+				status = 1;
 				continue ;
 			}
 			if (manage_variable(data, cmd->scmd[pos]->args[i]))
-				return (EXIT_FAILURE);
+				return (1);
 			i++;
 		}
 	}
-	return (EXIT_SUCCESS);
+	return (status);
 }
 
 int	manage_variable(t_pipe *data, char *var)

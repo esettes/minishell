@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   processes.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/08/27 19:13:27 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/08/28 00:27:46 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,9 @@ int exec_cmd(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 	else if (f_strncmp(*cmd->scmd[pos]->args, "export", sizeof("export")) == 0)
 		status = exec_export(*p_data, cmd, pos);
 	else if (f_strncmp(*cmd->scmd[pos]->args, "unset", sizeof("unset")) == 0)
-		exec_unset(cmd, *p_data, pos);
+		status = exec_unset(cmd, *p_data, pos);
 	else if (ft_strncmp(*cmd->scmd[pos]->args, "echo", sizeof("echo")) == 0)
-		exec_echo(*cmd->scmd[pos]);
+		status = exec_echo(*cmd->scmd[pos]);
 	else if (ft_strncmp(*cmd->scmd[pos]->args, "exit", sizeof("exit")) == 0)
 		exec_exit(cmd, *p_data);
 	else

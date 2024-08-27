@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:07:46 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/23 00:17:31 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/08/28 00:17:53 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,6 @@ char	*get_env_variable_from_minish_environ(char **envp_minish, char *var);
 void	init_env(char **env, size_t len, char **envp_minish);
 void	print_env_not_set(char *cmd, char *var);
 void	print_err_msg(char *cmd, char *var, char *msg);
+int		get_num_scmd_args(t_scmd scmd);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 19:10:04 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/23 00:15:00 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/08/28 00:31:57 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	exec_unset(t_cmd *cmd, t_pipe *data, int pos)
 	t_unset	uset;
 
 	if (!cmd->scmd[pos]->args[1])
-		return (EXIT_FAILURE);
+		return (EXIT_SUCCESS);
 	uset.k = 1;
 	while (cmd->scmd[pos]->args[uset.k])
 	{
