@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf_chr.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antosanc <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 11:20:19 by antosanc          #+#    #+#             */
-/*   Updated: 2023/11/25 11:22:41 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/08/29 20:17:23 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,5 @@
 
 int	ft_putchar(char c)
 {
-	return (write(1, &c, 1));
+	return (write(2, &c, 1));
 }

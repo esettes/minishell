@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/08/28 00:27:46 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/08/29 22:43:12 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,15 @@ int exec_process(t_pipe *data, char **cmd)
 		if (data->pid != 0)
 			return (process_waiting(data), free(path), WEXITSTATUS(exit_s));
 	}
+	//check file permissions with stat()
 	//if (cmd_have_relative_path(cmd[0]) || !path
-	if (!path || execve(path, cmd, data->env_mini) == -1)
-		(printf("minishell: %s: command not found\n", cmd[0]), status = 127);
+	if ((access(path, F_OK) || !path || execve(path, cmd, data->env_mini) == -1)) //&& status == 0)
+	{
+		// *empty
+		// *is a directory
+		status = 127;
+		print_err_msg(cmd[0], "", "command not found");
+	}
 	free(path);
 	if (data->n_cmds == 1)
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 19:27:39 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/29 13:31:02 by settes           ###   ########.fr       */
+/*   Updated: 2024/08/29 20:10:33 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	is_correct_env_variable(char *var, char *cmd)
 
 	count = 0;
 	ret = check_chars(var, cmd);
-	printf("*****chars: %s \n", var);
+	//printf("*****chars: %s \n", var);
 	i = 0;
 	while (var[i] && var[i] != '=')
 	{

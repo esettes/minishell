@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:23 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/27 18:30:06 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/08/29 22:05:40 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ int	run_executer(t_pipe *p_data, t_cmd *cmd, char *old_cwd)
 		}
 		exit_s = status;
 	}
-	
+	if (exit_s == 512 || exit_s == 256)
+		exit_s = 1;
 	//dprintf(2, "exit status after father waits: %i \n", WEXITSTATUS(status));
 	
 	// cpid = wait(NULL);
