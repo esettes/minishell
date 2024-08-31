@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 18:43:21 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/28 00:28:18 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/08/31 01:20:41 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	exec_cd(t_pipe *data, t_cmd *cmd, int pos)
 
 	if (get_num_scmd_args(*cmd->scmd[pos]) > 2)
 	{
-		printf("minishell: cd: too many arguments.\n");
+		print_err_msg("cd", "", "too many arguments.\n");
 		return (EXIT_FAILURE);
 	}
 	cd = init_cd(data, cmd, pos);
@@ -66,7 +66,7 @@ static void	change_and_create_env_var(t_pipe **data, char *curr_dir)
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 	{
-		printf("cd: error retrieving current directory: getcwd: cannot access"
+		print_err_msg("cd", "", "error retrieving current directory: getcwd: cannot access"
 			"parent directories: No such file or directory\n");
 		return ;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   processes.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/08/29 22:43:12 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/08/31 01:04:20 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int exec_process(t_pipe *data, char **cmd)
 {
 	char *path;
 	int	status;
+	struct stat	st;
 
 	status = 0;
 	if (cmd_have_abs_path(cmd[0]))
@@ -31,6 +32,16 @@ int exec_process(t_pipe *data, char **cmd)
 	}
 	//check file permissions with stat()
 	//if (cmd_have_relative_path(cmd[0]) || !path
+	// if (stat(path, &st) == -1)
+	// {
+	// 	status = 126;
+	// 	print_err_msg(cmd[0], "", "can't open file or directory.");
+	// }
+	// else if (S_ISDIR(st.st_mode))
+	// {
+	// 	status = 126;
+	// 	perror("minishell");
+	// }
 	if ((access(path, F_OK) || !path || execve(path, cmd, data->env_mini) == -1)) //&& status == 0)
 	{
 		// *empty

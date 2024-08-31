@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:07:02 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/27 19:10:47 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/08/31 05:46:24 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int	exec_exit(t_cmd *cmd, t_pipe *d)
 {
 	int	exit_code;
-	int	i;
 	char *full_arg;
 
 	exit_code = 0;
