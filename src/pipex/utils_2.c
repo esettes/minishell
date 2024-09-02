@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 23:30:58 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/23 00:15:00 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/08/31 06:22:40 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,9 @@ t_pipe	*init_pipe_struct(char *envp[])
 
 int	open_file(t_cmd *cmd, t_pipe *data, int pos)
 {
+	int status;
+
+	status = 0;
 	if (data->infile)
 		(close(data->infile), data->infile = 0);
 	if (cmd->scmd[pos]->in_f)
@@ -52,9 +55,11 @@ int	open_file(t_cmd *cmd, t_pipe *data, int pos)
 	}
 	if (data->infile == -1 || data->outfile == -1)
 	{
-		return (f_error(data));
+		status = f_error(data);
+		dprintf(2, "ewrroooor\n");
+		return (status);
 	}
-	return (EXIT_SUCCESS);
+	return (status);
 	// if (cmd->scmd[pos]->in_f)
 	// {
 	// 	data->infile = open(cmd->scmd[pos]->in_f, O_RDONLY, 0644);

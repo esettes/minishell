@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:23 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/31 01:41:52 by settes           ###   ########.fr       */
+/*   Updated: 2024/08/31 08:47:29 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	run_executer(t_pipe *p_data, t_cmd *cmd, char *old_cwd)
 	status = 0;
 	cpid = 0;
 	p_data->cmd_counter = cmd->n_scmd;
-	//dprintf(2, "num commands: %i \n", cmd->n_scmd);
+	dprintf(2, "num commands: %i \n", cmd->n_scmd);
 	p_data->childs = malloc(sizeof(pid_t) * cmd->n_scmd);
 	//p_data->childs[cmd->n_scmd] = NULL;
 	if (p_data->cmd_counter <= 0)
@@ -37,13 +37,13 @@ int	run_executer(t_pipe *p_data, t_cmd *cmd, char *old_cwd)
 	else
 	{
 		run_multiple_cmd(p_data, cmd, old_cwd);
-		int i = 0;
-		while (i < p_data->cmd_counter)
-		{
-			cpid = waitpid(p_data->childs[i], &status, 0);
-			i++;
-		}
-		exit_s = status;
+		// int i = 0;
+		// while (i < p_data->cmd_counter)
+		// {
+		// 	cpid = waitpid(p_data->childs[i], &status, 0);
+		// 	i++;
+		// }
+		// exit_s = status;
 	}
 	if (exit_s == 512 || exit_s == 256)
 		exit_s = 1;

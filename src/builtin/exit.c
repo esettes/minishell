@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:07:02 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/31 05:46:24 by settes           ###   ########.fr       */
+/*   Updated: 2024/08/31 06:55:12 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ int	exec_exit(t_cmd *cmd, t_pipe *d)
 	char *full_arg;
 
 	exit_code = 0;
-	if (cmd->n_scmd > 0 && cmd->scmd[0] != NULL && cmd->scmd[0]->args != NULL)
-		exit_code = ft_atoi(cmd->scmd[0]->args[1]);
+	//if (cmd->n_scmd > 0 && cmd->scmd[0] != NULL && cmd->scmd[0]->args != NULL)
+	//	exit_code = ft_atoi(cmd->scmd[0]->args[1]);
 	printf("exit\n");
 	free_cmd_tony(cmd);
 	free_memory((const char **)d->env_mini, get_array_size(d->env_mini));
