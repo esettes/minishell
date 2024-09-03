@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/09/03 12:38:49 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/03 18:46:54 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,18 +30,6 @@ int exec_process(t_pipe *data, char **cmd)
 		if (data->pid != 0)
 			return (process_waiting(data), free(path), WEXITSTATUS(exit_s));
 	}
-	//check file permissions with stat()
-	//if (cmd_have_relative_path(cmd[0]) || !path
-	// if (stat(path, &st) == -1)
-	// {
-	// 	status = 126;
-	// 	print_err_msg(cmd[0], "", "can't open file or directory.");
-	// }
-	// else if (S_ISDIR(st.st_mode))
-	// {
-	// 	status = 126;
-	// 	perror("minishell");
-	// }
 	if ((access(path, F_OK) || !path || execve(path, cmd, data->env_mini) == -1)) //&& status == 0)
 	{
 		// *empty
@@ -121,7 +109,12 @@ void close_fds(t_pipe *data)
 
 void	run_single_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
 {
-	open_file(cmd, data, 0);
+	if (open_file(cmd, data, 0))
+	{
+		close_fds(data);
+		return ;
+	}
+	dprintf(2, "mini output after open file: %i\n", exit_s);
 	if (data->infile)
 	{
 		dup2(data->infile, STDIN_FILENO);
@@ -139,8 +132,10 @@ void	run_single_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
 int run_multiple_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
 {
 	int i;
+	//int	status;
 
 	i = -1;
+	//status = 0;
 	while (++i < data->cmd_counter)
 	{
 		open_file(cmd, data, i);
@@ -151,11 +146,21 @@ int run_multiple_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
 		}
 		data->pid = fork();
 		data->childs[i] = data->pid;
+		// if (status)
+		// {
+		// 	if (data->pid != 0)
+		// 	{
+		// 		return (process_waiting(data), WEXITSTATUS(exit_s));
+		// 	}
+		// }
 		if (data->pid == 0)
 		{
+			// if (status)
+			// 	return (status);
 			redirect(data, i);
-			if (exec_cmd(cmd, &data, i, old_cwd))
-				return (EXIT_FAILURE);
+			exit_s = exec_cmd(cmd, &data, i, old_cwd);
+			// if (exit_s)
+			// 	return (exit_s);
 			close(data->std_[R]);
 			close(data->std_[W]);
 			close(data->pip[0]);
