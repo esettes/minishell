@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/08/31 01:04:20 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/03 12:38:49 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,15 +161,17 @@ int run_multiple_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
 			close(data->pip[0]);
 			close(data->pip[1]);
 			exit(WEXITSTATUS(exit_s));
+			//printf("after exit in run multiple ccmds\n");
 		}
 		else
 		{
 			if (i != 0)
 				close(data->old_fd);
-			if (i != data->cmd_counter - 1)
+			if (i != data->cmd_counter)
 			{
 				close(data->pip[1]);
 				data->old_fd = data->pip[0];
+				//printf("\x1b[34mclosing by parent in run multiple!\x1b[0m\n");
 			}
 		}
 		close_fds(data);

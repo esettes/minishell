@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 23:30:58 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/23 00:15:00 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/09/03 15:16:57 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ t_pipe	*init_pipe_struct(char *envp[])
 	if (tmp == NULL)
 		return (NULL);
 	init_envp_minishell(tmp, envp);
-	tmp->envp = get_env_var_value(tmp->env_mini, "PATH");
-	tmp->cmd = NULL;
+	//tmp->envp = get_env_var_value(tmp->env_mini, "PATH");
 	tmp->infile = 0;
 	tmp->outfile = 0;
 	tmp->pid = -1;
@@ -32,6 +31,9 @@ t_pipe	*init_pipe_struct(char *envp[])
 	tmp->n_cmds = 0;
 	tmp->old_fd = 0;
 	tmp->cmd_counter = 0;
+	tmp->buff = malloc(sizeof(t_buff));
+	tmp->buff->buffer = NULL;
+	tmp->buff->oldbuffer = NULL;
 	return (tmp);
 }
 
