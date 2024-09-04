@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:06:11 by iostancu          #+#    #+#             */
-/*   Updated: 2024/09/03 18:42:51 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/05 01:53:20 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,23 +87,25 @@ int	core_shell(char **envp)
 		//b.buffer = readline("\x1b[32mminishell$\x1b[0m ");
 		if (!p->buff->buffer)
 		{
-			printf("no line!\n");
+			//printf("no line!\n");
 			free_all(cmd, p, old_cwd);
 			exit(0);
 		}
 		if (!*p->buff->buffer || is_empty_line(p->buff->buffer))
 		{
-			printf("is blank line!\n");
+			//printf("is blank line!\n");
 			free(p->buff->buffer);
 			continue ;
 		}
 		// if (!b.buffer)
 		// 	break ;
+		printf("before parser \n");
 		cmd = parser(b.buffer, p->env_mini);
+		printf("after parser cmd: %s\n", cmd->scmd[0]);
 		if (cmd == NULL)
 		{
-			printf("for check if, when quotes fail, program will go through\
-				here or not\n");
+			//printf("for check if, when quotes fail, program will go through\
+			//	here or not\n");
 			//free(p->buff->buffer);
 			continue ;
 		}
