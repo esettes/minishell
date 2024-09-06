@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:07 by antosanc          #+#    #+#             */
-/*   Updated: 2024/09/05 01:37:38 by settes           ###   ########.fr       */
+/*   Updated: 2024/08/21 16:30:30 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,61 +47,24 @@
         }
     }
 }*/
-int	f_isblank(int c)
-{
-	if (c == 11 || c == 13 || c == 32)
-		return (c);
-	return (0);
-}
-
-int	is_empty_line(char *s)
-{
-	int	i;
-
-	if (!ft_strncmp(s, "\"\"\0", 3) || !ft_strncmp(s, "''\0", 3))
-		return (1);
-	i = -1;
-	while (s[++i])
-	{
-		if (!f_isblank(s[i]))
-			return (0);
-	}
-	return (1);
-}
 
 static int	parse_checker(t_cmd *cmd, char *str, char **envp)
 {
 	t_token		*token;
-	//t_token_lst		*tmp;
 	t_token_lst	*head;
 
 	token = lex_tony(str, envp);
-	dprintf(1, "Helloª\n");
-	// tmp = token->token_lst;
-	// printf("token list: %s\n", token->token_lst->content);
-	// while(token->token_lst->next)
-	// {
-	// 	printf("token list: %s\n", token->token_lst->content);
-	// }
-	// token = tmp;
 	if (token == NULL)
 	{
 		exit_s = 2;
 		return (EXIT_FAILURE);
 	}
-	
 	if (validator_tony(token))
 	{
 		exit_s = 2;
 		return (clear_all(&token, NULL), EXIT_FAILURE);
 	}
 	head = token->token_lst;
-	// while(token)
-	// {
-	// 	printf("token list: %s\n", token->token_lst->content);
-	// 	token = token->token_lst->next;
-	// }
-	// token = tmp;
 	cmd = yacc_tony(cmd, &token->token_lst, envp);
 	token->token_lst = head;
 	if (cmd == NULL)

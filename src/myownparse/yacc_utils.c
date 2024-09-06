@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 18:19:47 by antosanc          #+#    #+#             */
-/*   Updated: 2024/09/05 00:13:10 by settes           ###   ########.fr       */
+/*   Updated: 2024/07/08 16:46:45 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int	count_cmd(t_token_lst *token_lst)
 	{
 		if (((char *)token_lst->content)[0] == '|' && token_lst->quotes == 0)
 			len++;
-		printf("token list: %s\n", token_lst->content);
 		token_lst = token_lst->next;
 	}
 	return (len);

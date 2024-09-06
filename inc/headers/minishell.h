@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 19:03:59 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/27 23:07:56 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/09/06 17:14:50 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,6 @@ int 		manage_signactions(int mode);
 int			disable_signal(void);
 void		get_prompt(t_pipe *data, t_prompt *prompt);
 t_prompt	*init_prompt(void);
+int	        is_empty_line(char *s);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:09:44 by iostancu          #+#    #+#             */
-/*   Updated: 2024/09/03 18:38:33 by settes           ###   ########.fr       */
+/*   Updated: 2024/08/23 00:15:00 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,9 @@ typedef struct s_pipe
 	pid_t	pid;
 	pid_t	pid2;
 	pid_t	*childs;
-	//char	*envp;
+	//pid_t	last_child;
+	char	**cmd;
+	char	*envp;
 	char	**env_mini;
 	int		infile;
 	int		outfile;
@@ -30,7 +32,7 @@ typedef struct s_pipe
 	int		n_cmds;
 	int		cmd_counter;
 	int		old_fd;
-	t_buff	*buff;
+	//int		is_heredoc;
 }	t_pipe;
 
 # define COLORED 1
@@ -102,7 +104,5 @@ void	close_fds(t_pipe *data);
 int		f_perror(int status, char *s);
 int		exit_status(int val);
 void	process_waiting(t_pipe *d);
-void	reset_pipe_struct(t_pipe *p);
-void	free_pipe_struct(t_pipe *p);
 
 #endif

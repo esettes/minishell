@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 23:30:58 by iostancu          #+#    #+#             */
-/*   Updated: 2024/09/03 18:47:13 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/06 22:37:46 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ t_pipe	*init_pipe_struct(char *envp[])
 	if (tmp == NULL)
 		return (NULL);
 	init_envp_minishell(tmp, envp);
-	//tmp->envp = get_env_var_value(tmp->env_mini, "PATH");
+	tmp->envp = get_env_var_value(tmp->env_mini, "PATH");
+	tmp->cmd = NULL;
 	tmp->infile = 0;
 	tmp->outfile = 0;
 	tmp->pid = -1;
@@ -28,20 +29,13 @@ t_pipe	*init_pipe_struct(char *envp[])
 	tmp->childs = NULL;
 	tmp->std_[0] = 0;
 	tmp->std_[1] = 0;
-	tmp->n_cmds = 0;
 	tmp->old_fd = 0;
 	tmp->cmd_counter = 0;
-	tmp->buff = malloc(sizeof(t_buff));
-	tmp->buff->buffer = NULL;
-	tmp->buff->oldbuffer = NULL;
 	return (tmp);
 }
 
 int	open_file(t_cmd *cmd, t_pipe *data, int pos)
 {
-	int status;
-
-	status = 0;
 	if (data->infile)
 		(close(data->infile), data->infile = 0);
 	if (cmd->scmd[pos]->in_f)
@@ -57,11 +51,9 @@ int	open_file(t_cmd *cmd, t_pipe *data, int pos)
 	}
 	if (data->infile == -1 || data->outfile == -1)
 	{
-		status = f_error(data);
-		dprintf(2, "ewrroooor\n");
-		return (status);
+		return (f_error(data));
 	}
-	return (status);
+	return (EXIT_SUCCESS);
 	// if (cmd->scmd[pos]->in_f)
 	// {
 	// 	data->infile = open(cmd->scmd[pos]->in_f, O_RDONLY, 0644);
