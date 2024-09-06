@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/09/06 22:38:34 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/06 23:34:51 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,12 +125,6 @@ void close_fds(t_pipe *data)
 
 void	run_single_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
 {
-	// if open file fails, close and exit func
-	//if (open_file(cmd, data, 0))
-	//{
-	//	close_fds(data);
-	//	return ;
-	//}
 	open_file(cmd, data, 0);
 	if (data->infile)
 	{
@@ -156,6 +150,8 @@ int run_multiple_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
 	while (++i < data->cmd_counter)
 	{
 		status = open_file(cmd, data, i);
+		if (status)
+			continue ;
 		if (i != data->cmd_counter - 1)
 		{
 			if (pipe(data->pip) < 0)

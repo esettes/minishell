@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:39 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/21 16:47:43 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/06 23:03:50 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	f_error(t_pipe *data)
 	ft_putstrc_fd(RED_, "minishell: ", 2);
 	ft_putstrc_fd(RED_, strerror(exit_s), 2);
 	ft_putstrc_fd(RESET_, "\n", 2);
-	return (EXIT_FAILURE);
+	return (exit_s);
 }
 
 int	f_perror(int status, char *s)

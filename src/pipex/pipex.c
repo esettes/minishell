@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:23 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/31 01:41:52 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/06 23:38:30 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	run_executer(t_pipe *p_data, t_cmd *cmd, char *old_cwd)
 		}
 		exit_s = status;
 	}
-	if (exit_s == 512 || exit_s == 256)
+	if (exit_s == 512 || exit_s == 256 || exit_s == 13) // || exit_s == 2)
 		exit_s = 1;
 	//dprintf(2, "exit status after father waits: %i \n", WEXITSTATUS(status));
 	

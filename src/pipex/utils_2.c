@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 23:30:58 by iostancu          #+#    #+#             */
-/*   Updated: 2024/09/06 22:37:46 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/06 23:32:12 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ int	open_file(t_cmd *cmd, t_pipe *data, int pos)
 	}
 	if (data->infile == -1 || data->outfile == -1)
 	{
+		//dprintf(1, "an error occurs!!: %i \n", errno);
 		return (f_error(data));
 	}
 	return (EXIT_SUCCESS);
