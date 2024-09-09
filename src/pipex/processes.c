@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/09/09 17:27:12 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/09 19:03:36 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,11 @@ void redirect(t_pipe *data, int pos)
 	if (data->outfile)
 		(dup2(data->outfile, STDOUT_FILENO), close(data->outfile));
 	else if (pos != data->cmd_counter)
+	{
+		//dprintf(1, "position: %i\n", pos);
+		//dprintf(1, "data->cmd_counter: %i\n", data->cmd_counter);
 		(close(data->pip[0]), dup2(data->pip[1], 1), close(data->pip[1]));
+	}
 }
 
 void close_fds(t_pipe *data)
@@ -125,7 +129,16 @@ void close_fds(t_pipe *data)
 
 void	run_single_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
 {
-	open_file(cmd, data, 0);
+	int	status;
+	
+	status = 0;
+	status = open_file(cmd, data, 0);
+	if (status)
+		{
+			//dprintf(1, "open file status: %i\n", status);
+			exit_s = 1;
+			return ;
+		}
 	if (data->infile)
 	{
 		dup2(data->infile, STDIN_FILENO);
@@ -151,7 +164,10 @@ int run_multiple_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
 	{
 		status = open_file(cmd, data, i);
 		if (status)
+		{
+			exit_s = 1;
 			continue ;
+		}
 		if (i != data->cmd_counter - 1)
 		{
 			if (pipe(data->pip) < 0)

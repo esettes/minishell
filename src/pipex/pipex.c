@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:23 by iostancu          #+#    #+#             */
-/*   Updated: 2024/09/06 23:38:30 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/09 19:04:00 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	run_executer(t_pipe *p_data, t_cmd *cmd, char *old_cwd)
 	status = 0;
 	cpid = 0;
 	p_data->cmd_counter = cmd->n_scmd;
+	//dprintf(1, "initial cmd_counter: %i\n", p_data->cmd_counter);
 	//dprintf(2, "num commands: %i \n", cmd->n_scmd);
 	p_data->childs = malloc(sizeof(pid_t) * cmd->n_scmd);
 	//p_data->childs[cmd->n_scmd] = NULL;
