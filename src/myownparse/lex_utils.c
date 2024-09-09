@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lex_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:59:23 by antosanc          #+#    #+#             */
-/*   Updated: 2024/08/27 17:43:45 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/09/09 20:34:40 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	check_syntax_char(char c)
 {
-	if (c == '<' || c == '>' || c == '|' || c == ' ' || c == '\'' || c == '\"')
+	if (c == '<' || c == '>' || c == '|' || c == ' ' || c == '\'')// || c == '\"')
 		return (1);
 	return (0);
 }
@@ -77,7 +77,8 @@ t_token_lst	*create_token_lst(char *str, int j, t_token **token, int flag)
 		token_lst->content = ft_substr(str, j, (*token)->i - j);
 		return (token_lst);
 	}
-	if (j > 0 && str[j - 1] && !((str[j - 1] == '\'')))
+	
+	if (str[0] == '$' || j > 0 && str[j - 1] && !((str[j - 1] == '\'')))
 	{
 		if (flag > 0)
 			while (flag-- > 0)

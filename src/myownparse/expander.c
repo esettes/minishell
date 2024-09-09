@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:59:16 by antosanc          #+#    #+#             */
-/*   Updated: 2024/09/09 07:32:11 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/09 20:17:01 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,5 +90,6 @@ char	*expander(char *str, char **envp, t_token **token)
 		free(signal);
 	}
 	free(str);
+	//dprintf(1, "exp: %s\n", expanded_str);
 	return (expanded_str);
 }

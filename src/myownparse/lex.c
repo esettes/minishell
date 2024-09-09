@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:24 by antosanc          #+#    #+#             */
-/*   Updated: 2024/07/08 16:46:13 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/09 20:57:17 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,12 @@ static t_token_lst	*quotes_content(char *str, t_token **token)
 	j = (*token)->i;
 	quote = str[j - 1];
 	flag = 0;
+	// si el total del argumento està entre comillas, entonces quotes
+	
 	if (!ft_strchr(str + (*token)->i, quote))
 		return (clear_all(token, "unclosed quotes"));
+	// coge la str mientras !=; añadir q debe haber espacio delante del 1er quote y detras del 2º (o NULL)
+	// añadiendo un if, si es así entrar al while, sino return search_token
 	while (str[(*token)->i] && str[(*token)->i] != quote)
 	{
 		if (str[(*token)->i] == '$')
@@ -46,14 +50,21 @@ static t_token_lst	*search_token(char *str, t_token **token)
 
 	j = (*token)->i;
 	flag = 0;
+	//if (str[(*token)->i] == '\"' && str[(*token)->i - 1] )
 	if (check_syntax_char(str[(*token)->i]))
 		return (store_syntax_char(str, *token));
 	while (str[(*token)->i] && !check_syntax_char(str[(*token)->i]))
 	{
+		
+		if (str[(*token)->i] == '\"')
+			(*token)->i++;
+		dprintf(1, "%c\n", str[(*token)->i]);
 		if (str[(*token)->i] == '$')
 			flag++;
 		(*token)->i++;
 	}
+	// funct q elimine quotes y retorne new str para pasarlo a createÇ_token_lst
+	// !!
 	token_lst = create_token_lst(str, j, token, flag);
 	return (token_lst);
 }
@@ -71,6 +82,7 @@ t_token	*lex_tony(char *str, char **envp)
 			token->i++;
 		if (!str[token->i])
 			break ;
+		//invertir if st.
 		if (str[token->i] == '\'' || str[token->i] == '\"')
 		{
 			token->i++;
