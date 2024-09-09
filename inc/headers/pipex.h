@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:09:44 by iostancu          #+#    #+#             */
-/*   Updated: 2024/09/09 17:22:21 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/09 19:52:34 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,14 @@ typedef struct s_pipe
 {
 	int		pip[2];
 	pid_t	pid;
-	pid_t	pid2;
 	pid_t	*childs;
-	//pid_t	last_child;
 	char	**cmd;
-	char	*envp;
 	char	**env_mini;
 	int		infile;
 	int		outfile;
 	int		std_[2];
-	int		n_cmds;
 	int		cmd_counter;
 	int		old_fd;
-	//int		is_heredoc;
 }	t_pipe;
 
 # define COLORED 0

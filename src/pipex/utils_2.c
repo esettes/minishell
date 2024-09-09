@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 23:30:58 by iostancu          #+#    #+#             */
-/*   Updated: 2024/09/09 17:22:01 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/09 19:52:36 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,10 @@ t_pipe	*init_pipe_struct(char *envp[])
 	tmp = malloc(sizeof(t_pipe));
 	if (tmp == NULL)
 		return (NULL);
-	init_envp_minishell(tmp, envp);
-	tmp->envp = get_env_var_value(tmp->env_mini, "PATH");
 	tmp->cmd = NULL;
 	tmp->infile = 0;
 	tmp->outfile = 0;
 	tmp->pid = -1;
-	tmp->pid2 = -1;
 	tmp->childs = NULL;
 	tmp->std_[0] = 0;
 	tmp->std_[1] = 0;
@@ -50,10 +47,7 @@ int	open_file(t_cmd *cmd, t_pipe *data, int pos)
 			data->outfile = open(cmd->scmd[pos]->out_f, O_TRUNC | O_CREAT | O_WRONLY, 0644);
 	}
 	if (data->infile == -1 || data->outfile == -1)
-	{
-		//dprintf(1, "an error occurs!!: %i \n", errno);
 		return (f_error(data));
-	}
 	return (EXIT_SUCCESS);
 }
 
