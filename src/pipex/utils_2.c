@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 23:30:58 by iostancu          #+#    #+#             */
-/*   Updated: 2024/09/09 19:52:36 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/09 19:56:03 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ t_pipe	*init_pipe_struct(char *envp[])
 	tmp = malloc(sizeof(t_pipe));
 	if (tmp == NULL)
 		return (NULL);
+	init_envp_minishell(tmp, envp);
 	tmp->cmd = NULL;
 	tmp->infile = 0;
 	tmp->outfile = 0;

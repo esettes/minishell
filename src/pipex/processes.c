@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/09/09 19:03:36 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/09 19:58:45 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,28 +24,12 @@ int exec_process(t_pipe *data, char **cmd)
 		path = f_strdup(cmd[0]);
 	else
 		path = get_path(cmd[0], get_env_var_value(data->env_mini, "PATH"));
-	// dprintf(1, "executing processs! \n");
-	// dprintf(1, "data->n_cmds!: %i \n", data->cmd_counter);
 	if (data->cmd_counter == 1)
 	{
-		//dprintf(1, "it's a no builtin cmd! running with fork \n");
 		data->pid = fork();
-		
 		if (data->pid != 0)
 			return (process_waiting(data), free(path), WEXITSTATUS(exit_s));
 	}
-	//check file permissions with stat()
-	//if (cmd_have_relative_path(cmd[0]) || !path
-	// if (stat(path, &st) == -1)
-	// {
-	// 	status = 126;
-	// 	print_err_msg(cmd[0], "", "can't open file or directory.");
-	// }
-	// else if (S_ISDIR(st.st_mode))
-	// {
-	// 	status = 126;
-	// 	perror("minishell");
-	// }
 	if ((access(path, F_OK) || !path || execve(path, cmd, data->env_mini) == -1)) //&& status == 0)
 	{
 		// *empty
@@ -93,7 +77,6 @@ int exec_cmd(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 		status = exec_exit(cmd, *p_data);
 	else
 		status = exec_process(*p_data, cmd->scmd[pos]->args);
-	//return (exit_status(status));
 	return (status);
 }
 
@@ -106,11 +89,7 @@ void redirect(t_pipe *data, int pos)
 	if (data->outfile)
 		(dup2(data->outfile, STDOUT_FILENO), close(data->outfile));
 	else if (pos != data->cmd_counter)
-	{
-		//dprintf(1, "position: %i\n", pos);
-		//dprintf(1, "data->cmd_counter: %i\n", data->cmd_counter);
 		(close(data->pip[0]), dup2(data->pip[1], 1), close(data->pip[1]));
-	}
 }
 
 void close_fds(t_pipe *data)
@@ -134,11 +113,10 @@ void	run_single_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
 	status = 0;
 	status = open_file(cmd, data, 0);
 	if (status)
-		{
-			//dprintf(1, "open file status: %i\n", status);
-			exit_s = 1;
-			return ;
-		}
+	{
+		exit_s = 1;
+		return ;
+	}
 	if (data->infile)
 	{
 		dup2(data->infile, STDIN_FILENO);

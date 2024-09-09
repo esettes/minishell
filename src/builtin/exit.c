@@ -6,27 +6,20 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:07:02 by iostancu          #+#    #+#             */
-/*   Updated: 2024/09/09 07:37:32 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/09 19:57:31 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int is_numeric_symbol(char c)
+static int is_numeric_symbol(char c)
 {
-//	int	i;
-
-	//i = 0;
-//	while (s[i])
-//	{
-		if (!ft_isdigit(c) && c != '"')
-			return (FALSE);
-//		i++;
-//	}
+	if (!ft_isdigit(c) && c != '"')
+		return (FALSE);
 	return (TRUE);
 }
 
-int	args_are_numeric(t_cmd *cmd, t_pipe *d)
+static int	args_are_numeric(t_cmd *cmd, t_pipe *d)
 {
 	int	i;
 	int	j;

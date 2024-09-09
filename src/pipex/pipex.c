@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:23 by iostancu          #+#    #+#             */
-/*   Updated: 2024/09/09 19:04:00 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/09 19:56:35 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,7 @@ int	run_executer(t_pipe *p_data, t_cmd *cmd, char *old_cwd)
 	status = 0;
 	cpid = 0;
 	p_data->cmd_counter = cmd->n_scmd;
-	//dprintf(1, "initial cmd_counter: %i\n", p_data->cmd_counter);
-	//dprintf(2, "num commands: %i \n", cmd->n_scmd);
 	p_data->childs = malloc(sizeof(pid_t) * cmd->n_scmd);
-	//p_data->childs[cmd->n_scmd] = NULL;
 	if (p_data->cmd_counter <= 0)
 		print_err_msg(NULL, NULL, "syntax error near unexpected token.");
 	manage_signactions(MODE_CHILD);
@@ -48,32 +45,10 @@ int	run_executer(t_pipe *p_data, t_cmd *cmd, char *old_cwd)
 	}
 	if (exit_s == 512 || exit_s == 256 || exit_s == 13) // || exit_s == 2)
 		exit_s = 1;
-	//dprintf(2, "exit status after father waits: %i \n", WEXITSTATUS(status));
-	
-	// cpid = wait(NULL);
-	// while (cpid > 0)
-	// 	cpid = wait(NULL);
-	// //dprintf(2, "\nstatus: %i \n", status);
-	// if (WIFEXITED(status))
-	// {
-	// 	g_signal = WEXITSTATUS(status);
-	// 	//dprintf(2, "g_signal: %i \n", g_signal);
-	// }
-	
 	dup2(p_data->std_[STDIN_FILENO], STDIN_FILENO);
 	close(p_data->std_[STDIN_FILENO]);
 	dup2(p_data->std_[STDOUT_FILENO], STDOUT_FILENO);
 	close(p_data->std_[STDOUT_FILENO]);
-	// if (g_signal == 2)
-	// 	print_err_msg(p_data->last_cmd[0], p_data->last_cmd[1], strerror(g_signal));
-	// if (g_signal == 127)
-	// 	print_err_msg(p_data->last_cmd[0], p_data->last_cmd[1], "Command not found");
-	// if (g_signal == 13)
-	// 	print_err_msg(p_data->last_cmd[0], p_data->last_cmd[1], strerror(g_signal));
-	// if (g_signal != 0 && g_signal != 2 && g_signal != 13 && g_signal != 127)
-	// {
-	// 	print_err_msg(p_data->last_cmd[0], p_data->last_cmd[1], strerror(g_signal));
-	// }
 	return (EXIT_SUCCESS);
 }
 

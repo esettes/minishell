@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:39 by iostancu          #+#    #+#             */
-/*   Updated: 2024/09/06 23:03:50 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/09 19:59:31 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ int	f_error(t_pipe *data)
 	exit_s = errno;
 	if (exit_s == 0)
 		return (EXIT_SUCCESS);
-	//perror("TEST");
 	ft_putstrc_fd(RED_, "minishell: ", 2);
 	ft_putstrc_fd(RED_, strerror(exit_s), 2);
 	ft_putstrc_fd(RESET_, "\n", 2);
@@ -45,13 +44,6 @@ int	f_perror(int status, char *s)
 		perror(s);
 	return (status);
 }
-
-// int	duplicate_fd(int oldfd, int newfd)
-// {
-// 	if (dup2(oldfd, newfd) < 0)
-// 		return (f_error());
-// 	return (EXIT_SUCCESS);
-// }
 
 char	*get_path(char *cmd, char *path_envp)
 {
