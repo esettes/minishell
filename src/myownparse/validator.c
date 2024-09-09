@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validator.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:34 by antosanc          #+#    #+#             */
-/*   Updated: 2024/04/19 22:51:05 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/09/09 07:34:33 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int	validator_tony(t_token *token)
 		return (syntax_error("|"), EXIT_FAILURE);
 	while (token_lst)
 	{
+		///dprintf(2, "token %s\n", token_lst->content);
 		if (check_error_cases(token_lst))
 			return (EXIT_FAILURE);
 		token_lst = token_lst->next;

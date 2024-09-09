@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/09/09 03:35:40 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/09 17:27:12 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void redirect(t_pipe *data, int pos)
 		(dup2(data->old_fd, 0), close(data->old_fd));
 	if (data->outfile)
 		(dup2(data->outfile, STDOUT_FILENO), close(data->outfile));
-	else if (pos != data->n_cmds - 1)
+	else if (pos != data->cmd_counter)
 		(close(data->pip[0]), dup2(data->pip[1], 1), close(data->pip[1]));
 }
 
@@ -155,7 +155,7 @@ int run_multiple_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
 		if (i != data->cmd_counter - 1)
 		{
 			if (pipe(data->pip) < 0)
-				return (f_error(data));
+				return (EXIT_FAILURE);
 		}
 		data->pid = fork();
 		data->childs[i] = data->pid;
@@ -163,7 +163,8 @@ int run_multiple_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
 		{
 			redirect(data, i);
 			if (exec_cmd(cmd, &data, i, old_cwd))
-				return (EXIT_FAILURE);
+				//return (EXIT_FAILURE);
+				exit(WEXITSTATUS(exit_s));
 			close(data->std_[R]);
 			close(data->std_[W]);
 			close(data->pip[0]);

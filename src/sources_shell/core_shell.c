@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:06:11 by iostancu          #+#    #+#             */
-/*   Updated: 2024/09/09 04:04:42 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/09 07:34:42 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,8 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		}
 		cmd = parser(b.buffer, p_data->env_mini);
+		//dprintf(2, "cmd: %s\n", cmd->scmd[0]->args[0]);
+		//dprintf(2, "cmd: %s\n", cmd->scmd[0]->args[1]);
 		if (cmd == NULL)
 		{
 			free(b.buffer);

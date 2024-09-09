@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:07:02 by iostancu          #+#    #+#             */
-/*   Updated: 2024/09/09 04:26:18 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/09 07:37:32 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	args_are_numeric(t_cmd *cmd, t_pipe *d)
 		j = 0;
 		while (cmd->scmd[0]->args[i][j])
 		{
-			dprintf(2, "c: %c\n", cmd->scmd[0]->args[i][j]);
+			//dprintf(2, "c: %c\n", cmd->scmd[0]->args[i][j]);
 			if (!is_numeric_symbol(cmd->scmd[0]->args[i][j]) && cmd->scmd[0]->args[i][0] != '+' 
 				&& cmd->scmd[0]->args[i][j] != '-')
 			{
@@ -80,7 +80,7 @@ int	exec_exit(t_cmd *cmd, t_pipe *d)
 				}
 				i++;
 			}
-			if (i == ft_strlen(cmd->scmd[0]->args[2][0]))
+			if (i == ft_strlen(cmd->scmd[0]->args[2]))
 			{
 				if (cmd->n_scmd > 0 && cmd->scmd[0] != NULL && cmd->scmd[0]->args != NULL)
 					exit_code = ft_atoi(cmd->scmd[0]->args[1]);

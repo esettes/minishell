@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 23:30:58 by iostancu          #+#    #+#             */
-/*   Updated: 2024/09/06 23:32:12 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/09 17:22:01 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,31 +55,6 @@ int	open_file(t_cmd *cmd, t_pipe *data, int pos)
 		return (f_error(data));
 	}
 	return (EXIT_SUCCESS);
-	// if (cmd->scmd[pos]->in_f)
-	// {
-	// 	data->infile = open(cmd->scmd[pos]->in_f, O_RDONLY, 0644);
-	// 	if (data->infile < 0)
-	// 		return (f_error());
-	// }
-	// else
-	// 	data->infile = -1;
-	// if (cmd->scmd[pos]->out_f)
-	// {
-	// 	if (cmd->scmd[pos]->append)
-	// 	{
-	// 		data->outfile = open(cmd->scmd[pos]->out_f,
-	// 			O_WRONLY | O_CREAT | O_APPEND, 0644);
-	// 			dprintf(2, "fd: %d\n", data->outfile);
-	// 	}
-	// 	else
-	// 		data->outfile = open(cmd->scmd[pos]->out_f,
-	// 			O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	// 	if (data->outfile < 0)
-	// 		return (f_error());
-	// }
-	// else
-	// 	data->outfile = -1;
-	// return (EXIT_SUCCESS);
 }
 
 void	close_files(int *infile, int *outfile)
@@ -95,17 +70,6 @@ void	close_files(int *infile, int *outfile)
 		*outfile = 0;
 	}
 }
-
-// int	dup_files(int *infile, int *outfile)
-// {
-// 	if (*infile > -1)
-// 		if (dup2(*infile, 0) < 0)
-// 			return (f_error(data));
-// 	if (*outfile > -1)
-// 		if (dup2(*outfile, 1) < 0)
-// 			return (f_error());
-// 	return (EXIT_SUCCESS);
-// }
 
 int	cmd_have_relative_path(char *cmd)
 {
