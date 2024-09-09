@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/09/06 23:34:51 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/09 03:35:40 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int exec_cmd(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
 	else if (ft_strncmp(*cmd->scmd[pos]->args, "echo", sizeof("echo")) == 0)
 		status = exec_echo(*cmd->scmd[pos]);
 	else if (ft_strncmp(*cmd->scmd[pos]->args, "exit", sizeof("exit")) == 0)
-		exec_exit(cmd, *p_data);
+		status = exec_exit(cmd, *p_data);
 	else
 		status = exec_process(*p_data, cmd->scmd[pos]->args);
 	//return (exit_status(status));

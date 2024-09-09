@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:06:11 by iostancu          #+#    #+#             */
-/*   Updated: 2024/09/06 17:16:15 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/09 04:04:42 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,23 @@ void f_void(int sig)
 	return ;
 }
 
+void	f_signal(int sig)
+{
+	if (sig != SIGINT)
+		return ;
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	write(STDOUT_FILENO, "\n", 1);
+	rl_redisplay();
+}
+
 static int	init_shell(t_pipe **p_data, t_buff *b, char **envp)
 {
 	*p_data = init_pipe_struct(envp);
 	if (!p_data)
 		return (EXIT_FAILURE);
 	b->oldbuffer = ft_strdup("");
-	signal(SIGQUIT, f_void);
+	signal(SIGQUIT, f_signal);
 	return (EXIT_SUCCESS);
 }
 static int	check_args(int argc, char **envp)
@@ -62,17 +72,6 @@ static int	check_args(int argc, char **envp)
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
-
-// int	main(int argc, char **argv, char **envp)
-// {
-// 	(void)argv;
-// 	if (check_args(argc, envp))
-// 		exit (EXIT_FAILURE);
-// 	exit_s = 0;
-// 	if (core_shell(envp))
-// 		exit (EXIT_FAILURE);
-// 	exit (EXIT_SUCCESS);
-// }
 
 int	main(int argc, char **argv, char **envp)
 {
