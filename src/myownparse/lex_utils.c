@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:59:23 by antosanc          #+#    #+#             */
-/*   Updated: 2024/09/09 20:34:40 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/11 00:34:42 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,5 +91,8 @@ t_token_lst	*create_token_lst(char *str, int j, t_token **token, int flag)
 		free(token_lst);
 		token_lst = NULL;
 	}
+	dprintf(1, "before return created token: %s", token_lst->content);
+	token_lst->next;
+	dprintf(1, "before return created token 2: %s", token_lst->content);
 	return (token_lst);
 }

@@ -6,40 +6,94 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:24 by antosanc          #+#    #+#             */
-/*   Updated: 2024/09/09 20:57:17 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/11 00:29:26 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/headers/minishell.h"
 
+static t_token_lst	*search_token(char *str, t_token **token);
 //int	g_signal = 0;
 static t_token_lst	*quotes_content(char *str, t_token **token)
 {
 	int			j;
+	int			i;
 	t_token_lst	*token_lst;
 	int			flag;
 	char		quote;
+	int			n_quotes;
 
 	j = (*token)->i;
 	quote = str[j - 1];
 	flag = 0;
+	n_quotes = 0;
+	i = 0;
 	// si el total del argumento està entre comillas, entonces quotes
 	
 	if (!ft_strchr(str + (*token)->i, quote))
 		return (clear_all(token, "unclosed quotes"));
 	// coge la str mientras !=; añadir q debe haber espacio delante del 1er quote y detras del 2º (o NULL)
 	// añadiendo un if, si es así entrar al while, sino return search_token
-	while (str[(*token)->i] && str[(*token)->i] != quote)
+	dprintf(1, "str[(*token)->i]: %c\n", str[(*token)->i]);
+	if (str[(*token)->i - 2] == ' ')
 	{
-		if (str[(*token)->i] == '$')
-			flag++;
-		((*token)->i)++;
+		i = (*token)->i;
+		while (str[i] != '"')
+			i++;
+		dprintf(1, "str[%i]: %c\n", i, str[i]);
+		if (!str[i + 1] || (str[i + 1] && str[i + 1] == ' '))
+		{
+			dprintf(1, "str[i] have more than 1 arg!\n");
+			while (str[(*token)->i] && str[(*token)->i] != quote)
+			{
+				if (str[(*token)->i] == '$')
+					flag++;
+				((*token)->i)++;
+			}
+			token_lst = create_token_lst(str, j, token, flag);
+			if (token_lst)
+				token_lst->quotes = 1;
+			(*token)->i++;
+			return (token_lst);
+		}
 	}
-	token_lst = create_token_lst(str, j, token, flag);
-	if (token_lst)
-		token_lst->quotes = 1;
-	(*token)->i++;
-	return (token_lst);
+	return (search_token(str, token));
+	//return (token_lst);
+}
+
+static char	*remove_quotes(char *str)
+{
+	int		n_quotes;
+	char	*ret;
+	int		i;
+	int		j;
+
+	i = -1;
+	j = 0;
+	n_quotes = 0;
+	while (str[++i])
+	{
+		if (str[i] == '"')
+			n_quotes++;
+	}
+	ret = malloc(sizeof(char) * (ft_strlen(str) - n_quotes));
+	dprintf(1, "num quotes: %i malloc ret: %i\n", n_quotes, ft_strlen(str) - n_quotes);
+	i = 0;
+	while (str[i])
+	{
+		dprintf(1, "str[%i]: %c\n", i, str[i]);
+		if (str[i] != '"')
+		{
+			ret[j] = str[i];
+			dprintf(1, "ret[%i]: %c\n", j, ret[j]);
+			j++;
+		}
+		i++;
+	}
+	ret[j] = '\0';
+	dprintf(1, "ret: -----> %s\n", ret);
+	free (str);
+	return (ret);
 }
 
 static t_token_lst	*search_token(char *str, t_token **token)
@@ -63,8 +117,10 @@ static t_token_lst	*search_token(char *str, t_token **token)
 			flag++;
 		(*token)->i++;
 	}
+	dprintf(1, "Before create_token_lst!\n");
 	// funct q elimine quotes y retorne new str para pasarlo a createÇ_token_lst
 	// !!
+	str = remove_quotes(str);
 	token_lst = create_token_lst(str, j, token, flag);
 	return (token_lst);
 }
@@ -77,6 +133,7 @@ t_token	*lex_tony(char *str, char **envp)
 	token = token_init(envp);
 	while (str[token->i])
 	{
+		dprintf(1, "lex_tony str[token->i]: %c\n", str[token->i]);
 		token_lst = NULL;
 		while (str[token->i] == ' ')
 			token->i++;
@@ -89,7 +146,10 @@ t_token	*lex_tony(char *str, char **envp)
 			token_lst = quotes_content(str, &token);
 		}
 		else
+		{
+			dprintf(1, "lex_tony, before enter search_token.\n");
 			token_lst = search_token(str, &token);
+		}
 		if (token_lst && token_lst->content && *token_lst->content
 			|| token_lst && token_lst->quotes == 1)
 			token_add_back(&token->token_lst, token_lst);
