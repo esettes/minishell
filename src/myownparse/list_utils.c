@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 19:06:08 by antosanc          #+#    #+#             */
-/*   Updated: 2024/04/19 22:53:36 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/09/11 13:19:20 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ t_token	*token_init(char **envp)
 		return (NULL);
 	token->i = 0;
 	token->envp = envp;
+	token->single_arg = FALSE;
 	token->token_lst = NULL;
 	return (token);
 }

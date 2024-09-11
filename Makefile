@@ -6,7 +6,7 @@
 #    By: settes <settes@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/21 19:03:34 by uliherre          #+#    #+#              #
-#    Updated: 2024/09/09 07:33:52 by settes           ###   ########.fr        #
+#    Updated: 2024/09/11 01:11:28 by settes           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,7 +47,6 @@ OBJECTS = $(addprefix $(OBJDIR), $(SOURCES_PARSER:.c=.o))
 DIR_SHELL = ./src/sources_shell/
 SOURCES_SHELL = \
 	core_shell.c \
-	main.c \
 	signal.c \
 	prompt.c
 

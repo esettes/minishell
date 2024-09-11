@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 14:08:23 by iostancu          #+#    #+#             */
-/*   Updated: 2024/09/09 19:56:35 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/11 20:04:13 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int	run_executer(t_pipe *p_data, t_cmd *cmd, char *old_cwd)
 	close(p_data->std_[STDIN_FILENO]);
 	dup2(p_data->std_[STDOUT_FILENO], STDOUT_FILENO);
 	close(p_data->std_[STDOUT_FILENO]);
+	free(p_data->childs);
 	return (EXIT_SUCCESS);
 }
 

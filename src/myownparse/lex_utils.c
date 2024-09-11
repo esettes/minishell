@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:59:23 by antosanc          #+#    #+#             */
-/*   Updated: 2024/09/11 00:34:42 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/11 20:07:07 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,36 @@ t_token_lst	*create_token_lst(char *str, int j, t_token **token, int flag)
 		free(token_lst);
 		token_lst = NULL;
 	}
-	dprintf(1, "before return created token: %s", token_lst->content);
-	token_lst->next;
-	dprintf(1, "before return created token 2: %s", token_lst->content);
+	return (token_lst);
+}
+
+t_token_lst	*create_token_lst_single(char *str, int j, t_token **token, int flag)
+{
+	t_token_lst	*token_lst;
+
+	token_lst = token_new();
+	token_lst->content = ft_substr(str, j, (*token)->i - j);
+	if (check_heredoc((*token)->token_lst))
+		return (token_lst);
+	if (str[j] && str[j] == '$' && (str[j + 1] == '\0' || str[j + 1] == '\"'))
+	{
+		token_lst->content = ft_substr(str, j, (*token)->i - j);
+		return (token_lst);
+	}
+	
+	if (str[0] == '$' || j > 0 && str[j - 1] && !((str[j - 1] == '\'')))
+	{
+		if (flag > 0)
+			while (flag-- > 0)
+				token_lst->content = expander(token_lst->content,
+						(*token)->envp, token);
+	}
+	if (!*token_lst->content)
+	{
+		free(token_lst->content);
+		free(token_lst);
+		token_lst = NULL;
+	}
+	//dprintf(1, "before return created token single!: %s\n", token_lst->content);
 	return (token_lst);
 }

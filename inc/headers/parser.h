@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 19:04:03 by uliherre          #+#    #+#             */
-/*   Updated: 2024/08/22 00:35:40 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/09/11 13:51:27 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,19 @@ typedef struct s_token_lst
 	struct s_token_lst	*next;
 }		t_token_lst;
 
+typedef struct s_delimit
+{
+	int	start;
+	int	end;
+}		t_delimit;
+
 typedef struct s_token
 {
 	int			i;
 	char		**envp;
 	t_token_lst	*token_lst;
+	int			single_arg;
+	t_delimit	limit;
 }	t_token;
 
 //List utils
@@ -45,6 +53,7 @@ int			check_syntax_char(char c);
 void		*clear_all(t_token **token, char *error);
 int			check_heredoc(t_token_lst *token_lst);
 t_token_lst	*create_token_lst(char *str, int j, t_token **token, int flag);
+t_token_lst	*create_token_lst_single(char *str, int j, t_token **token, int flag);
 
 //Expander
 char		*expander(char *str, char **envp, t_token **token);
