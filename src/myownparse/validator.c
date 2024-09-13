@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:34 by antosanc          #+#    #+#             */
-/*   Updated: 2024/09/09 07:34:33 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/13 11:20:44 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ int	validator_tony(t_token *token)
 		&& (((char *)last->content)[0] == '>'
 		|| ((char *)last->content)[0] == '<'))
 		return (syntax_error("newline"), EXIT_FAILURE);
+	if (!(char *)token_lst)
+		return (2);
 	if ((((char *)token_lst->content)[0] == '|' && token_lst->quotes == 0)
 		|| (((char *)last->content)[0] == '|' && last->quotes == 0))
 		return (syntax_error("|"), EXIT_FAILURE);

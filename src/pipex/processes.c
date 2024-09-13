@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/09/09 19:58:45 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/13 11:16:40 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int exec_process(t_pipe *data, char **cmd)
 		if (data->pid != 0)
 			return (process_waiting(data), free(path), WEXITSTATUS(exit_s));
 	}
-	if ((access(path, F_OK) || !path || execve(path, cmd, data->env_mini) == -1)) //&& status == 0)
+	if ((!path || access(path, F_OK) || execve(path, cmd, data->env_mini) == -1)) //&& status == 0)
 	{
 		// *empty
 		// *is a directory

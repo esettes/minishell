@@ -6,7 +6,7 @@
 #    By: settes <settes@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/21 19:03:34 by uliherre          #+#    #+#              #
-#    Updated: 2024/09/13 06:35:22 by settes           ###   ########.fr        #
+#    Updated: 2024/09/13 11:16:56 by settes           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,7 @@ SOURCES_PARSER = \
 	lex.c \
 	list_utils.c \
 	parser.c \
+	parser_utils2.c \
 	validator.c \
 	yacc_utils.c \
 	yacc.c

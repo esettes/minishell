@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 19:04:03 by uliherre          #+#    #+#             */
-/*   Updated: 2024/09/13 07:51:47 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/13 12:43:02 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ typedef struct s_token
 	char		**envp;
 	t_token_lst	*token_lst;
 	int			single_arg;
+	int			*nextto;
+	int			n_cmds;
 	t_delimit	limit;
 }	t_token;
 
@@ -47,7 +49,7 @@ void		token_clear(t_token_lst **lst, void (*del)(void *));
 t_cmd		*parser(char *str, char **envp, char *newbuff);
 
 //Lex
-t_token		*lex_tony(char *str, char **envp, char *newbuff);
+t_token		*lex_tony(char *str, char **envp, char *newbuff, int n_cmds);
 t_token_lst	*store_syntax_char(char *str, t_token *token);
 int			check_syntax_char(char c);
 void		*clear_all(t_token **token, char *error);

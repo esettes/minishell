@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 19:43:08 by iostancu          #+#    #+#             */
-/*   Updated: 2024/09/13 08:45:26 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/13 12:23:34 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,15 @@ typedef struct s_scmd
 	int			append;
 }				t_scmd;
 
-typedef struct s_cmd
+/**
+ * @brief first nextto will always be false
+ */
+typedef struct s_cmd 
 {
 	int			n_scmd;
 	t_scmd		**scmd;
 	int			single_arg;
+	int			*nextto;
 }				t_cmd;
 
 typedef struct s_prompt

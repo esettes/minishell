@@ -10,6 +10,7 @@ static char	*remove_quotes(char *str)
 	i = -1;
 	j = 0;
 	n_quotes = 0;
+	dprintf(1, "removing quotes of: %s\n", str);
 	while (str[++i])
 	{
 		if (str[i] == '"')
@@ -31,7 +32,17 @@ static char	*remove_quotes(char *str)
 	//ft_memset(str, 0, sizeof(str));
 	//str = ft_strdup(ret);
 	//free(ret);
-	ft_strlcpy(str, ret, sizeof(ret+ 2));
+	ft_strlcpy(str, ret, sizeof(ret));
+	return (str);
+}
+
+char	*mix_args(char *s1, char *s2)
+{
+	char	*ret;
+	int		i;
+	int		j;
+
+	ret = ft_strjoin(s1, s2);
 	return (ret);
 }
 

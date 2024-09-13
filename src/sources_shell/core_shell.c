@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:06:11 by iostancu          #+#    #+#             */
-/*   Updated: 2024/09/13 09:02:31 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/13 14:11:07 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	reset_minishell(t_buff *b, t_cmd **cmd, t_pipe *p)
 	if (b->buffer && *b->buffer && f_strict_strncmp(b->buffer,
 			b->oldbuffer, sizeof(b->oldbuffer)) != 0)
 		add_history(b->buffer);
-	dprintf(1,"*b->buffer: %s\n", b->buffer);
+	//dprintf(1,"*b->buffer: %s\n", b->buffer);
 	free(b->oldbuffer);
 	b->oldbuffer = ft_strdup(b->buffer);
 	free(b->buffer);
@@ -85,8 +85,13 @@ int	main(int argc, char **argv, char **envp)
 	t_pipe		*p_data;
 	char		*old_cwd;
 	char		*newbuff;
+	char		*tmp;
+	int i;
+	int	j;
 
 	(void)argv;
+	i = 0;
+	j = 0;
 	if (check_args(argc, envp))
 		exit (EXIT_FAILURE);
 	exit_s = 0;
@@ -106,7 +111,7 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		}
 		cmd = parser(b.buffer, p_data->env_mini, newbuff);
-		dprintf(2, "b.buffer: %s\n", b.buffer);
+	//	dprintf(2, "b.buffer: %s\n", b.buffer);
 		//dprintf(2, "cmd: %s\n", cmd->scmd[0]->args[1]);
 		if (cmd == NULL)
 		{
@@ -115,9 +120,40 @@ int	main(int argc, char **argv, char **envp)
 		}
 		//get_cwd(old_cwd);
 		// Remove quotes of cmd if its single arg
-		dprintf(1, "cmd: %s\n", cmd->scmd[0]->args[0]);
-		dprintf(1, "cmd1: %s\n", cmd->scmd[0]->args[1]);
-		dprintf(1, "cmd2: %s\n", cmd->scmd[0]->args[2]);
+		if (cmd->single_arg == TRUE)
+		{
+			// remove quotes
+			dprintf(1, "is single!\n");
+			j = 2;
+			while (1)
+			{
+				
+				if (cmd->scmd[i]->args[j])
+				{
+					printf("scmd[%i]->arg[%i]: %s\n", i, j, cmd->scmd[0]->args[j]);
+					printf("len arg1: %i\n",ft_strlen(cmd->scmd[i]->args[1]));
+					printf("len arg kj: %i\n",ft_strlen(cmd->scmd[i]->args[j]));
+					cmd->scmd[i]->args[1] = ft_strjoin(cmd->scmd[i]->args[1], cmd->scmd[i]->args[j]);
+				}
+				else
+				{
+					while (j > 1)
+					{
+						free(cmd->scmd[i]->args[j]);
+						j--;
+					}
+					j = -1;
+				}
+				if (j == -1)
+					break ;
+				j++;	
+					// if [j + 1] exist.....else ?....
+			}
+			// mix the args in 1
+		}
+		dprintf(1, "cmd->scmd[i]->args[1]: %s\n", cmd->scmd[i]->args[1]);
+		// dprintf(1, "cmd1: %s\n", cmd->scmd[0]->args[1]);
+		// dprintf(1, "cmd2: %s\n", cmd->scmd[0]->args[2]);
 		run_executer(p_data, cmd, old_cwd);
 		reset_minishell(&b, &cmd, p_data);
 	}

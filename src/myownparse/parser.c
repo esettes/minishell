@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:07 by antosanc          #+#    #+#             */
-/*   Updated: 2024/09/13 09:03:30 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/13 13:29:03 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,28 @@ static int	parse_checker(t_cmd *cmd, char *str, char **envp, char *newbuff)
 {
 	t_token		*token;
 	t_token_lst	*head;
+	int			validator;
 
-	token = lex_tony(str, envp, newbuff);
-	
-	if (token->single_arg == TRUE)
+	token = lex_tony(str, envp, newbuff, cmd->n_scmd);
+	validator = 0;
+	dprintf(1,"token->single_arg: %i\n", token->single_arg);
+	if (token && token->single_arg == TRUE)
 	{
-		//dprintf(1,"token->single_arg: %i\n", token->single_arg);
+		dprintf(1,"token->single_arg: %i\n", token->single_arg);
 		cmd->single_arg = TRUE;
 	}
-	dprintf(1, "newbuff after lex_tony: %s\n", newbuff);
-	dprintf(1,"str after lex_tony: %s\n", str);
+	// dprintf(1, "newbuff after lex_tony: %s\n", newbuff);
+	//dprintf(1,"str after lex_tony: %s\n", str);
 	if (token == NULL)
 	{
 		exit_s = 2;
 		return (EXIT_FAILURE);
 	}
-	if (validator_tony(token))
+	validator = validator_tony(token);
+	if (validator)
 	{
-		exit_s = 2;
+		if (validator != 2)
+			exit_s = 2;
 		return (clear_all(&token, NULL), EXIT_FAILURE);
 	}
 	head = token->token_lst;
@@ -48,16 +52,20 @@ t_cmd	*parser(char *str, char **envp, char *newbuff)
 {
 	t_cmd	*command;
 	int		error_h;
+	int		i;
 
+	i = 0;
 	if (!str || !*str)
 		return (NULL);
 	command = ft_calloc(1, sizeof(t_cmd));
 	if (!command)
 		return (NULL);
+	
 	if (parse_checker(command, str, envp, newbuff))
 		return (free_cmd_tony(command), NULL);
+
 	//dprintf(1,"cmd single arg: %i\n", command->single_arg);
 	//dprintf(1,"parser newbuff: %s\n", newbuff);
-	dprintf(1,"parser buffer: %s\n", str);
+	//dprintf(1,"parser buffer: %s\n", str);
 	return (command);
 }
