@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:24 by antosanc          #+#    #+#             */
-/*   Updated: 2024/09/11 20:06:57 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/13 07:24:57 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,31 @@ static t_token_lst	*quotes_content(char *str, t_token **token)
 	int			flag;
 	char		quote;
 	int			n_quotes;
+	int			n_dquotes;
 
 	j = (*token)->i;
 	quote = str[j - 1];
 	flag = 0;
 	n_quotes = 0;
+	n_dquotes = 0;
 	i = 0;
 	if (!ft_strchr(str + (*token)->i, quote))
 		return (clear_all(token, "unclosed quotes"));
-	if (str[(*token)->i - 2] == ' ')
+	// si el total del str hay 2 quotes, el 1º tiene delante un espacio y el 2 un NULL,
+	// entonces sólo hay un arg
+	// while (str[i])
+	// {
+	// 	if (str[i] == '\"')
+	// 		n_dquotes++;
+	// 	if (str[i] == '\'')
+	// 		n_quotes++;
+	// 	i++;
+	// }
+	//dprintf(1,"str[(*token)->i - 1] : %c\n", str[(*token)->i - 1]);
+	if (str[(*token)->i - 2] == ' ')// && ft_strlen(str) - 1 == ' ')
 	{
 		i = (*token)->i;
-		while (str[i] != '"')
+		while (str[i] != '"' && str[i] != '\'')
 			i++;
 		if (!str[i + 1] || (str[i + 1] && str[i + 1] == ' '))
 		{
@@ -70,7 +83,7 @@ static char	*remove_quotes(char *str)
 		if (str[i] == '"')
 			n_quotes++;
 	}
-	ret = malloc(sizeof(char) * (ft_strlen(str) - n_quotes));
+	ret = malloc(sizeof(char) * (ft_strlen(str) - n_quotes + 1));
 	i = 0;
 	while (str[i])
 	{
@@ -82,8 +95,11 @@ static char	*remove_quotes(char *str)
 		i++;
 	}
 	ret[j] = '\0';
-	free (str);
-	return (ret);
+	//free (str);
+	ft_memset(str, 0, sizeof(str));
+	str = ft_strdup(ret);
+	free(ret);
+	return (str);
 }
 
 static t_token_lst	*search_token(char *str, t_token **token)
@@ -103,7 +119,7 @@ static t_token_lst	*search_token(char *str, t_token **token)
 	while (str[(*token)->i] && !check_syntax_char(str[(*token)->i]))
 	{
 		
-		if (str[(*token)->i] == '\"')
+		if (str[(*token)->i] == '\"' )
 			(*token)->i++;
 		if (str[(*token)->i] == '$')
 			flag++;
@@ -132,9 +148,9 @@ t_token	*lex_tony(char *str, char **envp)
 	t_token_lst	*token_lst;
 
 	token = token_init(envp);
-	while (str[token->i] && token->single_arg == FALSE)
+	while (str && str[token->i] && token->single_arg == FALSE)
 	{
-		//dprintf(1, "lex_tony str[token->i]: %c\n", str[token->i]);
+		dprintf(1, "one time in while! str: %s\n", str);
 		token_lst = NULL;
 		while (str[token->i] == ' ')
 			token->i++;

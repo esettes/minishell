@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:06:11 by iostancu          #+#    #+#             */
-/*   Updated: 2024/09/11 20:04:19 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/12 16:30:38 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,11 @@ static void	free_all(t_cmd *cmd, t_pipe *p_data, t_buff *buff, char *old_cwd)
 static void	reset_minishell(t_buff *b, t_cmd **cmd, t_pipe *p)
 {
 	int i = 0;
+	
 	if (b->buffer && *b->buffer && f_strict_strncmp(b->buffer,
 			b->oldbuffer, sizeof(b->oldbuffer)) != 0)
 		add_history(b->buffer);
+	dprintf(1,"*b->buffer: %s\n", b->buffer);
 	free(b->oldbuffer);
 	b->oldbuffer = ft_strdup(b->buffer);
 	free(b->buffer);

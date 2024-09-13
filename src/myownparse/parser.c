@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:07 by antosanc          #+#    #+#             */
-/*   Updated: 2024/08/21 16:30:30 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/12 16:31:39 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ static int	parse_checker(t_cmd *cmd, char *str, char **envp)
 	t_token_lst	*head;
 
 	token = lex_tony(str, envp);
+	dprintf(1,"str after lex_tony: %s\n", str);
 	if (token == NULL)
 	{
 		exit_s = 2;
@@ -84,6 +85,7 @@ t_cmd	*parser(char *str, char **envp)
 		return (NULL);
 	if (parse_checker(command, str, envp))
 		return (free_cmd_tony(command), NULL);
+	dprintf(1,"parser buffer: %s\n", str);
 	return (command);
 }
 
