@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:06:11 by iostancu          #+#    #+#             */
-/*   Updated: 2024/09/12 16:30:38 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/13 09:02:31 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,13 @@ void	f_signal(int sig)
 	rl_redisplay();
 }
 
-static int	init_shell(t_pipe **p_data, t_buff *b, char **envp)
+static int	init_shell(t_pipe **p_data, t_buff *b, char **envp, char *nbuff)
 {
 	*p_data = init_pipe_struct(envp);
 	if (!p_data)
 		return (EXIT_FAILURE);
 	b->oldbuffer = ft_strdup("");
+	nbuff = NULL;
 	signal(SIGQUIT, f_signal);
 	return (EXIT_SUCCESS);
 }
@@ -83,12 +84,13 @@ int	main(int argc, char **argv, char **envp)
 	t_cmd		*cmd;
 	t_pipe		*p_data;
 	char		*old_cwd;
+	char		*newbuff;
 
 	(void)argv;
 	if (check_args(argc, envp))
 		exit (EXIT_FAILURE);
 	exit_s = 0;
-	if (init_shell(&p_data, &b, envp))
+	if (init_shell(&p_data, &b, envp, newbuff))
 		return (EXIT_FAILURE);
 	old_cwd = getcwd(NULL, 0);
 	while (1)
@@ -103,8 +105,8 @@ int	main(int argc, char **argv, char **envp)
 			free(b.buffer);
 			continue ;
 		}
-		cmd = parser(b.buffer, p_data->env_mini);
-		//dprintf(2, "cmd: %s\n", cmd->scmd[0]->args[0]);
+		cmd = parser(b.buffer, p_data->env_mini, newbuff);
+		dprintf(2, "b.buffer: %s\n", b.buffer);
 		//dprintf(2, "cmd: %s\n", cmd->scmd[0]->args[1]);
 		if (cmd == NULL)
 		{
@@ -112,6 +114,10 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		}
 		//get_cwd(old_cwd);
+		// Remove quotes of cmd if its single arg
+		dprintf(1, "cmd: %s\n", cmd->scmd[0]->args[0]);
+		dprintf(1, "cmd1: %s\n", cmd->scmd[0]->args[1]);
+		dprintf(1, "cmd2: %s\n", cmd->scmd[0]->args[2]);
 		run_executer(p_data, cmd, old_cwd);
 		reset_minishell(&b, &cmd, p_data);
 	}

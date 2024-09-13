@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 19:04:03 by uliherre          #+#    #+#             */
-/*   Updated: 2024/09/11 13:51:27 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/13 07:51:47 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ t_token_lst	*token_last(t_token_lst *lst);
 void		token_add_back(t_token_lst **lst, t_token_lst *new);
 void		token_clear(t_token_lst **lst, void (*del)(void *));
 
-t_cmd		*parser(char *str, char **envp);
+t_cmd		*parser(char *str, char **envp, char *newbuff);
 
 //Lex
-t_token		*lex_tony(char *str, char **envp);
+t_token		*lex_tony(char *str, char **envp, char *newbuff);
 t_token_lst	*store_syntax_char(char *str, t_token *token);
 int			check_syntax_char(char c);
 void		*clear_all(t_token **token, char *error);

@@ -6,54 +6,25 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:58:07 by antosanc          #+#    #+#             */
-/*   Updated: 2024/09/12 16:31:39 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/13 09:03:30 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/headers/minishell.h"
 
-//Borrar cuando termine de probar
-
-/*void print_cmd_arguments(const t_cmd *cmd) {
-    if (cmd == NULL) {
-        printf("No command data available.\n");
-        return;
-    }
-
-    printf("Total subcommands: %d\n", cmd->n_scmd);
-    for (int i = 0; i < cmd->n_scmd; i++) {
-        t_scmd *scmd = cmd->scmd[i];
-        if (scmd == NULL) {
-            printf("Subcommand %d is null.\n", i + 1);
-            continue;
-        }
-
-        printf("Subcommand %d:\n", i + 1);
-        printf("  Number of arguments argc: %d\n", scmd->argc);
-        for (int j = 0; j < scmd->argc; j++) {
-            printf("    Arg %d: %s\n", j + 1, scmd->args[j]);
-        }
-
-        // Optionally print redirection info
-        if (scmd->in_f) {
-            printf("  Input redirected from: %s\n", scmd->in_f);
-        }
-        if (scmd->out_f) {
-            printf("  Output redirected to: %s", scmd->out_f);
-            if (scmd->append) {
-                printf(" (append mode)");
-            }
-            printf("\n");
-        }
-    }
-}*/
-
-static int	parse_checker(t_cmd *cmd, char *str, char **envp)
+static int	parse_checker(t_cmd *cmd, char *str, char **envp, char *newbuff)
 {
 	t_token		*token;
 	t_token_lst	*head;
 
-	token = lex_tony(str, envp);
+	token = lex_tony(str, envp, newbuff);
+	
+	if (token->single_arg == TRUE)
+	{
+		//dprintf(1,"token->single_arg: %i\n", token->single_arg);
+		cmd->single_arg = TRUE;
+	}
+	dprintf(1, "newbuff after lex_tony: %s\n", newbuff);
 	dprintf(1,"str after lex_tony: %s\n", str);
 	if (token == NULL)
 	{
@@ -73,7 +44,7 @@ static int	parse_checker(t_cmd *cmd, char *str, char **envp)
 	return (clear_all(&token, NULL), EXIT_SUCCESS);
 }
 
-t_cmd	*parser(char *str, char **envp)
+t_cmd	*parser(char *str, char **envp, char *newbuff)
 {
 	t_cmd	*command;
 	int		error_h;
@@ -83,17 +54,10 @@ t_cmd	*parser(char *str, char **envp)
 	command = ft_calloc(1, sizeof(t_cmd));
 	if (!command)
 		return (NULL);
-	if (parse_checker(command, str, envp))
+	if (parse_checker(command, str, envp, newbuff))
 		return (free_cmd_tony(command), NULL);
+	//dprintf(1,"cmd single arg: %i\n", command->single_arg);
+	//dprintf(1,"parser newbuff: %s\n", newbuff);
 	dprintf(1,"parser buffer: %s\n", str);
 	return (command);
 }
-
-//Borrar cuando termine de probar
-/*int	main(int argc, char **argv, char **envp)
-{
-	(void)argc;
-	(void)argv;
-	char	*str = "< Makefile cat";
-	parser(str, envp);
-}*/

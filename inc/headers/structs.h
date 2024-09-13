@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antosanc <antosanc@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 19:43:08 by iostancu          #+#    #+#             */
-/*   Updated: 2024/05/11 13:18:11 by antosanc         ###   ########.fr       */
+/*   Updated: 2024/09/13 08:45:26 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef struct s_cmd
 {
 	int			n_scmd;
 	t_scmd		**scmd;
+	int			single_arg;
 }				t_cmd;
 
 typedef struct s_prompt
