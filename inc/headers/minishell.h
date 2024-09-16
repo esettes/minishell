@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 19:03:59 by iostancu          #+#    #+#             */
-/*   Updated: 2024/09/16 19:01:24 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/09/16 19:04:08 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ void	free_dp(char **dp);
 int		cmd_counter(char **all_cmd);
 char	*f_find_path(char *cmd, t_list **env);
 int		is_blank_line(char *line);
-char	*nested_shell(char *line, char *keyword);
 char	*ft_getenv(t_list **env, char *name, char *value);
 void	ft_lstdelnode(t_list **head, t_list *node, t_list *tmp);
 int		quotes_closed(char *line, int i, char quote);
@@ -95,15 +94,11 @@ void	process_waiting(t_pipe *data);
 int		redir_files(t_pipe *data, char *cmd_line);
 int		manage_line(t_pipe *data, char *cmd_line, int i);
 char	*quotes_checker(char *line);
-char	**struct_quotes(char *old_cmd);
 char	**expand_metachar(t_pipe *data, char **rev_cmd);
 char	**lst_to_arr(t_list **head);
-char	*reset_metachar(char *line, int control);
 void	here_doc(t_pipe *data, char *keyword);
 void	print_err_msg(char c);
 int		f_perror(int code, char *name);
 void	wait_cmds(t_pipe *data);
-
-char	*manage_pipe(char *line, int *i);
 
 #endif

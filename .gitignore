@@ -6,3 +6,5 @@ docker
 .DS_Store
 *libft.a
 minishell_tester
+*.md
+*.sh

@@ -1,29 +1,41 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_file_utils.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/16 19:18:48 by iostancu          #+#    #+#             */
+/*   Updated: 2024/09/16 19:20:08 by iostancu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int	open_files(t_pipe *data, char *file_name, char red)
+int	open_files(t_pipe *d, char *file_name, char red)
 {
 	if ((red == LESS_THAN || red == HERE_DOC) && *file_name)
 	{
-		if (data->infile)
-			(close(data->infile), data->infile = 0);
+		if (d->infile)
+			(close(d->infile), d->infile = 0);
 		if (red == LESS_THAN)
-			data->infile = open(file_name, O_RDONLY);
+			d->infile = open(file_name, O_RDONLY);
 		else
-			here_doc(data, file_name);
+			here_doc(d, file_name);
 	}
 	else if ((red == MORE_THAN || red == APPEND) && *file_name)
 	{
-		if (data->outfile)
-			(close(data->outfile), data->outfile = 0);
+		if (d->outfile)
+			(close(d->outfile), d->outfile = 0);
 		if (red == MORE_THAN)
-			data->outfile = open(file_name, O_TRUNC | O_CREAT | O_WRONLY, 0644);
+			d->outfile = open(file_name, O_TRUNC | O_CREAT | O_WRONLY, 0644);
 		else
-			data->outfile = open(file_name, O_APPEND | O_CREAT | O_WRONLY, 0644);
+			d->outfile = open(file_name, O_APPEND | O_CREAT | O_WRONLY, 0644);
 	}
 	else if (!*file_name)
 		print_err_msg(red);
-	if (data->infile == -1 || data->outfile == -1)
-		return (ft_printf("minishell: "), data->outfile = 0, data->infile = 0,
+	if (d->infile == -1 || d->outfile == -1)
+		return (ft_printf("minishell: "), d->outfile = 0, d->infile = 0,
 			perror(file_name), -1);
 	return (0);
 }

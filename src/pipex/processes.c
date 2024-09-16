@@ -6,7 +6,7 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 19:39:46 by iostancu          #+#    #+#             */
-/*   Updated: 2024/09/16 18:59:33 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/09/16 19:17:10 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ void	exec_single_cmd(t_pipe *data)
 	close_fds(data);
 }
 
-
 int	run_execve(t_pipe *data, char *abs_path, char **cmd)
 {
 	char	**array_env;
@@ -103,7 +102,8 @@ int	run_execve(t_pipe *data, char *abs_path, char **cmd)
 
 	status = 0;
 	if (data->n_cmd == 1 && fork())
-		return (process_waiting(data), free(abs_path), WEXITSTATUS(data->status));
+		return (process_waiting(data), free(abs_path),
+			WEXITSTATUS(data->status));
 	array_env = lst_to_arr(data->env);
 	if (!abs_path || execve(abs_path, cmd, array_env) == -1)
 		(ft_printf("minishell: %s: command not found\n", cmd[0]), status = 127);
@@ -113,4 +113,3 @@ int	run_execve(t_pipe *data, char *abs_path, char **cmd)
 		(close(data->std_[0]), close(data->std_[1]), exit(status));
 	return (status);
 }
-

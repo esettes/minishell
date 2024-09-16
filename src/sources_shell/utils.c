@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/16 19:17:29 by iostancu          #+#    #+#             */
+/*   Updated: 2024/09/16 19:17:38 by iostancu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	**lst_to_arr(t_list **head)
@@ -40,7 +52,7 @@ void	none(int sig)
 
 t_pipe	init_struct(void)
 {
-	t_pipe	data;
+	t_pipe		data;
 	extern FILE	*stderr;
 
 	rl_outstream = stderr;
