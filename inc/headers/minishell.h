@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 19:03:59 by iostancu          #+#    #+#             */
-/*   Updated: 2024/09/16 16:42:06 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/16 18:06:46 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void		exec_env(t_list **environ);
 t_list		**exec_export(t_list **env, char **new_vars);
 int			run_execve(t_pipe *rl, char *abs_path, char **cmd);
 t_list		**exec_unset(t_list **env, char **name);
-void	    exec_export_no_args(t_list **env);
+void		exec_export_no_args(t_pipe **data);
 
 //pipes
 void		red_pipe_child(t_pipe *rl, int i);

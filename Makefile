@@ -6,7 +6,7 @@
 #    By: settes <settes@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/21 19:03:34 by uliherre          #+#    #+#              #
-#    Updated: 2024/09/16 16:48:19 by settes           ###   ########.fr        #
+#    Updated: 2024/09/16 18:07:59 by settes           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,6 +55,7 @@ SOURCES_BUILTIN = \
 	builtins.c \
 	env_utils.c \
 	export_utils.c \
+	export_utils2.c \
 	exit.c
 
 A_BUILTIN = $(addprefix $(DIR_BUILTIN),$(SOURCES_BUILTIN))

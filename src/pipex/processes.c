@@ -6,7 +6,7 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/09/16 16:48:57 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/16 18:07:27 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,11 @@ int	exec_cmd(t_pipe *data, char **cmd)
 	else if (!ft_strncmp(cmd[0], "cd\0", 3))
 		status = exec_cd(cmd);
 	else if (!ft_strncmp(cmd[0], "export\0", 7))
+	{
+		if (!cmd[1])
+			exec_export_no_args(&data);
 		data->env = exec_export(data->env, cmd);
+	}
 	else if (!ft_strncmp(cmd[0], "unset\0", 6))
 		data->env = exec_unset(data->env, cmd);
 	else if (!ft_strncmp(cmd[0], "echo\0", 5))
