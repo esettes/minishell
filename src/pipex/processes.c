@@ -3,25 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   processes.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/09/16 18:07:27 by settes           ###   ########.fr       */
+/*   Created: 2024/01/09 19:39:46 by iostancu          #+#    #+#             */
+/*   Updated: 2024/09/16 18:59:33 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 void	exec_multiple_cmds(t_pipe *data);
-
-void	wait_cmds(t_pipe *data)
-{
-	int	i;
-
-	i = -1;
-	while (++i < data->n_cmd)
-		process_waiting(data);
-}
 
 void	redirect_child(t_pipe *data, int i)
 {
@@ -50,11 +41,7 @@ int	exec_cmd(t_pipe *data, char **cmd)
 	else if (!ft_strncmp(cmd[0], "cd\0", 3))
 		status = exec_cd(cmd);
 	else if (!ft_strncmp(cmd[0], "export\0", 7))
-	{
-		if (!cmd[1])
-			exec_export_no_args(&data);
-		data->env = exec_export(data->env, cmd);
-	}
+		data->env = run_export(data->env, cmd, &data);
 	else if (!ft_strncmp(cmd[0], "unset\0", 6))
 		data->env = exec_unset(data->env, cmd);
 	else if (!ft_strncmp(cmd[0], "echo\0", 5))
@@ -66,33 +53,33 @@ int	exec_cmd(t_pipe *data, char **cmd)
 	return (free_dp(cmd), exit_status(status));
 }
 
-void	exec_multiple_cmds(t_pipe *data)
+void	exec_multiple_cmds(t_pipe *d)
 {
 	int		i;
 
 	i = -1;
-	while (++i < data->n_cmd)
+	while (++i < d->n_cmd)
 	{
-		if (!redir_files(data, data->all_cmd[i]))
+		if (!redir_files(d, d->all_cmd[i]))
 			break ;
-		if (i != data->n_cmd - 1)
-			f_perror(pipe(data->pipe), "pipe");
+		if (i != d->n_cmd - 1)
+			f_perror(pipe(d->pipe), "pipe");
 		if (!f_perror(fork(), "fork"))
-			(redirect_child(data, i), exec_cmd(data, reset_spaces(ft_split
-						(reset_pipes(data->all_cmd[i]), ' '))), free_dp
-				(data->all_cmd), free(data->line), close(data->std_[0]),
-				close(data->std_[1]), close(data->pipe[0]), close(data->pipe[1]),
-				exit(WEXITSTATUS(data->status)));
+			(redirect_child(d, i), exec_cmd(d, reset_spaces(ft_split
+						(reset_pipes(d->all_cmd[i]), ' '))), free_dp
+				(d->all_cmd), free(d->line), close(d->std_[0]),
+				close(d->std_[1]), close(d->pipe[0]), close(d->pipe[1]),
+				exit(WEXITSTATUS(d->status)));
 		else
 		{
 			if (i != 0)
-				close(data->old_fd);
-			if (i != data->n_cmd - 1)
-				(close(data->pipe[1]), data->old_fd = data->pipe[0]);
+				close(d->old_fd);
+			if (i != d->n_cmd - 1)
+				(close(d->pipe[1]), d->old_fd = d->pipe[0]);
 		}
-		close_fds(data);
+		close_fds(d);
 	}
-	(wait_cmds(data), data->old_fd = 0);
+	(wait_cmds(d), d->old_fd = 0);
 }
 
 void	exec_single_cmd(t_pipe *data)

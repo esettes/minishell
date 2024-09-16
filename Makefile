@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: settes <settes@student.42.fr>              +#+  +:+       +#+         #
+#    By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/21 19:03:34 by uliherre          #+#    #+#              #
-#    Updated: 2024/09/16 18:07:59 by settes           ###   ########.fr        #
+#    Updated: 2024/09/16 18:55:52 by iostancu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,8 +55,7 @@ SOURCES_BUILTIN = \
 	builtins.c \
 	env_utils.c \
 	export_utils.c \
-	export_utils2.c \
-	exit.c
+	export_utils2.c
 
 A_BUILTIN = $(addprefix $(DIR_BUILTIN),$(SOURCES_BUILTIN))
 SOURCES += $(A_BUILTIN)

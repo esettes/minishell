@@ -6,13 +6,14 @@
 /*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 18:15:49 by uherrero          #+#    #+#             */
-/*   Updated: 2023/12/14 21:37:47 by iostancu         ###   ########.fr       */
+/*   Updated: 2024/09/16 18:41:29 by iostancu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/libft.h"
 #include <stdio.h>
 
+/*
 void	free_split_split(char **s)
 {
 	int	i;
@@ -67,21 +68,21 @@ static char	**split_core(char **s, char *delimiter)
 	char	**start;
 	char	*aux;
 	char	*comienzo;
-	size_t		debug;
+	size_t	debug;
 
 	debug = split_len_new(s, delimiter);
-	splited = (char **) ft_calloc(debug + 1, sizeof(char *));
+	splited = (char **)ft_calloc(debug + 1, sizeof(char *));
 	if (NULL == splited)
 		exit(-66);
 	start = splited;
-	while (NULL != *s)/*bucle de palabras*/
+	while (NULL != *s)
 	{
 		comienzo = *s;
-		while (TRUE)/*maquina de estados*/
+		while (TRUE)
 		{
 			aux = ft_strnstr(*s, delimiter, ft_strlen(*s));
 			if (NULL == aux)
-				break;
+				break ;
 			if (*s == aux)
 			{
 				*splited = ft_substr(*s, ZERO, ft_strlen(delimiter));
@@ -122,3 +123,4 @@ char	**ft_split_split(char **s, char *delimiter)
 	}
 	return (splited);
 }
+*/

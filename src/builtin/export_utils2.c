@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export_utils2.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: iostancu <iostancu@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/16 18:43:16 by iostancu          #+#    #+#             */
+/*   Updated: 2024/09/16 18:43:50 by iostancu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	swap_str(char **env, int i, int j)
@@ -29,13 +41,13 @@ int	get_array_size(char **arr)
 
 void	exec_export_no_args(t_pipe **data)
 {
-	int     i;
-    int     j;
+	int		i;
+	int		j;
 	char	**env;
-    int     len;
+	int		len;
 
 	env = lst_to_arr((*data)->env);
-    len = get_array_size(env);
+	len = get_array_size(env);
 	i = -1;
 	while (++i < len)
 	{
@@ -48,7 +60,7 @@ void	exec_export_no_args(t_pipe **data)
 		}
 	}
 	i = -1;
-    while (++i < len)
-        printf("declare -x %s\n", env[i]);
+	while (++i < len)
+		printf("declare -x %s\n", env[i]);
 	free_arr((const char **)env, i);
 }
