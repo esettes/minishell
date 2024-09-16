@@ -6,108 +6,93 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 19:27:39 by iostancu          #+#    #+#             */
-/*   Updated: 2024/08/31 05:46:58 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/16 16:20:30 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-size_t		var_lenght(char *var);
-static int	check_chars(char *var, char *cmd);
-static void	free_vars(char *s1, char *s2, char *s3);
-
-int	is_correct_env_variable(char *var, char *cmd)
+void	replace_var(t_list **env, char *rep_var, char *var_name)
 {
-	size_t	count;
-	int		ret;
-	int		i;
+	t_list	*line;
 
-	count = 0;
-	ret = check_chars(var, cmd);
-	//printf("checking chars %i\n", ret);
-	//printf("*****chars: %s \n", var);
-	i = 0;
-	while (var[i] && var[i] != '=' && var[i] != '"')
-	{
-		if (ft_isdigit(var[i]))
-			count++;
-		//printf("%c\n", var[i]);
-		i++;
-	}
-	if (count == var_lenght(var))
-		ret = FALSE;
-	if (ret == FALSE)
-	{
-		print_cmd_error(var, cmd);
-		exit_s = 1;
-		return (FALSE);
-	}
-	return (TRUE);
+	line = *env;
+	while (ft_strncmp(line->content, var_name, ft_strlen(var_name)))
+		line = line->next;
+	free(line->content);
+	line->content = ft_strdup(rep_var);
+	*rep_var = '?';
+	free(var_name);
 }
 
-static int	check_chars(char *var, char *cmd)
+t_list	**exec_export(t_list **env, char **new_vars)
 {
-	int		i;
-	size_t	ret;
+	int	i;
 
+	if (!new_vars[1] || !check_syntax(env, &new_vars[1]))
+		return (env);
 	i = 0;
-	ret = TRUE;
-	if (!(ft_isalpha(var[0]) || var[0] == '_'))
-		ret = FALSE;
-	while (var[i] && var[i] != '=')
-	{
-		if (!ft_isalnum(var[i]) && var[i] != '_')
-			ret = FALSE;
-		i++;
-	}
-	if (var[f_strlen(var) - 1] == '='
-		&& f_strncmp(cmd, "unset", f_strlen(cmd)) == 0)
-		ret = FALSE;
-	return (ret);
+	while (new_vars[++i])
+		if (new_vars[i][0] != '?')
+			ft_lstadd_back(env, ft_lstnew(ft_strdup(new_vars[i])));
+	return (env);
 }
 
-int	change_var_value(char **envp_minish, char *raw_variable)
+void	exec_env(t_list **env)
 {
-	int		i;
-	char	*in_var;
-	char	*var;
-	int		envp_size;
+	t_list	*line;
 
-	i = 0;
-	in_var = get_env_variable(raw_variable);
-	envp_size = get_array_size(envp_minish);
-	if (!in_var)
-		return (EXIT_FAILURE);
-	while (i < envp_size)
+	line = *env;
+	while (line)
+		(printf("%s\n", (char *) line->content), line = line->next);
+}
+
+t_list	**exec_unset(t_list **env, char **name)
+{
+	char	*full_name;
+	t_list	*line;
+	t_list	*tmp;
+
+	if (!name[1])
+		return (ft_printf("unset: not enough arguments\n"), env);
+	full_name = ft_strjoin(name[1], "=");
+	line = *env;
+	while (line)
 	{
-		var = get_env_variable(envp_minish[i]);
-		if (f_strict_strncmp(var, in_var, f_strlen(in_var)) == 0)
+		if (!ft_strncmp((char *)line->content, full_name, ft_strlen(full_name)))
 		{
-			free(envp_minish[i]);
-			envp_minish[i] = f_strdup(raw_variable);
-			free_vars(in_var, var, raw_variable);
-			return (EXIT_SUCCESS);
+			ft_lstdelnode(env, line, tmp);
+			if (!ft_lstsize(*env))
+				*env = 0;
+			break ;
 		}
-		free(var);
-		i++;
+		tmp = line;
+		line = line->next;
 	}
-	free_vars(in_var, NULL, raw_variable);
-	return (EXIT_SUCCESS);
+	free(full_name);
+	return (env);
 }
 
-static void	free_vars(char *s1, char *s2, char *s3)
+char	*ft_getenv(t_list **env, char *name, char *value)
 {
-	free(s1);
-	free(s2);
-	free(s3);
-}
+	char	*full_name;
+	char	**split_name;
+	t_list	*line;
 
-size_t	var_lenght(char *var)
-{
-	size_t	i;
-
-	i = 0;
-	while (var[i] && var[i] != '=')
-		i++;
-	return (i);
+	full_name = ft_strjoin(name, "=");
+	line = *env;
+	while (line)
+	{
+		if (!ft_strncmp((char *)line->content, full_name, ft_strlen(full_name)))
+		{
+			free(full_name);
+			split_name = ft_split(line->content, '=');
+			ft_strlcpy(value, split_name[1], BUF_SIZE);
+			free_dp(split_name);
+			return (value);
+		}
+		line = line->next;
+	}
+	free(full_name);
+	return (0);
 }

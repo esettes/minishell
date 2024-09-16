@@ -6,12 +6,13 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:07:02 by iostancu          #+#    #+#             */
-/*   Updated: 2024/09/09 19:57:31 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/16 16:37:31 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
 static int is_numeric_symbol(char c)
 {
 	if (!ft_isdigit(c) && c != '"')
@@ -101,3 +102,5 @@ int	exec_exit(t_cmd *cmd, t_pipe *d)
 	close(d->std_[1]);
 	exit (exit_code);
 }
+
+*/

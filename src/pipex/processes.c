@@ -6,177 +6,120 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/09/13 11:16:40 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/16 16:48:57 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
 
-#include <minishell.h>
+void	exec_multiple_cmds(t_pipe *data);
 
-int exec_process(t_pipe *data, char **cmd)
+void	wait_cmds(t_pipe *data)
 {
-	char *path;
-	int	status;
-	struct stat	st;
+	int	i;
 
-	status = 0;
-	if (cmd_have_abs_path(cmd[0]))
-		path = f_strdup(cmd[0]);
-	else
-		path = get_path(cmd[0], get_env_var_value(data->env_mini, "PATH"));
-	if (data->cmd_counter == 1)
-	{
-		data->pid = fork();
-		if (data->pid != 0)
-			return (process_waiting(data), free(path), WEXITSTATUS(exit_s));
-	}
-	if ((!path || access(path, F_OK) || execve(path, cmd, data->env_mini) == -1)) //&& status == 0)
-	{
-		// *empty
-		// *is a directory
-		status = 127;
-		print_err_msg(cmd[0], "", "command not found");
-	}
-	free(path);
-	if (data->cmd_counter == 1)
-	{
-		close(data->std_[R]);
-		close(data->std_[W]);
-		exit(status);
-	}
-	return (status);
+	i = -1;
+	while (++i < data->n_cmd)
+		process_waiting(data);
 }
 
-void	process_waiting(t_pipe *d)
-{
-	(signal(SIGINT, SIG_IGN), f_perror(wait(&exit_s), "wait"));
-	if (WTERMSIG(exit_s) == SIGINT)
-		(ft_putchar_fd('\n', STDOUT_FILENO), exit_s = exit_status(130));
-	else if (WTERMSIG(exit_s) == SIGQUIT)
-		(ft_putchar_fd('\n', STDOUT_FILENO), exit_s = exit_status(131));
-}
-
-int exec_cmd(t_cmd *cmd, t_pipe **p_data, int pos, char *old_cwd)
-{
-	int	status;
-
-	status = 0;
-	if (f_strncmp(*cmd->scmd[pos]->args, "cd", sizeof("cd")) == 0)
-		status = exec_cd(*p_data, cmd, pos);
-	else if (f_strncmp(*cmd->scmd[pos]->args, "pwd", sizeof("pwd")) == 0)
-		exec_pwd(old_cwd);
-	else if (f_strncmp(*cmd->scmd[pos]->args, "env", sizeof("env")) == 0)
-		exec_env(*p_data);
-	else if (f_strncmp(*cmd->scmd[pos]->args, "export", sizeof("export")) == 0)
-		status = exec_export(*p_data, cmd, pos);
-	else if (f_strncmp(*cmd->scmd[pos]->args, "unset", sizeof("unset")) == 0)
-		status = exec_unset(cmd, *p_data, pos);
-	else if (ft_strncmp(*cmd->scmd[pos]->args, "echo", sizeof("echo")) == 0)
-		status = exec_echo(*cmd->scmd[pos]);
-	else if (ft_strncmp(*cmd->scmd[pos]->args, "exit", sizeof("exit")) == 0)
-		status = exec_exit(cmd, *p_data);
-	else
-		status = exec_process(*p_data, cmd->scmd[pos]->args);
-	return (status);
-}
-
-void redirect(t_pipe *data, int pos)
+void	redirect_child(t_pipe *data, int i)
 {
 	if (data->infile)
 		(dup2(data->infile, STDIN_FILENO), close(data->infile));
-	else if (pos != 0)
+	else if (i != 0)
 		(dup2(data->old_fd, 0), close(data->old_fd));
 	if (data->outfile)
 		(dup2(data->outfile, STDOUT_FILENO), close(data->outfile));
-	else if (pos != data->cmd_counter)
-		(close(data->pip[0]), dup2(data->pip[1], 1), close(data->pip[1]));
+	else if (i != data->n_cmd - 1)
+		(close(data->pipe[0]), dup2(data->pipe[1], 1), close(data->pipe[1]));
 }
 
-void close_fds(t_pipe *data)
-{
-	if (data->infile)
-	{
-		close(data->infile);
-		data->infile = 0;
-	}
-	if (data->outfile)
-	{
-		close(data->outfile);
-		data->outfile = 0;
-	}
-}
-
-void	run_single_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
+int	exec_cmd(t_pipe *data, char **cmd)
 {
 	int	status;
-	
+
 	status = 0;
-	status = open_file(cmd, data, 0);
-	if (status)
-	{
-		exit_s = 1;
-		return ;
-	}
-	if (data->infile)
-	{
-		dup2(data->infile, STDIN_FILENO);
-		close(data->infile);
-	}
-	if (data->outfile)
-	{
-		dup2(data->outfile, STDOUT_FILENO);
-		close(data->outfile);
-	}
-	exit_s = exec_cmd(cmd, &data, 0, old_cwd);
-	close_fds(data);
+	if (!cmd[0])
+		return (free_dp(cmd), 1);
+	if (!ft_strncmp(cmd[0], "pwd\0", 4))
+		exec_pwd();
+	else if (!ft_strncmp(cmd[0], "exit\0", 5))
+		(ft_lstclear(data->env, (*free)), free_dp(cmd), close(data->std_
+				[STDIN_FILENO]), close(data->std_[STDOUT_FILENO]), exit(0));
+	else if (!ft_strncmp(cmd[0], "cd\0", 3))
+		status = exec_cd(cmd);
+	else if (!ft_strncmp(cmd[0], "export\0", 7))
+		data->env = exec_export(data->env, cmd);
+	else if (!ft_strncmp(cmd[0], "unset\0", 6))
+		data->env = exec_unset(data->env, cmd);
+	else if (!ft_strncmp(cmd[0], "echo\0", 5))
+		exec_echo(cmd);
+	else if (!ft_strncmp(cmd[0], "env\0", 4))
+		exec_env(data->env);
+	else
+		status = run_execve(data, f_find_path(cmd[0], data->env), cmd);
+	return (free_dp(cmd), exit_status(status));
 }
 
-int run_multiple_cmd(t_pipe *data, t_cmd *cmd, char *old_cwd)
+void	exec_multiple_cmds(t_pipe *data)
 {
-	int i;
-	int	status;
+	int		i;
 
 	i = -1;
-	status = 0;
-	while (++i < data->cmd_counter)
+	while (++i < data->n_cmd)
 	{
-		status = open_file(cmd, data, i);
-		if (status)
-		{
-			exit_s = 1;
-			continue ;
-		}
-		if (i != data->cmd_counter - 1)
-		{
-			if (pipe(data->pip) < 0)
-				return (EXIT_FAILURE);
-		}
-		data->pid = fork();
-		data->childs[i] = data->pid;
-		if (data->pid == 0)
-		{
-			redirect(data, i);
-			if (exec_cmd(cmd, &data, i, old_cwd))
-				//return (EXIT_FAILURE);
-				exit(WEXITSTATUS(exit_s));
-			close(data->std_[R]);
-			close(data->std_[W]);
-			close(data->pip[0]);
-			close(data->pip[1]);
-			exit(WEXITSTATUS(exit_s));
-		}
+		if (!redir_files(data, data->all_cmd[i]))
+			break ;
+		if (i != data->n_cmd - 1)
+			f_perror(pipe(data->pipe), "pipe");
+		if (!f_perror(fork(), "fork"))
+			(redirect_child(data, i), exec_cmd(data, reset_spaces(ft_split
+						(reset_pipes(data->all_cmd[i]), ' '))), free_dp
+				(data->all_cmd), free(data->line), close(data->std_[0]),
+				close(data->std_[1]), close(data->pipe[0]), close(data->pipe[1]),
+				exit(WEXITSTATUS(data->status)));
 		else
 		{
 			if (i != 0)
 				close(data->old_fd);
-			if (i != data->cmd_counter - 1)
-			{
-				close(data->pip[1]);
-				data->old_fd = data->pip[0];
-			}
+			if (i != data->n_cmd - 1)
+				(close(data->pipe[1]), data->old_fd = data->pipe[0]);
 		}
 		close_fds(data);
 	}
-	data->old_fd = 0;
-	return (EXIT_SUCCESS);
+	(wait_cmds(data), data->old_fd = 0);
 }
+
+void	exec_single_cmd(t_pipe *data)
+{
+	if (!redir_files(data, data->all_cmd[0]))
+		return ;
+	if (data->infile)
+		(dup2(data->infile, STDIN_FILENO), close(data->infile));
+	if (data->outfile)
+		(dup2(data->outfile, STDOUT_FILENO), close(data->outfile));
+	data->status = exec_cmd(data, reset_spaces(ft_split(
+					reset_pipes(data->all_cmd[0]), ' ')));
+	close_fds(data);
+}
+
+
+int	run_execve(t_pipe *data, char *abs_path, char **cmd)
+{
+	char	**array_env;
+	int		status;
+
+	status = 0;
+	if (data->n_cmd == 1 && fork())
+		return (process_waiting(data), free(abs_path), WEXITSTATUS(data->status));
+	array_env = lst_to_arr(data->env);
+	if (!abs_path || execve(abs_path, cmd, array_env) == -1)
+		(ft_printf("minishell: %s: command not found\n", cmd[0]), status = 127);
+	free(abs_path);
+	free_dp(array_env);
+	if (data->n_cmd == 1)
+		(close(data->std_[0]), close(data->std_[1]), exit(status));
+	return (status);
+}
+

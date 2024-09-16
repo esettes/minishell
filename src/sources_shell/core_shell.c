@@ -6,50 +6,22 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 20:06:11 by iostancu          #+#    #+#             */
-/*   Updated: 2024/09/13 14:11:07 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/16 16:16:48 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	exit_s;
-
-static void	free_all(t_cmd *cmd, t_pipe *p_data, t_buff *buff, char *old_cwd)
+void	process_waiting(t_pipe *data)
 {
-	if (old_cwd)
-		free(old_cwd);
-	free_memory((const char **)p_data->env_mini,
-		get_array_size(p_data->env_mini));
-	free(p_data);
-	free(buff->buffer);
-	free(buff->oldbuffer);
+	(signal(SIGINT, SIG_IGN), f_perror(wait(&data->status), "wait"));
+	if (WTERMSIG(data->status) == SIGINT)
+		(ft_putchar_fd('\n', STDOUT_FILENO), data->status = exit_status(130));
+	else if (WTERMSIG(data->status) == SIGQUIT)
+		(ft_putchar_fd('\n', STDOUT_FILENO), data->status = exit_status(131));
 }
 
-static void	reset_minishell(t_buff *b, t_cmd **cmd, t_pipe *p)
-{
-	int i = 0;
-	
-	if (b->buffer && *b->buffer && f_strict_strncmp(b->buffer,
-			b->oldbuffer, sizeof(b->oldbuffer)) != 0)
-		add_history(b->buffer);
-	//dprintf(1,"*b->buffer: %s\n", b->buffer);
-	free(b->oldbuffer);
-	b->oldbuffer = ft_strdup(b->buffer);
-	free(b->buffer);
-	free_cmd_tony(*cmd);
-	cmd = NULL;
-	// if (&p->childs[i])
-	// 	free(&p->childs[i++]);
-	// p->childs = NULL;
-}
-
-void f_void(int sig)
-{
-	(void)sig;
-	return ;
-}
-
-void	f_signal(int sig)
+void	manage_signal(int sig)
 {
 	if (sig != SIGINT)
 		return ;
@@ -59,104 +31,46 @@ void	f_signal(int sig)
 	rl_redisplay();
 }
 
-static int	init_shell(t_pipe **p_data, t_buff *b, char **envp, char *nbuff)
+void	run_executer(t_pipe *data)
 {
-	*p_data = init_pipe_struct(envp);
-	if (!p_data)
-		return (EXIT_FAILURE);
-	b->oldbuffer = ft_strdup("");
-	nbuff = NULL;
-	signal(SIGQUIT, f_signal);
-	return (EXIT_SUCCESS);
-}
-static int	check_args(int argc, char **envp)
-{
-	if (1 != argc)
-		return (EXIT_FAILURE);
-	if (NULL == envp)
-		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
+	if (data->n_cmd <= 0)
+		print_err_msg(PIPE);
+	f_perror(data->std_[0] = dup(STDIN_FILENO), "dup");
+	f_perror(data->std_[1] = dup(STDOUT_FILENO), "dup");
+	if (data->n_cmd == 1)
+		exec_single_cmd(data);
+	else
+		exec_multiple_cmds(data);
+	(dup2(data->std_[STDIN_FILENO], STDIN_FILENO),
+		close(data->std_[STDIN_FILENO]));
+	(dup2(data->std_[STDOUT_FILENO], STDOUT_FILENO),
+		close(data->std_[STDOUT_FILENO]));
+	(free_dp(data->all_cmd), free(data->line));
 }
 
-int	main(int argc, char **argv, char **envp)
+int	main(void)
 {
-	t_buff		b;
-	t_cmd		*cmd;
-	t_pipe		*p_data;
-	char		*old_cwd;
-	char		*newbuff;
-	char		*tmp;
-	int i;
-	int	j;
+	t_pipe	data;
 
-	(void)argv;
-	i = 0;
-	j = 0;
-	if (check_args(argc, envp))
-		exit (EXIT_FAILURE);
-	exit_s = 0;
-	if (init_shell(&p_data, &b, envp, newbuff))
-		return (EXIT_FAILURE);
-	old_cwd = getcwd(NULL, 0);
+	data = init_struct();
 	while (1)
 	{
-		if (manage_signactions(MODE_STANDARD))
-			exit (EXIT_FAILURE);
-		b.buffer = readline("\x1b[32mminishell$\x1b[0m ");
-		if (!b.buffer)
-			exit(0);
-		if (!*b.buffer || is_empty_line(b.buffer))
+		signal(SIGINT, &manage_signal);
+		data.line = readline("\x1b[32mminishell$\x1b[0m ");
+		if (!data.line)
+			(ft_lstclear(data.env, (*free)), exit(0));
+		if (!*data.line || !is_blank_line(data.line))
 		{
-			free(b.buffer);
+			free(data.line);
 			continue ;
 		}
-		cmd = parser(b.buffer, p_data->env_mini, newbuff);
-	//	dprintf(2, "b.buffer: %s\n", b.buffer);
-		//dprintf(2, "cmd: %s\n", cmd->scmd[0]->args[1]);
-		if (cmd == NULL)
-		{
-			free(b.buffer);
+		add_history(data.line);
+		data.line = quotes_checker(data.line);
+		if (!data.line)
 			continue ;
-		}
-		//get_cwd(old_cwd);
-		// Remove quotes of cmd if its single arg
-		if (cmd->single_arg == TRUE)
-		{
-			// remove quotes
-			dprintf(1, "is single!\n");
-			j = 2;
-			while (1)
-			{
-				
-				if (cmd->scmd[i]->args[j])
-				{
-					printf("scmd[%i]->arg[%i]: %s\n", i, j, cmd->scmd[0]->args[j]);
-					printf("len arg1: %i\n",ft_strlen(cmd->scmd[i]->args[1]));
-					printf("len arg kj: %i\n",ft_strlen(cmd->scmd[i]->args[j]));
-					cmd->scmd[i]->args[1] = ft_strjoin(cmd->scmd[i]->args[1], cmd->scmd[i]->args[j]);
-				}
-				else
-				{
-					while (j > 1)
-					{
-						free(cmd->scmd[i]->args[j]);
-						j--;
-					}
-					j = -1;
-				}
-				if (j == -1)
-					break ;
-				j++;	
-					// if [j + 1] exist.....else ?....
-			}
-			// mix the args in 1
-		}
-		dprintf(1, "cmd->scmd[i]->args[1]: %s\n", cmd->scmd[i]->args[1]);
-		// dprintf(1, "cmd1: %s\n", cmd->scmd[0]->args[1]);
-		// dprintf(1, "cmd2: %s\n", cmd->scmd[0]->args[2]);
-		run_executer(p_data, cmd, old_cwd);
-		reset_minishell(&b, &cmd, p_data);
+		data.all_cmd = expand_metachar(&data, ft_split(data.line, '|'));
+		data.n_cmd = cmd_counter(data.all_cmd);
+		run_executer(&data);
 	}
-	free_all(cmd, p_data, &b, old_cwd);
-	return (EXIT_SUCCESS);
+	return (0);
 }

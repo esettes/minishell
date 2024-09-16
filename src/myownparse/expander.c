@@ -6,90 +6,86 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:59:16 by antosanc          #+#    #+#             */
-/*   Updated: 2024/09/09 20:17:01 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/16 16:18:35 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/headers/minishell.h"
+#include "minishell.h"
 
-static char	*fill_array(char *str, char *env_value, char *array)
+char	*append_str(t_list **head)
 {
-	int	i;
-	int	j;
-	int	x;
+	t_list	*line;
+	char	*full_line;
+	char	*appended_line;
 
-	i = 0;
-	j = 0;
-	x = 0;
-	while (str[i] && str[i] != '$')
-		array[j++] = str[i++];
-	i++;
-	while (str[i] && (str[i] == '?' || ft_isalnum(str[i]) || str[i] == '_'))
-		i++;
-	while (env_value && env_value[x])
-		array[j++] = env_value[x++];
-	while (str[i])
-		array[j++] = str[i++];
-	array[j] = '\0';
-	return (array);
-}
-
-static char	*create_expanded_str(char *str, char *env_value, t_token **token)
-{
-	char	*array;
-	int		len;
-
-	len = len_expanded_str(str, env_value);
-	array = (char *)malloc(len + 1);
-	if (!array)
+	line = *head;
+	full_line = malloc(sizeof(char *));
+	*full_line = 0;
+	while (line)
 	{
-		free(str);
-		free(env_value);
-		return (clear_all(token, "malloc has failed"));
+		appended_line = ft_strjoin(full_line, (char *)line->content);
+		free(full_line);
+		full_line = appended_line;
+		line = line->next;
 	}
-	return (fill_array(str, env_value, array));
+	ft_lstclear(head, (*free));
+	free(head);
+	return (full_line);
 }
 
-static char	*expander_process(char *str, char **envp, t_token **token, int *i)
+void	expand_vars(char *line, t_pipe *data, t_list **head, int *i)
 {
-	char	*expanded_str;
-	char	*env_key;
-	char	*env_value;
-	int		l;
+	char	value[BUF_SIZE];
+	char	*name;
 
-	if (str[*i + 1] && !((ft_isalnum(str[*i + 1]) || str[*i + 1] == '_')))
-		return (str);
-	l = 1;
-	while (str[*i + l] && (ft_isalnum(str[*i + l]) || str[*i + l] == '_'))
-		l++;
-	env_key = ft_substr(str + *i, 1, l - 1);
-	env_value = get_env_value(env_key, envp);
-	free(env_key);
-	expanded_str = create_expanded_str(str, env_value, token);
-	free(env_value);
-	return (expanded_str);
-}
-
-char	*expander(char *str, char **envp, t_token **token)
-{
-	char	*expanded_str;
-	int		i;
-	char	*signal;
-
-	i = 0;
-	while (str[i] && str[i] != '$')
-		i++;
-	if (str[i] && !(str[i + 1] == '?'))
-		expanded_str = expander_process(str, envp, token, &i);
+	ft_lstadd_back(head, ft_lstnew(ft_substr(line, i[1], i[0] - i[1])));
+	i[1] = i[0]++;
+	if (line[i[0]] == '?')
+		(ft_lstadd_back(head, ft_lstnew(ft_itoa(WEXITSTATUS(data->status)))),
+			i[0]++);
+	else if (line[i[0]] == -7 || !line[i[0]])
+		ft_lstadd_back(head, ft_lstnew(ft_strdup("$")));
 	else
 	{
-		signal = ft_itoa(exit_s);
-		if (str[i + 1] != '\0')
-			ft_strlcat(signal, str + 2, sizeof(str) - 1);
-		expanded_str = create_expanded_str(str, signal, token);
-		free(signal);
+		while ((ft_isalnum(line[i[0]]) || line[i[0]] == '_') && line[i[0]])
+			i[0]++;
+		name = ft_substr(line, i[1] + 1, i[0] - i[1] - 1);
+		if (ft_getenv(data->env, name, value))
+			ft_lstadd_back(head, ft_lstnew(ft_strdup(value)));
+		free(name);
 	}
-	free(str);
-	//dprintf(1, "exp: %s\n", expanded_str);
-	return (expanded_str);
+	i[1] = i[0];
+}
+
+char	*check_vars(t_pipe *data, char *line)
+{
+	t_list	**head;
+	int		i[2];
+
+	i[0] = -1;
+	i[1] = 0;
+	head = malloc(sizeof(t_list **));
+	*head = 0;
+	while (line[++i[0]])
+	{
+		while (line[i[0]] == DOLLAR)
+			expand_vars(line, data, head, i);
+		if (!line[i[0]])
+			break ;
+	}
+	ft_lstadd_back(head, ft_lstnew(ft_substr(line, i[1], i[0] - i[1])));
+	return (free(line), append_str(head));
+}
+
+char	**expand_metachar(t_pipe *data, char **rev_cmd)
+{
+	int	i;
+
+	i = -1;
+	while (rev_cmd[++i])
+	{
+		rev_cmd[i] = check_vars(data, rev_cmd[i]);
+		rev_cmd[i] = reset_vars(rev_cmd[i]);
+	}
+	return (rev_cmd);
 }

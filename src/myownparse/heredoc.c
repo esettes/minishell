@@ -6,52 +6,55 @@
 /*   By: settes <settes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 18:19:52 by antosanc          #+#    #+#             */
-/*   Updated: 2024/08/21 16:30:30 by settes           ###   ########.fr       */
+/*   Updated: 2024/09/16 16:24:30 by settes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/headers/minishell.h"
+#include "minishell.h"
 
-static int	heredoc_write(int fd, char *delimiter, char **envp)
+void	heredoc_handler(int sig)
 {
-	char	*buff;
-
-	while (1)
-	{
-		buff = readline("> ");
-		if (!buff || exit_s == 130)
-			return (free(buff), EXIT_FAILURE);
-		if (ft_strchr(buff, '$') != 0)
-			buff = expander(buff, envp, NULL);
-		if (ft_strcmp(buff, delimiter) == 0)
-		{
-			free(buff);
-			break ;
-		}
-		ft_putstr_fd(buff, fd);
-		write(fd, "\n", 1);
-		free(buff);
-	}
-	return (EXIT_SUCCESS);
+	if (sig != SIGINT)
+		return ;
+	close(STDIN_FILENO);
 }
 
-int	heredoc_init(t_scmd *scmd, t_token_lst **token_lst, char **envp)
+int	reading_doc(char *keyword)
 {
-	char	*delimiter;
-	int		fd;
+	char	*appended_line;
+	int		pip[2];
+	int		stdin_cp;
 
-	*token_lst = (*token_lst)->next;
-	delimiter = (*token_lst)->content;
-	exit_s = 0;
-	manage_signactions(MODE_HEREDOC);
-	if (access("/tmp", W_OK) != 0)
-		return (perror("Access denied to /tmp directory"), EXIT_FAILURE);
-	scmd->in_f = ft_strdup("/tmp/heredoc");
-	fd = open("/tmp/heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd == -1)
-		return (perror("Failed to open file"), EXIT_FAILURE);
-	if (heredoc_write(fd, delimiter, envp))
-		return (close(fd), EXIT_FAILURE);
-	close(fd);
-	return (EXIT_SUCCESS);
+	stdin_cp = dup(STDIN_FILENO);
+	signal(SIGINT, &heredoc_handler);
+	f_perror(pipe(pip), "pipe");
+	while (1)
+	{
+		appended_line = readline("> ");
+		if (!appended_line)
+			break ;
+		if (!ft_strncmp(appended_line, keyword, ft_strlen(appended_line) + 1))
+			break ;
+		(ft_putstr_fd(appended_line, pip[1]), ft_putchar_fd('\n', pip[1]));
+		free(appended_line);
+	}
+	if (appended_line)
+		free(appended_line);
+	(close(pip[1]), dup2(stdin_cp, STDIN_FILENO), close(stdin_cp));
+	return (pip[0]);
+}
+
+void	here_doc(t_pipe *data, char *keyword)
+{
+	static int	i;
+	int			heredoc_fd;
+
+	if (i > 0)
+		dup2(data->std_[STDIN_FILENO], STDIN_FILENO);
+	heredoc_fd = reading_doc(keyword);
+	if (data->old_fd)
+		(close(data->old_fd), data->old_fd = heredoc_fd);
+	else
+		(dup2(heredoc_fd, STDIN_FILENO), close(heredoc_fd));
+	i++;
 }

@@ -63,7 +63,8 @@ SRCS = ft_atoi.c \
 	ft_free_matrix.c \
 	ft_count_chars_str.c \
 	ft_puterror.c \
-	ft_strcmp.c
+	ft_strcmp.c \
+	ft_isblank.c
 
 SRC_DIR = src/
 

@@ -6,7 +6,7 @@
 #    By: settes <settes@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/21 19:03:34 by uliherre          #+#    #+#              #
-#    Updated: 2024/09/13 11:16:56 by settes           ###   ########.fr        #
+#    Updated: 2024/09/16 16:48:19 by settes           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,17 +28,12 @@ INCLUDES = -I include -I ./inc/headers -I ./inc/libft/inc
 ############################ PARSER ###########################
 DIR_PARSER = ./src/myownparse/
 SOURCES_PARSER = \
-	expander_utils.c \
 	expander.c \
 	heredoc.c \
-	lex_utils.c \
-	lex.c \
-	list_utils.c \
 	parser.c \
 	parser_utils2.c \
-	validator.c \
-	yacc_utils.c \
-	yacc.c
+	reset_input.c \
+	parser_file_utils.c
 
 A_PARSER = $(addprefix $(DIR_PARSER),$(SOURCES_PARSER))
 SOURCES = $(A_PARSER)
@@ -48,8 +43,7 @@ OBJECTS = $(addprefix $(OBJDIR), $(SOURCES_PARSER:.c=.o))
 DIR_SHELL = ./src/sources_shell/
 SOURCES_SHELL = \
 	core_shell.c \
-	signal.c \
-	prompt.c
+	utils.c
 
 A_SHELL = $(addprefix $(DIR_SHELL),$(SOURCES_SHELL))
 SOURCES += $(A_SHELL)
@@ -58,16 +52,10 @@ OBJECTS += $(addprefix $(OBJDIR), $(SOURCES_SHELL:.c=.o))
 ########################## BUILTIN ############################
 DIR_BUILTIN = ./src/builtin/
 SOURCES_BUILTIN = \
-	echo.c \
-	export.c \
-	unset.c \
-	cd.c \
-	env.c \
-	exit.c \
-	pwd.c \
+	builtins.c \
 	env_utils.c \
-	env_utils_2.c \
-	env_utils_3.c
+	export_utils.c \
+	exit.c
 
 A_BUILTIN = $(addprefix $(DIR_BUILTIN),$(SOURCES_BUILTIN))
 SOURCES += $(A_BUILTIN)
@@ -76,14 +64,8 @@ OBJECTS += $(addprefix $(OBJDIR), $(SOURCES_BUILTIN:.c=.o))
 ########################## PIPEX ##############################
 DIR_PIPEX = ./src/pipex/
 SOURCES_PIPEX = \
-	f_split.c \
-	lib_utils.c \
-	lib_utils_2.c \
-	pipex.c \
 	processes.c \
-	utils.c \
-	utils_2.c \
-	utils_3.c
+	utils_processes.c
 
 A_PIPEX = $(addprefix $(DIR_PIPEX),$(SOURCES_PIPEX))
 SOURCES += $(A_PIPEX)

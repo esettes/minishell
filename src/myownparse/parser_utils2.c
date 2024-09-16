@@ -1,56 +1,51 @@
 #include <minishell.h>
 
-static char	*remove_quotes(char *str)
-{
-	int		n_quotes;
-	char	*ret;
-	int		i;
-	int		j;
+#include "minishell.h"
 
-	i = -1;
-	j = 0;
-	n_quotes = 0;
-	dprintf(1, "removing quotes of: %s\n", str);
-	while (str[++i])
-	{
-		if (str[i] == '"')
-			n_quotes++;
-	}
-	ret = malloc(sizeof(char) * ((ft_strlen(str) - n_quotes )+ 1));
+int	exit_status(int value)
+{
+	return (value << 8);
+}
+
+void	close_fds(t_pipe *data)
+{
+	if (data->infile)
+		(close(data->infile), data->infile = 0);
+	if (data->outfile)
+		(close(data->outfile), data->outfile = 0);
+}
+
+void	free_dp(char **dp)
+{
+	int	i;
+
 	i = 0;
-	while (str[i])
-	{
-		if (str[i] != '"')
-		{
-			ret[j] = str[i];
-			j++;
-		}
+	while (dp[i])
+		free(dp[i++]);
+	free(dp);
+}
+
+int	cmd_counter(char **all_cmd)
+{
+	int	i;
+
+	i = 0;
+	while (all_cmd[i])
 		i++;
+	return (i);
+}
+
+int	is_blank_line(char *line)
+{
+	int	i;
+
+	if (!ft_strncmp(line, "\"\"\0", 3) || !ft_strncmp(line, "''\0", 3))
+		return (0);
+	i = -1;
+	while (line[++i])
+	{
+		if (!ft_isblank(line[i]))
+			return (1);
 	}
-	ret[j] = '\0';
-	//free (str);
-	//ft_memset(str, 0, sizeof(str));
-	//str = ft_strdup(ret);
-	//free(ret);
-	ft_strlcpy(str, ret, sizeof(ret));
-	return (str);
-}
-
-char	*mix_args(char *s1, char *s2)
-{
-	char	*ret;
-	int		i;
-	int		j;
-
-	ret = ft_strjoin(s1, s2);
-	return (ret);
-}
-
-void	set_single_arg_token(t_token **token, t_token_lst *t_list)
-{
-	if (t_list && t_list->content && *t_list->content
-			|| t_list && t_list->quotes == 1)
-			token_add_back(&(*token)->token_lst, t_list);
-		if (token == NULL)
-			return ;
+	return (0);
 }
