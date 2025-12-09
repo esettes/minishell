@@ -65,11 +65,15 @@ void	exec_multiple_cmds(t_pipe *d)
 		if (i != d->n_cmd - 1)
 			f_perror(pipe(d->pipe), "pipe");
 		if (!f_perror(fork(), "fork"))
-			(redirect_child(d, i), exec_cmd(d, reset_spaces(ft_split
-						(reset_pipes(d->all_cmd[i]), ' '))), free_dp
-				(d->all_cmd), free(d->line), close(d->std_[0]),
-				close(d->std_[1]), close(d->pipe[0]), close(d->pipe[1]),
-				exit(WEXITSTATUS(d->status)));
+			(redirect_child(d, i),
+			exec_cmd(d, reset_spaces(ft_split(reset_pipes(d->all_cmd[i]), ' '))),
+			free_dp(d->all_cmd),
+			free(d->line),
+			close(d->std_[0]),
+			close(d->std_[1]),
+			close(d->pipe[0]),
+			close(d->pipe[1]),
+			exit(WEXITSTATUS(d->status)));
 		else
 		{
 			if (i != 0)
